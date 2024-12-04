@@ -1,0 +1,68 @@
+# Maven/Gradle build directories
+target/
+build/
+out/
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+.idea/modules.xml
+.idea/jarRepositories.xml
+.idea/compiler.xml
+.idea/libraries/
+
+# Eclipse
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# VS Code
+.vscode/
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+*.log.*
+
+# Java specific
+*.class
+*.jar
+*.war
+*.ear
+
+# Environment-specific files
+.env
+*.env
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Specific exclusions for JavaFX or additional tools (if any, such as generated files)
+*.launch
+*.history
+*.session
+
+# Exclude any generated resources
+generated/
+
+# Libraries or dependencies that should not be checked in
+lib/
