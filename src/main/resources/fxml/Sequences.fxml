@@ -11,9 +11,9 @@
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane prefHeight="610.0" prefWidth="1011.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.eam.code.vmixapp.SequenceController">
+<AnchorPane prefHeight="610.0" prefWidth="1011.0" styleClass="form_container" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.eam.code.vmixapp.SequenceController">
    <children>
-      <VBox layoutX="61.0" layoutY="65.0" prefHeight="300.0" prefWidth="390.0" spacing="15.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="110.0">
+      <VBox layoutX="61.0" layoutY="65.0" prefHeight="193.0" prefWidth="390.0" styleClass="form_container" stylesheets="@../css/styles.css" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="110.0">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
             <TextField fx:id="tfName" />
@@ -21,19 +21,19 @@
             <TextField fx:id="tfDescription" />
          </children>
       </VBox>
-      <TableView layoutX="509.0" layoutY="110.0" prefHeight="318.0" prefWidth="489.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="110.0">
+      <TableView fx:id="table" layoutX="509.0" layoutY="110.0" prefHeight="318.0" prefWidth="489.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="110.0">
         <columns>
           <TableColumn prefWidth="75.0" text="C1" />
           <TableColumn prefWidth="75.0" text="C2" />
         </columns>
       </TableView>
-      <Label layoutX="454.0" layoutY="35.0" text="SEQUENCE SCREEN" />
-      <ButtonBar layoutX="326.0" layoutY="479.0" prefHeight="40.0" prefWidth="330.0">
+      <Label layoutX="397.0" layoutY="39.0" styleClass="title" text="SEQUENCE SCREEN" />
+      <ButtonBar buttonMinWidth="90.0" layoutX="293.0" layoutY="480.0" prefHeight="40.0" prefWidth="330.0" styleClass="form_container">
         <buttons>
-          <Button fx:id="btnSave" mnemonicParsing="false" onAction="#createSequence" text="Save" />
+          <Button fx:id="btnSave" mnemonicParsing="false" onAction="#createSequence" styleClass="form_container" text="Save" />
             <Button fx:id="btnUpdate" layoutX="302.0" layoutY="18.0" mnemonicParsing="false" onAction="#updateSequence" text="Update" />
             <Button fx:id="btnDelete" layoutX="217.0" layoutY="18.0" mnemonicParsing="false" onAction="#deleteSequence" text="Delete" />
-            <Button fx:id="btnClear" layoutX="132.0" layoutY="18.0" mnemonicParsing="false" onAction="#clearField" text="Clear" />
+            <Button fx:id="btnClear" layoutX="132.0" layoutY="18.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#clearField" prefWidth="100.0" text="Clear" />
         </buttons>
       </ButtonBar>
    </children>
