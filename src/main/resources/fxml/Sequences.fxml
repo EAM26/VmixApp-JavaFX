@@ -23,8 +23,9 @@
       </VBox>
       <TableView fx:id="table" layoutX="509.0" layoutY="110.0" prefHeight="318.0" prefWidth="489.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="110.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
+          <TableColumn fx:id="colId" prefWidth="75.0" text="ID" />
+          <TableColumn fx:id="colName" prefWidth="146.0" text="Name" />
+            <TableColumn fx:id="colDescription" prefWidth="267.0" text="Description" />
         </columns>
       </TableView>
       <Label layoutX="397.0" layoutY="39.0" styleClass="title" text="SEQUENCE SCREEN" />
