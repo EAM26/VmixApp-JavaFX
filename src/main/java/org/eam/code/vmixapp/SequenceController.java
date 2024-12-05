@@ -24,7 +24,7 @@ public class SequenceController implements Initializable {
     PreparedStatement pstmt = null;
     ResultSet resultSet = null;
 
-    private int id;
+    private int id = 0;
 
     public int getId() {
         return id;
@@ -118,10 +118,10 @@ public class SequenceController implements Initializable {
 
     @FXML
     void createSequence(ActionEvent event) {
-        String insert = "insert into sequences(Name, Description) values(?, ?)";
+        String insertMessage = "insert into sequences(Name, Description) values(?, ?)";
         con = DBConnection.getCon();
         try {
-            pstmt = con.prepareStatement(insert);
+            pstmt = con.prepareStatement(insertMessage);
             pstmt.setString(1, tfName.getText());
             pstmt.setString(2, tfDescription.getText());
             pstmt.executeUpdate();
@@ -134,15 +134,26 @@ public class SequenceController implements Initializable {
 
     @FXML
     void deleteSequence(ActionEvent event) {
-
+        String deleteMessage = "delete from sequences where id=?";
+        con = DBConnection.getCon();
+        try {
+            pstmt = con.prepareStatement(deleteMessage);
+            pstmt.setInt(1, getId());
+            pstmt.executeUpdate();
+            showSequences();
+            setId(0);
+            btnSave.setDisable(false);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
     void updateSequence(ActionEvent event) {
-        String update = "update sequences set Name=?, Description=? where id=?";
+        String updateMessage = "update sequences set Name=?, Description=? where id=?";
         con = DBConnection.getCon();
         try {
-            pstmt = con.prepareStatement(update);
+            pstmt = con.prepareStatement(updateMessage);
             pstmt.setString(1, tfName.getText());
             pstmt.setString(2, tfDescription.getText());
             pstmt.setInt(3, getId());
