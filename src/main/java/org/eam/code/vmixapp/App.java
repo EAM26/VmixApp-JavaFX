@@ -5,7 +5,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.eam.code.vmixapp.util.DBInitializer;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Objects;
 
 public class App extends Application {
@@ -19,6 +23,7 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
+        DBInitializer.initializeDatabase();
         launch();
 
     }
