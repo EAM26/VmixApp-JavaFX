@@ -7,19 +7,34 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.eam.code.vmixapp.util.DBInitializer;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Objects;
 
 public class App extends Application {
+    private static Stage primaryStage;
+
     @Override
     public void start(Stage stage) throws Exception {
-        Parent parent = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/Sequences.fxml")));
-        Scene scene = new Scene(parent);
-        stage.setTitle("VMix App");
-        stage.setScene(scene);
+        primaryStage = stage;
+        switchToMainScreen();
         stage.show();
+    }
+
+    public static void switchToMainScreen() throws IOException {
+        Parent parent = FXMLLoader.load(Objects.requireNonNull(App.class.getResource("/fxml/Sequences.fxml")));
+        Scene scene = new Scene(parent);
+        primaryStage.setTitle("VMix App");
+        primaryStage.setScene(scene);
+    }
+
+    public static void switchToOPScreen() throws IOException {
+        Parent parent = FXMLLoader.load(Objects.requireNonNull(App.class.getResource("/fxml/OPScreen.fxml")));
+        Scene scene = new Scene(parent);
+        primaryStage.setTitle("OPScreen");
+        primaryStage.setScene(scene);
     }
 
     public static void main(String[] args) {
