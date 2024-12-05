@@ -8,9 +8,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import org.eam.code.vmixapp.App;
 import org.eam.code.vmixapp.DBConnection;
 import org.eam.code.vmixapp.model.Sequence;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,6 +34,10 @@ public class SequenceController implements Initializable {
     public void setId(int id) {
         this.id = id;
     }
+
+
+    @FXML
+    private Button btnSwitch;
 
     @FXML
     private Button btnClear;
@@ -194,5 +200,11 @@ public class SequenceController implements Initializable {
     public boolean validateTextFields() {
         return !tfName.getText().isBlank() && !tfDescription.getText().isBlank();
     }
+
+    @FXML
+    void switchScreen(ActionEvent event) throws IOException {
+        App.switchToOPScreen();
+    }
+
 
 }
