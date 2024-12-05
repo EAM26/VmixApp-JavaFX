@@ -104,16 +104,18 @@ public class SequenceController implements Initializable {
     @FXML
     void getSelectedData(MouseEvent event) {
         Sequence selectedSeq = table.getSelectionModel().getSelectedItem();
-        setId(selectedSeq.getId());
-        tfName.setText(selectedSeq.getName());
-        tfDescription.setText(selectedSeq.getDescription());
-        btnSave.setDisable(true);
+        if(selectedSeq != null) {
+            setId(selectedSeq.getId());
+            tfName.setText(selectedSeq.getName());
+            tfDescription.setText(selectedSeq.getDescription());
+            btnSave.setDisable(true);
+        }
     }
 
 
     @FXML
     void clearField(ActionEvent event) {
-
+        clear();
     }
 
     @FXML
@@ -126,6 +128,7 @@ public class SequenceController implements Initializable {
             pstmt.setString(2, tfDescription.getText());
             pstmt.executeUpdate();
             showSequences();
+            clear();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -142,7 +145,7 @@ public class SequenceController implements Initializable {
             pstmt.executeUpdate();
             showSequences();
             setId(0);
-            btnSave.setDisable(false);
+            clear();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -160,10 +163,17 @@ public class SequenceController implements Initializable {
             pstmt.executeUpdate();
             showSequences();
             setId(0);
-            btnSave.setDisable(false);
+            clear();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
+
+    public void clear() {
+        setId(0);
+        tfName.setText("");
+        tfDescription.setText("");
+        btnSave.setDisable(true);
+    }
+
 }
