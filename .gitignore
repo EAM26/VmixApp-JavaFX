@@ -66,3 +66,4 @@ generated/
 
 # Libraries or dependencies that should not be checked in
 lib/
+/vmdb.db

@@ -1,4 +1,4 @@
-package org.eam.code.vmixapp;
+package org.eam.code.vmixapp.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,6 +8,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import org.eam.code.vmixapp.DBConnection;
+import org.eam.code.vmixapp.model.Sequence;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -105,6 +107,7 @@ public class SequenceController implements Initializable {
             setId(selectedSeq.getId());
             tfName.setText(selectedSeq.getName());
             tfDescription.setText(selectedSeq.getDescription());
+            btnSave.setDisable(true);
         }
     }
 
@@ -176,6 +179,7 @@ public class SequenceController implements Initializable {
         tfName.setText("");
         tfDescription.setText("");
         setId(0);
+        btnSave.setDisable(false);
     }
 
     public boolean alarmDelete() {

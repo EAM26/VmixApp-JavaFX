@@ -1,4 +1,4 @@
-package org.eam.code.vmixapp;
+package org.eam.code.vmixapp.model;
 
 public class Sequence {
 

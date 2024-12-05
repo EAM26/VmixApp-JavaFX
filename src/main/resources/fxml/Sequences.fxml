@@ -10,31 +10,36 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="610.0" prefWidth="1011.0" styleClass="form_container" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.eam.code.vmixapp.SequenceController">
-   <children>
-      <VBox layoutX="61.0" layoutY="65.0" prefHeight="193.0" prefWidth="390.0" styleClass="form_container" stylesheets="@../css/styles.css" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="110.0">
-         <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
-            <TextField fx:id="tfName" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Descrption" />
-            <TextField fx:id="tfDescription" />
-         </children>
-      </VBox>
-      <TableView fx:id="table" layoutX="509.0" layoutY="110.0" onMouseClicked="#getSelectedData" prefHeight="318.0" prefWidth="489.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="110.0">
-        <columns>
-          <TableColumn fx:id="colId" prefWidth="75.0" text="ID" />
-          <TableColumn fx:id="colName" prefWidth="146.0" text="Name" />
-            <TableColumn fx:id="colDescription" prefWidth="267.0" text="Description" />
-        </columns>
-      </TableView>
-      <Label layoutX="397.0" layoutY="39.0" styleClass="title" text="SEQUENCE SCREEN" />
-      <ButtonBar buttonMinWidth="90.0" layoutX="293.0" layoutY="480.0" prefHeight="40.0" prefWidth="330.0" styleClass="form_container">
-        <buttons>
-          <Button fx:id="btnSave" mnemonicParsing="false" onAction="#createSequence" styleClass="form_container" text="Save" />
-            <Button fx:id="btnUpdate" layoutX="302.0" layoutY="18.0" mnemonicParsing="false" onAction="#updateSequence" text="Update" />
-            <Button fx:id="btnDelete" layoutX="217.0" layoutY="18.0" mnemonicParsing="false" onAction="#deleteSequence" text="Delete" />
-            <Button fx:id="btnClear" layoutX="132.0" layoutY="18.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#clearField" prefWidth="100.0" text="Clear" />
-        </buttons>
-      </ButtonBar>
-   </children>
+<AnchorPane prefHeight="610.0" prefWidth="1011.0" styleClass="form_container" stylesheets="@../css/styles.css"
+            xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.eam.code.vmixapp.controller.SequenceController">
+    <VBox layoutX="61.0" layoutY="65.0" prefHeight="193.0" prefWidth="390.0" styleClass="form_container"
+          stylesheets="@../css/styles.css" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="110.0">
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name"/>
+        <TextField fx:id="tfName"/>
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Descrption"/>
+        <TextField fx:id="tfDescription"/>
+    </VBox>
+    <TableView fx:id="table" layoutX="509.0" layoutY="110.0" onMouseClicked="#getSelectedData" prefHeight="318.0"
+               prefWidth="489.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="110.0">
+      <columns>
+          <TableColumn fx:id="colId" prefWidth="75.0" text="ID"/>
+          <TableColumn fx:id="colName" prefWidth="146.0" text="Name"/>
+          <TableColumn fx:id="colDescription" prefWidth="267.0" text="Description"/>
+      </columns>
+    </TableView>
+    <Label layoutX="397.0" layoutY="39.0" styleClass="title" text="SEQUENCE SCREEN"/>
+    <ButtonBar buttonMinWidth="90.0" layoutX="293.0" layoutY="480.0" prefHeight="40.0" prefWidth="330.0"
+               styleClass="form_container">
+      <buttons>
+          <Button fx:id="btnSave" mnemonicParsing="false" onAction="#createSequence" styleClass="form_container"
+                  text="Save"/>
+          <Button fx:id="btnUpdate" layoutX="302.0" layoutY="18.0" mnemonicParsing="false" onAction="#updateSequence"
+                  text="Update"/>
+          <Button fx:id="btnDelete" layoutX="217.0" layoutY="18.0" mnemonicParsing="false" onAction="#deleteSequence"
+                  text="Delete"/>
+          <Button fx:id="btnClear" layoutX="132.0" layoutY="18.0" minWidth="-Infinity" mnemonicParsing="false"
+                  onAction="#clearField" prefWidth="100.0" text="Clear"/>
+      </buttons>
+    </ButtonBar>
 </AnchorPane>
