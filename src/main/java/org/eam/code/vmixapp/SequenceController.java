@@ -38,11 +38,6 @@ public class SequenceController implements Initializable {
     @FXML
     private TableView<Sequence> table;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        showSequences();
-    }
-
     @FXML
     private TableColumn<Sequence, String> colDescription;
 
@@ -51,6 +46,11 @@ public class SequenceController implements Initializable {
 
     @FXML
     private TableColumn<Sequence, String> colName;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        showSequences();
+    }
 
     public ObservableList<Sequence> getSequences() {
         ObservableList<Sequence> sequences = FXCollections.observableArrayList();
@@ -62,7 +62,7 @@ public class SequenceController implements Initializable {
             pstmt = con.prepareStatement(insert);
             resultSet = pstmt.executeQuery();
 
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 Sequence sequence = new Sequence();
                 sequence.setId(resultSet.getInt("Id"));
                 sequence.setName(resultSet.getString("Name"));
@@ -97,6 +97,17 @@ public class SequenceController implements Initializable {
 
     @FXML
     void createSequence(ActionEvent event) {
+        String insert = "insert into sequences(Name, Description) values(?, ?)";
+        con = DBConnection.getCon();
+        try {
+            pstmt = con.prepareStatement(insert);
+            pstmt.setString(1, tfName.getText());
+            pstmt.setString(2, tfDescription.getText());
+            pstmt.executeUpdate();
+            showSequences();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
