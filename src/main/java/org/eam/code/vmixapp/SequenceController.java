@@ -10,6 +10,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -22,6 +23,16 @@ public class SequenceController implements Initializable {
     Connection con = null;
     PreparedStatement pstmt = null;
     ResultSet resultSet = null;
+
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     @FXML
     private Button btnClear;
@@ -46,6 +57,12 @@ public class SequenceController implements Initializable {
 
     @FXML
     private TableColumn<Sequence, String> colName;
+
+    @FXML
+    private TextField tfDescription;
+
+    @FXML
+    private TextField tfName;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -85,10 +102,14 @@ public class SequenceController implements Initializable {
     }
 
     @FXML
-    private TextField tfDescription;
+    void getSelectedData(MouseEvent event) {
+        Sequence selectedSeq = table.getSelectionModel().getSelectedItem();
+        setId(selectedSeq.getId());
+        tfName.setText(selectedSeq.getName());
+        tfDescription.setText(selectedSeq.getDescription());
+        btnSave.setDisable(true);
+    }
 
-    @FXML
-    private TextField tfName;
 
     @FXML
     void clearField(ActionEvent event) {
@@ -118,8 +139,20 @@ public class SequenceController implements Initializable {
 
     @FXML
     void updateSequence(ActionEvent event) {
+        String update = "update sequences set Name=?, Description=? where id=?";
+        con = DBConnection.getCon();
+        try {
+            pstmt = con.prepareStatement(update);
+            pstmt.setString(1, tfName.getText());
+            pstmt.setString(2, tfDescription.getText());
+            pstmt.setInt(3, getId());
+            pstmt.executeUpdate();
+            showSequences();
+            setId(0);
+            btnSave.setDisable(false);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
     }
-
-
 }
