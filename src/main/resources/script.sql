@@ -1,19 +1,38 @@
--- Drop the old database if it exists
-DROP DATABASE IF EXISTS vmix;
+-- -- Drop the table if it already exists (SQLite doesn't support DROP DATABASE)
+-- DROP TABLE IF EXISTS sequences;
+--
+-- -- Create the table
+-- CREATE TABLE sequences (
+--                            Id INTEGER PRIMARY KEY, -- Auto-increment is implicit with INTEGER PRIMARY KEY
+--                            Name TEXT NOT NULL, -- Use TEXT instead of VARCHAR
+--                            Description TEXT NOT NULL
+-- );
+--
+-- -- Insert data into the table
+-- INSERT INTO sequences (Name, Description)
+-- VALUES
+--     ('Brahms piano', 'Utrecht 2024'),
+--     ('Beethoven piano', 'Den Haag 2024');
 
--- Create a new database
-CREATE DATABASE vmix;
-USE vmix;
 
--- Create the sequences table
-CREATE TABLE sequences
-(
-    Id          INT AUTO_INCREMENT PRIMARY KEY,
-    Name        VARCHAR(20) NOT NULL,
-    Description VARCHAR(20) NOT NULL
-);
 
--- Insert multiple entries into the sequences table
+
+-- DROP TABLE IF EXISTS sequences;
+--
+--
+-- CREATE TABLE sequences (
+--                            Id INTEGER PRIMARY KEY,
+--                            Name TEXT NOT NULL,
+--                            Description TEXT NOT NULL
+-- );
+
+
 INSERT INTO sequences (Name, Description)
-VALUES ('Brahms piano', 'Utrecht 2024'),
-       ('Beethoven piano', 'Den Haag 2024');
+VALUES
+    ('Mozart piano', 'Utrecht 2024'),
+    ('Mozart piano', 'Utrecht 2024'),
+    ('Mozart piano', 'Utrecht 2024'),
+    ('Mozart piano', 'Utrecht 2024'),
+    ('Mozart piano', 'Utrecht 2024');
+
+
