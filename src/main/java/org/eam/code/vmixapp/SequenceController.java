@@ -5,10 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
@@ -104,11 +101,10 @@ public class SequenceController implements Initializable {
     @FXML
     void getSelectedData(MouseEvent event) {
         Sequence selectedSeq = table.getSelectionModel().getSelectedItem();
-        if(selectedSeq != null) {
+        if (selectedSeq != null) {
             setId(selectedSeq.getId());
             tfName.setText(selectedSeq.getName());
             tfDescription.setText(selectedSeq.getDescription());
-            btnSave.setDisable(true);
         }
     }
 
@@ -120,60 +116,79 @@ public class SequenceController implements Initializable {
 
     @FXML
     void createSequence(ActionEvent event) {
-        String insertMessage = "insert into sequences(Name, Description) values(?, ?)";
-        con = DBConnection.getCon();
-        try {
-            pstmt = con.prepareStatement(insertMessage);
-            pstmt.setString(1, tfName.getText());
-            pstmt.setString(2, tfDescription.getText());
-            pstmt.executeUpdate();
-            showSequences();
-            clear();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        if(validateTextFields()) {
 
+            String insertMessage = "insert into sequences(Name, Description) values(?, ?)";
+            con = DBConnection.getCon();
+            try {
+                pstmt = con.prepareStatement(insertMessage);
+                pstmt.setString(1, tfName.getText());
+                pstmt.setString(2, tfDescription.getText());
+                pstmt.executeUpdate();
+                showSequences();
+                clear();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @FXML
     void deleteSequence(ActionEvent event) {
-        String deleteMessage = "delete from sequences where id=?";
-        con = DBConnection.getCon();
-        try {
-            pstmt = con.prepareStatement(deleteMessage);
-            pstmt.setInt(1, getId());
-            pstmt.executeUpdate();
-            showSequences();
-            setId(0);
+        if(id != 0) {
+            if(alarmDelete()) {
+                String deleteMessage = "delete from sequences where id=?";
+                con = DBConnection.getCon();
+                try {
+                    pstmt = con.prepareStatement(deleteMessage);
+                    pstmt.setInt(1, getId());
+                    pstmt.executeUpdate();
+                    showSequences();
+                    clear();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
             clear();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 
     @FXML
     void updateSequence(ActionEvent event) {
-        String updateMessage = "update sequences set Name=?, Description=? where id=?";
-        con = DBConnection.getCon();
-        try {
-            pstmt = con.prepareStatement(updateMessage);
-            pstmt.setString(1, tfName.getText());
-            pstmt.setString(2, tfDescription.getText());
-            pstmt.setInt(3, getId());
-            pstmt.executeUpdate();
-            showSequences();
-            setId(0);
-            clear();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        if(getId() != 0 && validateTextFields()) {
+            String updateMessage = "update sequences set Name=?, Description=? where id=?";
+            con = DBConnection.getCon();
+            try {
+                pstmt = con.prepareStatement(updateMessage);
+                pstmt.setString(1, tfName.getText());
+                pstmt.setString(2, tfDescription.getText());
+                pstmt.setInt(3, getId());
+                pstmt.executeUpdate();
+                showSequences();
+                clear();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
     public void clear() {
-        setId(0);
         tfName.setText("");
         tfDescription.setText("");
-        btnSave.setDisable(true);
+        setId(0);
+    }
+
+    public boolean alarmDelete() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm Deletion");
+        alert.setHeaderText("Are you sure you want to delete sequence with id: " + id + "  ?");
+        alert.setContentText("This action cannot be undone.");
+
+        return alert.showAndWait().filter(response -> response == ButtonType.OK).isPresent();
+    }
+
+    public boolean validateTextFields() {
+        return !tfName.getText().isBlank() && !tfDescription.getText().isBlank();
     }
 
 }
