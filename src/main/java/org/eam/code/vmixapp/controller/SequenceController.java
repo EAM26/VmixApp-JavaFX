@@ -10,7 +10,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import org.eam.code.vmixapp.App;
 import org.eam.code.vmixapp.DBConnection;
+import org.eam.code.vmixapp.dao.SequenceDAO;
 import org.eam.code.vmixapp.model.Sequence;
+import org.eam.code.vmixapp.service.SequenceService;
 
 import java.io.IOException;
 import java.net.URL;
@@ -21,11 +23,16 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class SequenceController implements Initializable {
+    private final SequenceService sequenceService;
     Connection con = null;
     PreparedStatement pstmt = null;
     ResultSet resultSet = null;
 
     private int id = 0;
+
+    public SequenceController() {
+        this.sequenceService = new SequenceService(new SequenceDAO());
+    }
 
     public int getId() {
         return id;
@@ -74,40 +81,9 @@ public class SequenceController implements Initializable {
         showSequences();
     }
 
-    public ObservableList<Sequence> getSequences() {
-        ObservableList<Sequence> sequences = FXCollections.observableArrayList();
-
-        String insert = "select * from sequences";
-
-        con = DBConnection.getCon();
-        try {
-            pstmt = con.prepareStatement(insert);
-            resultSet = pstmt.executeQuery();
-
-            while (resultSet.next()) {
-                Sequence sequence = new Sequence();
-                sequence.setId(resultSet.getInt("Id"));
-                sequence.setName(resultSet.getString("Name"));
-                sequence.setDescription(resultSet.getString("Description"));
-
-                sequences.add(sequence);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return sequences;
-    }
-
-    public void showSequences() {
-        ObservableList<Sequence> seqList = getSequences();
-        table.setItems(seqList);
-        colId.setCellValueFactory(new PropertyValueFactory<Sequence, Integer>("id"));
-        colName.setCellValueFactory(new PropertyValueFactory<Sequence, String>("name"));
-        colDescription.setCellValueFactory(new PropertyValueFactory<Sequence, String>("description"));
-    }
 
     @FXML
-    void getSelectedData(MouseEvent event) {
+    private void getSelectedData(MouseEvent event) {
         Sequence selectedSeq = table.getSelectionModel().getSelectedItem();
         if (selectedSeq != null) {
             setId(selectedSeq.getId());
@@ -181,14 +157,28 @@ public class SequenceController implements Initializable {
         }
     }
 
-    public void clear() {
+    private void showSequences() {
+        try{
+            ObservableList<Sequence> seqList = sequenceService.getSequences();
+            table.setItems(seqList);
+            colId.setCellValueFactory(new PropertyValueFactory<Sequence, Integer>("id"));
+            colName.setCellValueFactory(new PropertyValueFactory<Sequence, String>("name"));
+            colDescription.setCellValueFactory(new PropertyValueFactory<Sequence, String>("description"));
+        } catch (Exception e) {
+            showError("An error occurred while loadingsequences: " + e.getMessage());
+        }
+
+    }
+
+
+    private void clear() {
         tfName.setText("");
         tfDescription.setText("");
         setId(0);
         btnSave.setDisable(false);
     }
 
-    public boolean alarmDelete() {
+    private boolean alarmDelete() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirm Deletion");
         alert.setHeaderText("Are you sure you want to delete sequence with id: " + id + "  ?");
@@ -197,14 +187,28 @@ public class SequenceController implements Initializable {
         return alert.showAndWait().filter(response -> response == ButtonType.OK).isPresent();
     }
 
-    public boolean validateTextFields() {
+    private boolean validateTextFields() {
         return !tfName.getText().isBlank() && !tfDescription.getText().isBlank();
     }
 
-    @FXML
-    void switchScreen(ActionEvent event) throws IOException {
-        App.switchToOPScreen();
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
+
+    @FXML
+    void switchToOP(ActionEvent event) {
+        try {
+            App.switchToOPScreen();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 
 
 }
