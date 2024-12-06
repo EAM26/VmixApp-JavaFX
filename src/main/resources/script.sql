@@ -35,4 +35,13 @@ VALUES
     ('Mozart piano', 'Utrecht 2024'),
     ('Mozart piano', 'Utrecht 2024');
 
+INSERT INTO cameras(Name, Number, SeqId)
+VALUES
+('Cam1-1', 1, 1),
+('Cam1-2', 2, 1),
+('Cam2-1', 3, 1),
+('Cam3-1', 4, 1);
+
+
+
 
