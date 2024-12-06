@@ -8,9 +8,6 @@ import javafx.stage.Stage;
 import org.eam.code.vmixapp.util.DBInitializer;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Objects;
 
 public class App extends Application {
