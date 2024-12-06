@@ -18,7 +18,7 @@ public class CameraDAO {
         List<Camera> cameraList = new ArrayList<>();
 
         if(SelectedSequence.getSelectedSequence() != null) {
-            String selectMessage = "SELECT * FROM cameras WHERE Id = ?";
+            String selectMessage = "SELECT * FROM cameras WHERE SeqId = ?";
             Connection connection = DBConnection.getCon();
 
             try {;

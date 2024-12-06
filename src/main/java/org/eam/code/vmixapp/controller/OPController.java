@@ -6,12 +6,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Camera;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.eam.code.vmixapp.App;
 import org.eam.code.vmixapp.dao.CameraDAO;
 import org.eam.code.vmixapp.service.CameraService;
+import org.eam.code.vmixapp.util.SelectedSequence;
 
 import java.io.IOException;
 import java.net.URL;
@@ -26,11 +28,27 @@ public class OPController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        setLabel();
         showCameras();
     }
 
     @FXML
+    private Label lbSequence;
+
+    @FXML
     private Button btnSwitch;
+
+    @FXML
+    private Button btnDelete;
+
+    @FXML
+    private Button btnSave;
+
+    @FXML
+    private Button btnUpdate;
+
+    @FXML
+    private Button clear;
 
     @FXML
     private TableColumn<Camera, String> colName;
@@ -50,8 +68,32 @@ public class OPController implements Initializable {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    void setLabel() {
+        lbSequence.setText("SEQUENCE: " + SelectedSequence.getSelectedSequence().getName());
+    }
+
+    @FXML
+    void clearFields(ActionEvent event) {
 
     }
+
+    @FXML
+    void createCam(ActionEvent event) {
+
+    }
+
+    @FXML
+    void deleteCam(ActionEvent event) {
+
+    }
+
+    @FXML
+    void updateCam(ActionEvent event) {
+
+    }
+
 
     @FXML
     void switchToMain(ActionEvent event) {
@@ -61,4 +103,6 @@ public class OPController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
+
 }
