@@ -13,6 +13,7 @@ import org.eam.code.vmixapp.DBConnection;
 import org.eam.code.vmixapp.dao.SequenceDAO;
 import org.eam.code.vmixapp.model.Sequence;
 import org.eam.code.vmixapp.service.SequenceService;
+import org.eam.code.vmixapp.util.SelectedSequence;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,19 +29,19 @@ public class SequenceController implements Initializable {
     PreparedStatement pstmt = null;
     ResultSet resultSet = null;
 
-    private int id = 0;
-
     public SequenceController() {
         this.sequenceService = new SequenceService(new SequenceDAO());
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+//    private int id = 0;
+//
+//    public int getId() {
+//        return id;
+//    }
+//
+//    public void setId(int id) {
+//        this.id = id;
+//    }
 
 
     @FXML
@@ -78,17 +79,17 @@ public class SequenceController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        clear();
         showSequences();
     }
 
 
     @FXML
     private void getSelectedData(MouseEvent event) {
-        Sequence selectedSeq = table.getSelectionModel().getSelectedItem();
-        if (selectedSeq != null) {
-            setId(selectedSeq.getId());
-            tfName.setText(selectedSeq.getName());
-            tfDescription.setText(selectedSeq.getDescription());
+        SelectedSequence.setSelectedSequence(table.getSelectionModel().getSelectedItem());
+        if (SelectedSequence.getSelectedSequence() != null) {
+            tfName.setText(SelectedSequence.getSelectedSequence().getName());
+            tfDescription.setText(SelectedSequence.getSelectedSequence().getDescription());
             btnSave.setDisable(true);
         }
     }
@@ -120,13 +121,13 @@ public class SequenceController implements Initializable {
 
     @FXML
     void deleteSequence(ActionEvent event) {
-        if(id != 0) {
+        if(SelectedSequence.getSelectedSequence() != null) {
             if(alarmDelete()) {
                 String deleteMessage = "delete from sequences where id=?";
                 con = DBConnection.getCon();
                 try {
                     pstmt = con.prepareStatement(deleteMessage);
-                    pstmt.setInt(1, getId());
+                    pstmt.setInt(1, SelectedSequence.getSelectedSequence().getId());
                     pstmt.executeUpdate();
                     showSequences();
                     clear();
@@ -140,14 +141,14 @@ public class SequenceController implements Initializable {
 
     @FXML
     void updateSequence(ActionEvent event) {
-        if(getId() != 0 && validateTextFields()) {
+        if(SelectedSequence.getSelectedSequence() != null && validateTextFields()) {
             String updateMessage = "update sequences set Name=?, Description=? where id=?";
             con = DBConnection.getCon();
             try {
                 pstmt = con.prepareStatement(updateMessage);
                 pstmt.setString(1, tfName.getText());
                 pstmt.setString(2, tfDescription.getText());
-                pstmt.setInt(3, getId());
+                pstmt.setInt(3, SelectedSequence.getSelectedSequence().getId());
                 pstmt.executeUpdate();
                 showSequences();
                 clear();
@@ -165,7 +166,7 @@ public class SequenceController implements Initializable {
             colName.setCellValueFactory(new PropertyValueFactory<Sequence, String>("name"));
             colDescription.setCellValueFactory(new PropertyValueFactory<Sequence, String>("description"));
         } catch (Exception e) {
-            showError("An error occurred while loadingsequences: " + e.getMessage());
+            showError("An error occurred while loading sequences: " + e.getMessage());
         }
 
     }
@@ -174,14 +175,15 @@ public class SequenceController implements Initializable {
     private void clear() {
         tfName.setText("");
         tfDescription.setText("");
-        setId(0);
+        SelectedSequence.setSelectedSequence(null);
         btnSave.setDisable(false);
     }
 
     private boolean alarmDelete() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirm Deletion");
-        alert.setHeaderText("Are you sure you want to delete sequence with id: " + id + "  ?");
+        alert.setHeaderText("Are you sure you want to delete sequence with id: " +
+                SelectedSequence.getSelectedSequence().getId() + "  ?");
         alert.setContentText("This action cannot be undone.");
 
         return alert.showAndWait().filter(response -> response == ButtonType.OK).isPresent();

@@ -7,13 +7,6 @@ public class Camera {
     private int number;
     private Sequence sequence;
 
-    public Camera(int id, String name, int number, Sequence sequence) {
-        this.id = id;
-        this.name = name;
-        this.number = number;
-        this.sequence = sequence;
-    }
-
     public int getId() {
         return id;
     }
