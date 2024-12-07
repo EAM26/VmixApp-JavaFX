@@ -19,7 +19,6 @@ public class MyCameraService {
     }
 
     public void createCam(String ref, String name, Sequence sequence) {
-        System.out.println("Seq id in service is: " + sequence.getId());
         cameraDAO.createCamera(ref, name, sequence);
     }
 }

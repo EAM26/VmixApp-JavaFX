@@ -91,13 +91,12 @@ public class OPController implements Initializable {
 
     @FXML
     void clearFields(ActionEvent event) {
-
+        clear();
     }
 
     @FXML
     void createCam(ActionEvent event) {
         myCameraService.createCam(tfRef.getText(), tfName.getText(), SelectedSequence.getSelectedSequence());
-        System.out.println("selected seq id in controller is: " + SelectedSequence.getSelectedSequence().getId());
         showCameras();
     }
 
@@ -120,6 +119,14 @@ public class OPController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
+    private void clear() {
+        tfRef.setText("");
+        tfName.setText("");
+        btnSave.setDisable(false);
+
+    }
+
 
 
 }
