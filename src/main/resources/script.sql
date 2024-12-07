@@ -35,29 +35,15 @@ VALUES
     ('Mozart piano', 'Utrecht 2024'),
     ('Mozart piano', 'Utrecht 2024');
 
-INSERT INTO cameras(Name, Number, SeqId)
+INSERT INTO cameras(Ref, Name, SeqId)
 VALUES
-('Cam1-1', 1, 4),
-('Cam1-2', 2, 4),
-('Cam2-1', 3, 4),
-('Cam2-1', 3, 4),
-('Cam2-1', 3, 4),
-('Cam2-1', 3, 4),
-('Cam2-1', 3, 4),
-('Cam2-1', 3, 4),
-('Cam2-1', 3, 4),
-('Cam2-1', 3, 4),
-('Cam2-1', 3, 4),
-('Cam2-1', 3, 4),
-('Cam2-1', 3, 4),
-('Cam2-1', 3, 4),
-('Cam2-1', 3, 4),
-('Cam2-1', 3, 1),
-('Cam2-1', 3, 1),
-('Cam2-1', 3, 1),
-('Cam2-1', 3, 1),
-('Cam2-1', 3, 1),
-('Cam3-1', 4, 1);
+(1,'Cam1-1', 4),
+(1,'Cam1-1', 2),
+(4,'Cam1-1', 4),
+(1,'Cam1-1', 3),
+(3,'Cam1-1', 4),
+(2,'Cam1-1', 4),
+(2, 'Cam3-1', 1);
 
 
 

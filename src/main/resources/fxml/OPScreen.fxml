@@ -15,15 +15,15 @@
     <Button fx:id="btnSwitch" layoutX="989.0" layoutY="26.0" mnemonicParsing="false" onAction="#switchToMain" text="BACK" />
     <TableView fx:id="tableCams" layoutX="808.0" layoutY="68.0" onMouseClicked="#getSelectedData" prefHeight="296.0" prefWidth="241.0" AnchorPane.rightAnchor="20.666666666666742">
       <columns>
-          <TableColumn fx:id="colNumber" prefWidth="75.0" text="Number" />
+          <TableColumn fx:id="colRef" prefWidth="75.0" text="Ref" />
           <TableColumn fx:id="colName" prefWidth="197.0" text="Name" />
       </columns>
     </TableView>
    <Label fx:id="lbSequence" layoutX="495.0" layoutY="107.0" text="Label" />
    <VBox layoutX="808.0" layoutY="376.0" prefHeight="97.0" prefWidth="241.0" AnchorPane.rightAnchor="20.666666666666742">
       <children>
-         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Number" />
-         <TextField fx:id="tfNumber" prefHeight="25.0" prefWidth="304.0" />
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ref" />
+         <TextField fx:id="tfRef" prefHeight="25.0" prefWidth="304.0" />
          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
          <TextField fx:id="tfName" />
       </children>
