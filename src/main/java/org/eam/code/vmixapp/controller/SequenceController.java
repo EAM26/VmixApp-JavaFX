@@ -1,6 +1,5 @@
 package org.eam.code.vmixapp.controller;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -60,7 +59,7 @@ public class SequenceController implements Initializable {
     private Button btnUpdate;
 
     @FXML
-    private TableView<Sequence> table;
+    private TableView<Sequence> tableSeq;
 
     @FXML
     private TableColumn<Sequence, String> colDescription;
@@ -86,7 +85,7 @@ public class SequenceController implements Initializable {
 
     @FXML
     private void getSelectedData(MouseEvent event) {
-        SelectedSequence.setSelectedSequence(table.getSelectionModel().getSelectedItem());
+        SelectedSequence.setSelectedSequence(tableSeq.getSelectionModel().getSelectedItem());
         if (SelectedSequence.getSelectedSequence() != null) {
             tfName.setText(SelectedSequence.getSelectedSequence().getName());
             tfDescription.setText(SelectedSequence.getSelectedSequence().getDescription());
@@ -161,7 +160,7 @@ public class SequenceController implements Initializable {
     private void showSequences() {
         try{
             ObservableList<Sequence> seqList = sequenceService.getSequences();
-            table.setItems(seqList);
+            tableSeq.setItems(seqList);
             colId.setCellValueFactory(new PropertyValueFactory<Sequence, Integer>("id"));
             colName.setCellValueFactory(new PropertyValueFactory<Sequence, String>("name"));
             colDescription.setCellValueFactory(new PropertyValueFactory<Sequence, String>("description"));

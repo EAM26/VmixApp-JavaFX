@@ -1,7 +1,7 @@
 package org.eam.code.vmixapp.dao;
 
 import org.eam.code.vmixapp.DBConnection;
-import org.eam.code.vmixapp.model.Camera;
+import org.eam.code.vmixapp.model.MyCamera;
 import org.eam.code.vmixapp.model.Sequence;
 import org.eam.code.vmixapp.util.SelectedSequence;
 
@@ -12,10 +12,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CameraDAO {
+public class MyCameraDAO {
 
-    public List<Camera> getCameras() {
-        List<Camera> cameraList = new ArrayList<>();
+    public List<MyCamera> getCameras() {
+        List<MyCamera> myCameraList = new ArrayList<>();
 
         if(SelectedSequence.getSelectedSequence() != null) {
             String selectMessage = "SELECT * FROM cameras WHERE SeqId = ?";
@@ -26,18 +26,18 @@ public class CameraDAO {
                 pstmt.setInt(1, SelectedSequence.getSelectedSequence().getId());
                 ResultSet resultSet = pstmt.executeQuery();
                 while (resultSet.next()){
-                    Camera camera = new Camera();
-                    camera.setId(resultSet.getInt("Id"));
-                    camera.setName(resultSet.getString("Name"));
-                    camera.setNumber(resultSet.getInt("Number"));
+                    MyCamera myCamera = new MyCamera();
+                    myCamera.setId(resultSet.getInt("Id"));
+                    myCamera.setName(resultSet.getString("Name"));
+                    myCamera.setNumber(resultSet.getInt("Number"));
                     Sequence sequence = SelectedSequence.getSelectedSequence();
-                    camera.setSequence(sequence);
-                    cameraList.add(camera);
+                    myCamera.setSequence(sequence);
+                    myCameraList.add(myCamera);
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
-        return cameraList;
+        return myCameraList;
     }
 }

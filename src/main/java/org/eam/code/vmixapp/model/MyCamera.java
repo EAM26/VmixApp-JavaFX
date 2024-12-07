@@ -1,6 +1,6 @@
 package org.eam.code.vmixapp.model;
 
-public class Camera {
+public class MyCamera {
 
     private int id;
     private String name;

@@ -5,14 +5,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Camera;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.eam.code.vmixapp.App;
-import org.eam.code.vmixapp.dao.CameraDAO;
-import org.eam.code.vmixapp.service.CameraService;
+import org.eam.code.vmixapp.dao.MyCameraDAO;
+import org.eam.code.vmixapp.model.MyCamera;
+import org.eam.code.vmixapp.service.MyCameraService;
 import org.eam.code.vmixapp.util.SelectedSequence;
 
 import java.io.IOException;
@@ -20,10 +18,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class OPController implements Initializable {
-    private final CameraService cameraService;
+    private final MyCameraService myCameraService;
 
     public OPController() {
-        this.cameraService = new CameraService(new CameraDAO());
+        this.myCameraService = new MyCameraService(new MyCameraDAO());
     }
 
     @Override
@@ -57,12 +55,18 @@ public class OPController implements Initializable {
     private TableColumn<Camera, Integer> colNumber;
 
     @FXML
-    private TableView<org.eam.code.vmixapp.model.Camera> tableCameras;
+    private TableView<MyCamera> tableCams;
+
+    @FXML
+    private TextField tfNumber;
+
+    @FXML
+    private TextField tfName;
 
     private void showCameras() {
-        ObservableList<org.eam.code.vmixapp.model.Camera> cameraList = cameraService.getCameras();
+        ObservableList<MyCamera> myCameraList = myCameraService.getCameras();
         try {
-            tableCameras.setItems(cameraList);
+            tableCams.setItems(myCameraList);
             colName.setCellValueFactory(new PropertyValueFactory<>("name"));
             colNumber.setCellValueFactory(new PropertyValueFactory<>("number"));
         } catch (Exception e) {
@@ -72,6 +76,17 @@ public class OPController implements Initializable {
 
     void setLabel() {
         lbSequence.setText("SEQUENCE: " + SelectedSequence.getSelectedSequence().getName());
+    }
+
+    @FXML
+    void getSelectedData() {
+        MyCamera selectedCamera = tableCams.getSelectionModel().getSelectedItem();
+        if(selectedCamera != null) {
+            tfNumber.setText(String.valueOf(selectedCamera.getNumber()));
+            tfName.setText(selectedCamera.getName());
+            btnSave.setDisable(true);
+        }
+
     }
 
     @FXML
