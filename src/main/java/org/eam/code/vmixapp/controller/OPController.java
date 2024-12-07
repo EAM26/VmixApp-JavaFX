@@ -12,6 +12,7 @@ import org.eam.code.vmixapp.App;
 import org.eam.code.vmixapp.dao.MyCameraDAO;
 import org.eam.code.vmixapp.model.MyCamera;
 import org.eam.code.vmixapp.service.MyCameraService;
+import org.eam.code.vmixapp.util.AlarmDelete;
 import org.eam.code.vmixapp.util.SelectedSequence;
 
 import java.io.IOException;
@@ -84,7 +85,7 @@ public class OPController implements Initializable {
     @FXML
     void getSelectedData() {
         MyCamera selectedCamera = tableCams.getSelectionModel().getSelectedItem();
-        if(selectedCamera != null) {
+        if (selectedCamera != null) {
             tfRef.setText(String.valueOf(selectedCamera.getRef()));
             tfName.setText(selectedCamera.getName());
             btnSave.setDisable(true);
@@ -111,15 +112,18 @@ public class OPController implements Initializable {
     @FXML
     void deleteCam(ActionEvent event) {
         MyCamera selectedCam = tableCams.getSelectionModel().getSelectedItem();
-        try {
-            if(selectedCam != null) {
-                myCameraService.deleteCam(selectedCam.getId());
-                showCameras();
-                clear();
+        if (selectedCam != null) {
+            if (AlarmDelete.show(selectedCam.getRef(), selectedCam.getName())) {
+                try {
+                    myCameraService.deleteCam(selectedCam.getId());
+                    showCameras();
+                    clear();
+                } catch (RuntimeException e) {
+                    System.err.println(e.getMessage());
+                }
             }
-        } catch (RuntimeException e) {
-            System.err.println(e.getMessage());
         }
+
     }
 
 
@@ -127,7 +131,7 @@ public class OPController implements Initializable {
     void updateCam(ActionEvent event) {
         MyCamera selectedCam = tableCams.getSelectionModel().getSelectedItem();
         try {
-            if(selectedCam != null) {
+            if (selectedCam != null) {
                 myCameraService.updateCam(tfRef.getText(), tfName.getText(), selectedCam.getId());
                 showCameras();
                 clear();
@@ -153,7 +157,6 @@ public class OPController implements Initializable {
         btnSave.setDisable(false);
 
     }
-
 
 
 }

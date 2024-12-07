@@ -12,6 +12,7 @@ import org.eam.code.vmixapp.DBConnection;
 import org.eam.code.vmixapp.dao.SequenceDAO;
 import org.eam.code.vmixapp.model.Sequence;
 import org.eam.code.vmixapp.service.SequenceService;
+import org.eam.code.vmixapp.util.AlarmDelete;
 import org.eam.code.vmixapp.util.SelectedSequence;
 
 import java.io.IOException;
@@ -31,17 +32,6 @@ public class SequenceController implements Initializable {
     public SequenceController() {
         this.sequenceService = new SequenceService(new SequenceDAO());
     }
-
-//    private int id = 0;
-//
-//    public int getId() {
-//        return id;
-//    }
-//
-//    public void setId(int id) {
-//        this.id = id;
-//    }
-
 
     @FXML
     private Button btnSwitch;
@@ -102,7 +92,6 @@ public class SequenceController implements Initializable {
     @FXML
     void createSequence(ActionEvent event) {
         if(validateTextFields()) {
-
             String insertMessage = "insert into sequences(Name, Description) values(?, ?)";
             con = DBConnection.getCon();
             try {
@@ -121,7 +110,7 @@ public class SequenceController implements Initializable {
     @FXML
     void deleteSequence(ActionEvent event) {
         if(SelectedSequence.getSelectedSequence() != null) {
-            if(alarmDelete()) {
+            if(AlarmDelete.show(SelectedSequence.getSelectedSequence().getId(), SelectedSequence.getSelectedSequence().getName())) {
                 String deleteMessage = "delete from sequences where id=?";
                 con = DBConnection.getCon();
                 try {
@@ -134,7 +123,7 @@ public class SequenceController implements Initializable {
                     throw new RuntimeException(e);
                 }
             }
-            clear();
+
         }
     }
 
