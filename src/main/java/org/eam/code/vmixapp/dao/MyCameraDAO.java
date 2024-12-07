@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyCameraDAO {
+    Connection connection = null;
+    PreparedStatement pstmt = null;
+    ResultSet resultSet = null;
 
     public List<MyCamera> getCameras() {
         List<MyCamera> myCameraList = new ArrayList<>();
@@ -29,7 +32,7 @@ public class MyCameraDAO {
                     MyCamera myCamera = new MyCamera();
                     myCamera.setId(resultSet.getInt("Id"));
                     myCamera.setName(resultSet.getString("Name"));
-                    myCamera.setNumber(resultSet.getInt("Number"));
+                    myCamera.setRef(resultSet.getString("Ref"));
                     Sequence sequence = SelectedSequence.getSelectedSequence();
                     myCamera.setSequence(sequence);
                     myCameraList.add(myCamera);
@@ -39,5 +42,24 @@ public class MyCameraDAO {
             }
         }
         return myCameraList;
+    }
+
+    public void createCamera(String ref, String name, Sequence sequence) {
+        String insertMessage = "INSERT INTO cameras (Ref, Name, SeqId) values(?, ?, ?)";
+
+        connection = DBConnection.getCon();
+
+        try {
+            pstmt = connection.prepareStatement(insertMessage);
+            pstmt.setString(1, ref);
+            pstmt.setString(2, name);
+            pstmt.setInt(3, sequence.getId());
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 }

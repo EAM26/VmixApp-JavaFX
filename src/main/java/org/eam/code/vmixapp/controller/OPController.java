@@ -52,13 +52,13 @@ public class OPController implements Initializable {
     private TableColumn<Camera, String> colName;
 
     @FXML
-    private TableColumn<Camera, Integer> colNumber;
+    private TableColumn<Camera, Integer> colRef;
 
     @FXML
     private TableView<MyCamera> tableCams;
 
     @FXML
-    private TextField tfNumber;
+    private TextField tfRef;
 
     @FXML
     private TextField tfName;
@@ -67,8 +67,8 @@ public class OPController implements Initializable {
         ObservableList<MyCamera> myCameraList = myCameraService.getCameras();
         try {
             tableCams.setItems(myCameraList);
-            colName.setCellValueFactory(new PropertyValueFactory<>("name"));
-            colNumber.setCellValueFactory(new PropertyValueFactory<>("number"));
+            colRef.setCellValueFactory(new PropertyValueFactory<>("Ref"));
+            colName.setCellValueFactory(new PropertyValueFactory<>("Name"));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -82,7 +82,7 @@ public class OPController implements Initializable {
     void getSelectedData() {
         MyCamera selectedCamera = tableCams.getSelectionModel().getSelectedItem();
         if(selectedCamera != null) {
-            tfNumber.setText(String.valueOf(selectedCamera.getNumber()));
+            tfRef.setText(String.valueOf(selectedCamera.getRef()));
             tfName.setText(selectedCamera.getName());
             btnSave.setDisable(true);
         }
@@ -96,7 +96,9 @@ public class OPController implements Initializable {
 
     @FXML
     void createCam(ActionEvent event) {
-
+        myCameraService.createCam(tfRef.getText(), tfName.getText(), SelectedSequence.getSelectedSequence());
+        System.out.println("selected seq id in controller is: " + SelectedSequence.getSelectedSequence().getId());
+        showCameras();
     }
 
     @FXML

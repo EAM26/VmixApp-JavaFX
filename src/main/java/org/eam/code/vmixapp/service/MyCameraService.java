@@ -4,6 +4,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.eam.code.vmixapp.dao.MyCameraDAO;
 import org.eam.code.vmixapp.model.MyCamera;
+import org.eam.code.vmixapp.model.Sequence;
+import org.eam.code.vmixapp.util.SelectedSequence;
 
 public class MyCameraService {
     private final MyCameraDAO cameraDAO;
@@ -14,5 +16,10 @@ public class MyCameraService {
 
     public ObservableList<MyCamera> getCameras() {
         return FXCollections.observableArrayList(cameraDAO.getCameras());
+    }
+
+    public void createCam(String ref, String name, Sequence sequence) {
+        System.out.println("Seq id in service is: " + sequence.getId());
+        cameraDAO.createCamera(ref, name, sequence);
     }
 }

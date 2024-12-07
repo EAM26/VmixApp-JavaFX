@@ -3,6 +3,7 @@ package org.eam.code.vmixapp.dao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.eam.code.vmixapp.DBConnection;
+import org.eam.code.vmixapp.model.MyCamera;
 import org.eam.code.vmixapp.model.Sequence;
 
 import java.sql.Connection;
