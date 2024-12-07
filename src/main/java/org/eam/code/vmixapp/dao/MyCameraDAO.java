@@ -74,6 +74,18 @@ public class MyCameraDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void deleteCam(int id){
+        String deleteMessage = "delete from cameras where id = ?";
+        connection = DBConnection.getCon();
+        try {
+            pstmt = connection.prepareStatement(deleteMessage);
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 }

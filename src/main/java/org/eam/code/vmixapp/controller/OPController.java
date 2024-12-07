@@ -110,8 +110,18 @@ public class OPController implements Initializable {
 
     @FXML
     void deleteCam(ActionEvent event) {
-
+        MyCamera selectedCam = tableCams.getSelectionModel().getSelectedItem();
+        try {
+            if(selectedCam != null) {
+                myCameraService.deleteCam(selectedCam.getId());
+                showCameras();
+                clear();
+            }
+        } catch (RuntimeException e) {
+            System.err.println(e.getMessage());
+        }
     }
+
 
     @FXML
     void updateCam(ActionEvent event) {
@@ -125,7 +135,6 @@ public class OPController implements Initializable {
         } catch (RuntimeException e) {
             System.err.println(e.getMessage());
         }
-
     }
 
 

@@ -24,4 +24,8 @@ public class MyCameraService {
     public void updateCam(String ref, String name, int id) {
         cameraDAO.updateCam(ref, name, id);
     }
+
+    public void deleteCam(int id) {
+        cameraDAO.deleteCam(id);
+    }
 }
