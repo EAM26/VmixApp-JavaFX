@@ -59,7 +59,21 @@ public class MyCameraDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    public void updateCam(String ref, String name, int id) {
+        String updateMessage = "update cameras set ref=?, name=? where id=?";
+        connection = DBConnection.getCon();
+
+        try {
+            pstmt = connection.prepareStatement(updateMessage);
+            pstmt.setString(1, ref);
+            pstmt.setString(2, name);
+            pstmt.setInt(3, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 }

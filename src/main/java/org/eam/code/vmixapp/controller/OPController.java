@@ -1,5 +1,6 @@
 package org.eam.code.vmixapp.controller;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +16,7 @@ import org.eam.code.vmixapp.util.SelectedSequence;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Comparator;
 import java.util.ResourceBundle;
 
 public class OPController implements Initializable {
@@ -65,6 +67,7 @@ public class OPController implements Initializable {
 
     private void showCameras() {
         ObservableList<MyCamera> myCameraList = myCameraService.getCameras();
+        FXCollections.sort(myCameraList, Comparator.comparing(MyCamera::getRef));
         try {
             tableCams.setItems(myCameraList);
             colRef.setCellValueFactory(new PropertyValueFactory<>("Ref"));
@@ -96,8 +99,13 @@ public class OPController implements Initializable {
 
     @FXML
     void createCam(ActionEvent event) {
-        myCameraService.createCam(tfRef.getText(), tfName.getText(), SelectedSequence.getSelectedSequence());
-        showCameras();
+        try {
+            myCameraService.createCam(tfRef.getText(), tfName.getText(), SelectedSequence.getSelectedSequence());
+            showCameras();
+            clear();
+        } catch (RuntimeException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     @FXML
@@ -107,6 +115,16 @@ public class OPController implements Initializable {
 
     @FXML
     void updateCam(ActionEvent event) {
+        MyCamera selectedCam = tableCams.getSelectionModel().getSelectedItem();
+        try {
+            if(selectedCam != null) {
+                myCameraService.updateCam(tfRef.getText(), tfName.getText(), selectedCam.getId());
+                showCameras();
+                clear();
+            }
+        } catch (RuntimeException e) {
+            System.err.println(e.getMessage());
+        }
 
     }
 
