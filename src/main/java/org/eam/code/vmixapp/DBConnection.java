@@ -3,6 +3,7 @@ package org.eam.code.vmixapp;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class DBConnection {
 //    static String user = "root";
@@ -27,9 +28,12 @@ public class DBConnection {
 //    }
 
     public static Connection getCon() {
-        Connection con = null;
+        Connection con;
         try {
             con = DriverManager.getConnection(url);
+            try (Statement stmt = con.createStatement()) {
+                stmt.execute("PRAGMA foreign_keys = ON;");
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
