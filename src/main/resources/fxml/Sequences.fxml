@@ -17,7 +17,7 @@
         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Descrption" />
         <TextField fx:id="tfDescription" />
     </VBox>
-    <TableView fx:id="table" layoutX="509.0" layoutY="110.0" onMouseClicked="#getSelectedData" prefHeight="318.0" prefWidth="489.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="110.0">
+    <TableView fx:id="tableSeq" layoutX="509.0" layoutY="110.0" onMouseClicked="#getSelectedData" prefHeight="318.0" prefWidth="489.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="110.0">
       <columns>
           <TableColumn fx:id="colId" prefWidth="75.0" text="ID" />
           <TableColumn fx:id="colName" prefWidth="146.0" text="Name" />

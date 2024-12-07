@@ -15,8 +15,6 @@
 --     ('Beethoven piano', 'Den Haag 2024');
 
 
-
-
 -- DROP TABLE IF EXISTS sequences;
 --
 --
@@ -28,11 +26,21 @@
 
 
 INSERT INTO sequences (Name, Description)
-VALUES
-    ('Mozart piano', 'Utrecht 2024'),
-    ('Mozart piano', 'Utrecht 2024'),
-    ('Mozart piano', 'Utrecht 2024'),
-    ('Mozart piano', 'Utrecht 2024'),
-    ('Mozart piano', 'Utrecht 2024');
+VALUES ('Mozart piano', 'Utrecht 2024'),
+       ('Mozart piano', 'Utrecht 2024'),
+       ('Mozart piano', 'Utrecht 2024'),
+       ('Mozart piano', 'Utrecht 2024'),
+       ('Mozart piano', 'Utrecht 2024');
+
+INSERT INTO cameras(Ref, Name, SeqId)
+VALUES (1, 'Cam1-1', 4),
+       (1, 'Cam1-1', 2),
+       (4, 'Cam1-1', 4),
+       (1, 'Cam1-1', 3),
+       (3, 'Cam1-1', 4),
+       (2, 'Cam1-1', 4),
+       (2, 'Cam3-1', 1);
+
+
 
 
