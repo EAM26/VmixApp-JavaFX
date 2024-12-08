@@ -57,6 +57,23 @@ public class SequenceDAO {
         }
     }
 
+    public void updateSequence(int id, String name, String description) {
+        String updateMessage = "update sequences set Name=?, Description=? where Id=?";
+
+        con = DBConnection.getCon();
+
+        try {
+            PreparedStatement pstmt = con.prepareStatement(updateMessage);
+            pstmt.setString(1, name);
+            pstmt.setString(2, description);
+            pstmt.setInt(3, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     public void deleteSequence(int id) {
         String deleteMessage = "delete from sequences where id = ?";
 

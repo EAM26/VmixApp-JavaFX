@@ -62,7 +62,7 @@ public class MyCameraDAO {
     }
 
     public void updateCam(String ref, String name, int id) {
-        String updateMessage = "update cameras set ref=?, name=? where id=?";
+        String updateMessage = "update cameras set Ref=?, Name=? where Id=?";
         connection = DBConnection.getCon();
 
         try {

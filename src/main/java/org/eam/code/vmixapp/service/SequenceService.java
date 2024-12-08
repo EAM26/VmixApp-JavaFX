@@ -28,6 +28,10 @@ public class SequenceService {
         sequenceDAO.createSequence(name, description);
     }
 
+    public void updateSequence(int id, String name, String description) {
+        sequenceDAO.updateSequence(id, name, description);
+    }
+
     public void deleteSequence(int id) {
         if(!myCameraService.getCameras().isEmpty()) {
             throw new RuntimeException("Sequence has camera(s).");

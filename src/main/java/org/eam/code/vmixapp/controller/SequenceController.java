@@ -27,9 +27,6 @@ import java.util.ResourceBundle;
 
 public class SequenceController implements Initializable {
     private final SequenceService sequenceService;
-    Connection con = null;
-    PreparedStatement pstmt = null;
-    ResultSet resultSet = null;
 
     public SequenceController() {
         this.sequenceService = new SequenceService(new SequenceDAO(), new MyCameraService(new MyCameraDAO()));
@@ -128,18 +125,14 @@ public class SequenceController implements Initializable {
     @FXML
     void updateSequence(ActionEvent event) {
         if(SelectedSequence.getSelectedSequence() != null && validateTextFields()) {
-            String updateMessage = "update sequences set Name=?, Description=? where id=?";
-            con = DBConnection.getCon();
             try {
-                pstmt = con.prepareStatement(updateMessage);
-                pstmt.setString(1, tfName.getText());
-                pstmt.setString(2, tfDescription.getText());
-                pstmt.setInt(3, SelectedSequence.getSelectedSequence().getId());
-                pstmt.executeUpdate();
+                sequenceService.updateSequence(SelectedSequence.getSelectedSequence().getId(), tfName.getText(),
+                        tfDescription.getText());
                 showSequences();
                 clear();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+            } catch (RuntimeException e) {
+                System.err.println(e.getMessage());
+                Alarm.showError("Error in updating sequence.");
             }
         }
     }
@@ -151,7 +144,7 @@ public class SequenceController implements Initializable {
             colId.setCellValueFactory(new PropertyValueFactory<Sequence, Integer>("id"));
             colName.setCellValueFactory(new PropertyValueFactory<Sequence, String>("name"));
             colDescription.setCellValueFactory(new PropertyValueFactory<Sequence, String>("description"));
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             Alarm.showError("An error occurred while loading sequences: " + e.getMessage());
         }
 
