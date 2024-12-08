@@ -14,4 +14,6 @@ module org.eam.code.vmixapp {
     opens org.eam.code.vmixapp.controller to javafx.fxml;
     exports org.eam.code.vmixapp.service;
     opens org.eam.code.vmixapp.service to javafx.fxml;
+    exports org.eam.code.vmixapp.dao;
+    opens org.eam.code.vmixapp.dao to javafx.fxml;
 }

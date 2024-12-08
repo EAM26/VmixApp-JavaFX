@@ -9,8 +9,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import org.eam.code.vmixapp.App;
 import org.eam.code.vmixapp.DBConnection;
+import org.eam.code.vmixapp.dao.MyCameraDAO;
 import org.eam.code.vmixapp.dao.SequenceDAO;
 import org.eam.code.vmixapp.model.Sequence;
+import org.eam.code.vmixapp.service.MyCameraService;
 import org.eam.code.vmixapp.service.SequenceService;
 import org.eam.code.vmixapp.util.Alarm;
 import org.eam.code.vmixapp.util.SelectedSequence;
@@ -30,7 +32,7 @@ public class SequenceController implements Initializable {
     ResultSet resultSet = null;
 
     public SequenceController() {
-        this.sequenceService = new SequenceService(new SequenceDAO());
+        this.sequenceService = new SequenceService(new SequenceDAO(), new MyCameraService(new MyCameraDAO()));
     }
 
     @FXML
@@ -92,17 +94,15 @@ public class SequenceController implements Initializable {
     @FXML
     void createSequence(ActionEvent event) {
         if(validateTextFields()) {
-            String insertMessage = "insert into sequences(Name, Description) values(?, ?)";
-            con = DBConnection.getCon();
+            String name = tfName.getText();
+            String description = tfDescription.getText();
             try {
-                pstmt = con.prepareStatement(insertMessage);
-                pstmt.setString(1, tfName.getText());
-                pstmt.setString(2, tfDescription.getText());
-                pstmt.executeUpdate();
+                sequenceService.createSequence(name, description);
                 showSequences();
                 clear();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+            } catch (RuntimeException e) {
+                System.err.println(e.getMessage());
+                Alarm.showError("Error in creating new sequence.");
             }
         }
     }
@@ -111,16 +111,14 @@ public class SequenceController implements Initializable {
     void deleteSequence(ActionEvent event) {
         if(SelectedSequence.getSelectedSequence() != null) {
             if(Alarm.showAskConfirmation(SelectedSequence.getSelectedSequence().getId(), SelectedSequence.getSelectedSequence().getName())) {
-                String deleteMessage = "delete from sequences where id=?";
-                con = DBConnection.getCon();
+
                 try {
-                    pstmt = con.prepareStatement(deleteMessage);
-                    pstmt.setInt(1, SelectedSequence.getSelectedSequence().getId());
-                    pstmt.executeUpdate();
+                    sequenceService.deleteSequence(SelectedSequence.getSelectedSequence().getId());
                     showSequences();
                     clear();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                } catch (RuntimeException e) {
+                    System.err.println(e.getMessage());
+                    Alarm.showError("Error in deleting sequence.\n" + e.getMessage());
                 }
             }
 

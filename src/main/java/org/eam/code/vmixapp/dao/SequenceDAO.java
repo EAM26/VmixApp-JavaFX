@@ -42,4 +42,31 @@ public class SequenceDAO {
         }
         return sequences;
     }
+
+    public void createSequence(String name, String description) {
+        String createMessage = "insert into sequences (Name, Description) values (?, ?)";
+        con = DBConnection.getCon();
+
+        try {
+            PreparedStatement pstmt = con.prepareStatement(createMessage);
+            pstmt.setString(1, name);
+            pstmt.setString(2, description);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteSequence(int id) {
+        String deleteMessage = "delete from sequences where id = ?";
+
+        con = DBConnection.getCon();
+        try {
+            PreparedStatement pstmt = con.prepareStatement(deleteMessage);
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

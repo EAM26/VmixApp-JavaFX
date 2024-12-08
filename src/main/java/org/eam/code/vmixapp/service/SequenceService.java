@@ -10,17 +10,29 @@ import java.util.List;
 
 public class SequenceService {
 
-    public final SequenceDAO sequenceDAO;
+    private final SequenceDAO sequenceDAO;
+    private final MyCameraService myCameraService;
 
-    public SequenceService(SequenceDAO sequenceDAO) {
+
+    public SequenceService(SequenceDAO sequenceDAO, MyCameraService myCameraService) {
         this.sequenceDAO = sequenceDAO;
+        this.myCameraService = myCameraService;
     }
 
 
     public ObservableList<Sequence> getSequences() {
         return FXCollections.observableArrayList(sequenceDAO.getSequences());
+    }
 
+    public void createSequence(String name, String description) {
+        sequenceDAO.createSequence(name, description);
+    }
 
+    public void deleteSequence(int id) {
+        if(!myCameraService.getCameras().isEmpty()) {
+            throw new RuntimeException("Sequence has camera(s).");
+        }
+        sequenceDAO.deleteSequence(id);
     }
 
 }
