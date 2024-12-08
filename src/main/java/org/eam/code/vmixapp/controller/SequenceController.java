@@ -12,7 +12,7 @@ import org.eam.code.vmixapp.DBConnection;
 import org.eam.code.vmixapp.dao.SequenceDAO;
 import org.eam.code.vmixapp.model.Sequence;
 import org.eam.code.vmixapp.service.SequenceService;
-import org.eam.code.vmixapp.util.AlarmDelete;
+import org.eam.code.vmixapp.util.Alarm;
 import org.eam.code.vmixapp.util.SelectedSequence;
 
 import java.io.IOException;
@@ -110,7 +110,7 @@ public class SequenceController implements Initializable {
     @FXML
     void deleteSequence(ActionEvent event) {
         if(SelectedSequence.getSelectedSequence() != null) {
-            if(AlarmDelete.show(SelectedSequence.getSelectedSequence().getId(), SelectedSequence.getSelectedSequence().getName())) {
+            if(Alarm.showAskConfirmation(SelectedSequence.getSelectedSequence().getId(), SelectedSequence.getSelectedSequence().getName())) {
                 String deleteMessage = "delete from sequences where id=?";
                 con = DBConnection.getCon();
                 try {
@@ -154,11 +154,10 @@ public class SequenceController implements Initializable {
             colName.setCellValueFactory(new PropertyValueFactory<Sequence, String>("name"));
             colDescription.setCellValueFactory(new PropertyValueFactory<Sequence, String>("description"));
         } catch (Exception e) {
-            showError("An error occurred while loading sequences: " + e.getMessage());
+            Alarm.showError("An error occurred while loading sequences: " + e.getMessage());
         }
 
     }
-
 
     private void clear() {
         tfName.setText("");
@@ -167,26 +166,9 @@ public class SequenceController implements Initializable {
         btnSave.setDisable(false);
     }
 
-    private boolean alarmDelete() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirm Deletion");
-        alert.setHeaderText("Are you sure you want to delete sequence with id: " +
-                SelectedSequence.getSelectedSequence().getId() + "  ?");
-        alert.setContentText("This action cannot be undone.");
-
-        return alert.showAndWait().filter(response -> response == ButtonType.OK).isPresent();
-    }
 
     private boolean validateTextFields() {
         return !tfName.getText().isBlank() && !tfDescription.getText().isBlank();
-    }
-
-    private void showError(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 
     @FXML

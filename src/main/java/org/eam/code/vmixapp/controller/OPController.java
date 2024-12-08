@@ -12,7 +12,7 @@ import org.eam.code.vmixapp.App;
 import org.eam.code.vmixapp.dao.MyCameraDAO;
 import org.eam.code.vmixapp.model.MyCamera;
 import org.eam.code.vmixapp.service.MyCameraService;
-import org.eam.code.vmixapp.util.AlarmDelete;
+import org.eam.code.vmixapp.util.Alarm;
 import org.eam.code.vmixapp.util.SelectedSequence;
 
 import java.io.IOException;
@@ -113,7 +113,7 @@ public class OPController implements Initializable {
     void deleteCam(ActionEvent event) {
         MyCamera selectedCam = tableCams.getSelectionModel().getSelectedItem();
         if (selectedCam != null) {
-            if (AlarmDelete.show(selectedCam.getRef(), selectedCam.getName())) {
+            if (Alarm.showAskConfirmation(selectedCam.getRef(), selectedCam.getName())) {
                 try {
                     myCameraService.deleteCam(selectedCam.getId());
                     showCameras();
