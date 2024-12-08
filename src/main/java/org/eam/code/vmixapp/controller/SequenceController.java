@@ -9,10 +9,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import org.eam.code.vmixapp.App;
 import org.eam.code.vmixapp.DBConnection;
+import org.eam.code.vmixapp.dao.MyCameraDAO;
 import org.eam.code.vmixapp.dao.SequenceDAO;
 import org.eam.code.vmixapp.model.Sequence;
+import org.eam.code.vmixapp.service.MyCameraService;
 import org.eam.code.vmixapp.service.SequenceService;
-import org.eam.code.vmixapp.util.AlarmDelete;
+import org.eam.code.vmixapp.util.Alarm;
 import org.eam.code.vmixapp.util.SelectedSequence;
 
 import java.io.IOException;
@@ -25,12 +27,9 @@ import java.util.ResourceBundle;
 
 public class SequenceController implements Initializable {
     private final SequenceService sequenceService;
-    Connection con = null;
-    PreparedStatement pstmt = null;
-    ResultSet resultSet = null;
 
     public SequenceController() {
-        this.sequenceService = new SequenceService(new SequenceDAO());
+        this.sequenceService = new SequenceService(new SequenceDAO(), new MyCameraService(new MyCameraDAO()));
     }
 
     @FXML
@@ -92,17 +91,15 @@ public class SequenceController implements Initializable {
     @FXML
     void createSequence(ActionEvent event) {
         if(validateTextFields()) {
-            String insertMessage = "insert into sequences(Name, Description) values(?, ?)";
-            con = DBConnection.getCon();
+            String name = tfName.getText();
+            String description = tfDescription.getText();
             try {
-                pstmt = con.prepareStatement(insertMessage);
-                pstmt.setString(1, tfName.getText());
-                pstmt.setString(2, tfDescription.getText());
-                pstmt.executeUpdate();
+                sequenceService.createSequence(name, description);
                 showSequences();
                 clear();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+            } catch (RuntimeException e) {
+                System.err.println(e.getMessage());
+                Alarm.showError("Error in creating new sequence.");
             }
         }
     }
@@ -110,17 +107,15 @@ public class SequenceController implements Initializable {
     @FXML
     void deleteSequence(ActionEvent event) {
         if(SelectedSequence.getSelectedSequence() != null) {
-            if(AlarmDelete.show(SelectedSequence.getSelectedSequence().getId(), SelectedSequence.getSelectedSequence().getName())) {
-                String deleteMessage = "delete from sequences where id=?";
-                con = DBConnection.getCon();
+            if(Alarm.showAskConfirmation(SelectedSequence.getSelectedSequence().getId(), SelectedSequence.getSelectedSequence().getName())) {
+
                 try {
-                    pstmt = con.prepareStatement(deleteMessage);
-                    pstmt.setInt(1, SelectedSequence.getSelectedSequence().getId());
-                    pstmt.executeUpdate();
+                    sequenceService.deleteSequence(SelectedSequence.getSelectedSequence().getId());
                     showSequences();
                     clear();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                } catch (RuntimeException e) {
+                    System.err.println(e.getMessage());
+                    Alarm.showError("Error in deleting sequence.\n" + e.getMessage());
                 }
             }
 
@@ -130,18 +125,14 @@ public class SequenceController implements Initializable {
     @FXML
     void updateSequence(ActionEvent event) {
         if(SelectedSequence.getSelectedSequence() != null && validateTextFields()) {
-            String updateMessage = "update sequences set Name=?, Description=? where id=?";
-            con = DBConnection.getCon();
             try {
-                pstmt = con.prepareStatement(updateMessage);
-                pstmt.setString(1, tfName.getText());
-                pstmt.setString(2, tfDescription.getText());
-                pstmt.setInt(3, SelectedSequence.getSelectedSequence().getId());
-                pstmt.executeUpdate();
+                sequenceService.updateSequence(SelectedSequence.getSelectedSequence().getId(), tfName.getText(),
+                        tfDescription.getText());
                 showSequences();
                 clear();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+            } catch (RuntimeException e) {
+                System.err.println(e.getMessage());
+                Alarm.showError("Error in updating sequence.");
             }
         }
     }
@@ -153,12 +144,11 @@ public class SequenceController implements Initializable {
             colId.setCellValueFactory(new PropertyValueFactory<Sequence, Integer>("id"));
             colName.setCellValueFactory(new PropertyValueFactory<Sequence, String>("name"));
             colDescription.setCellValueFactory(new PropertyValueFactory<Sequence, String>("description"));
-        } catch (Exception e) {
-            showError("An error occurred while loading sequences: " + e.getMessage());
+        } catch (RuntimeException e) {
+            Alarm.showError("An error occurred while loading sequences: " + e.getMessage());
         }
 
     }
-
 
     private void clear() {
         tfName.setText("");
@@ -167,26 +157,9 @@ public class SequenceController implements Initializable {
         btnSave.setDisable(false);
     }
 
-    private boolean alarmDelete() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirm Deletion");
-        alert.setHeaderText("Are you sure you want to delete sequence with id: " +
-                SelectedSequence.getSelectedSequence().getId() + "  ?");
-        alert.setContentText("This action cannot be undone.");
-
-        return alert.showAndWait().filter(response -> response == ButtonType.OK).isPresent();
-    }
 
     private boolean validateTextFields() {
         return !tfName.getText().isBlank() && !tfDescription.getText().isBlank();
-    }
-
-    private void showError(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 
     @FXML
