@@ -164,11 +164,15 @@ public class SequenceController implements Initializable {
 
     @FXML
     void switchToOP(ActionEvent event) {
-        try {
-            App.switchToOPScreen();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if(SelectedSequence.getSelectedSequence() != null) {
+            try {
+                App.switchToOPScreen();
+            } catch (IOException e) {
+                System.err.println(e.getMessage());
+                Alarm.showError("Error in switching to OP Screen.");
+            }
         }
+
     }
 
 

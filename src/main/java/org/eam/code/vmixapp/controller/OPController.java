@@ -100,12 +100,15 @@ public class OPController implements Initializable {
 
     @FXML
     void createCam(ActionEvent event) {
-        try {
-            myCameraService.createCam(tfRef.getText(), tfName.getText(), SelectedSequence.getSelectedSequence());
-            showCameras();
-            clear();
-        } catch (RuntimeException e) {
-            System.err.println(e.getMessage());
+        if (validateTextFields()) {
+            try {
+                myCameraService.createCam(tfRef.getText(), tfName.getText(), SelectedSequence.getSelectedSequence());
+                showCameras();
+                clear();
+            } catch (RuntimeException e) {
+                System.err.println(e.getMessage());
+                Alarm.showError("Error in creating new Camera.");
+            }
         }
     }
 
@@ -120,6 +123,7 @@ public class OPController implements Initializable {
                     clear();
                 } catch (RuntimeException e) {
                     System.err.println(e.getMessage());
+                    Alarm.showError("Error in deleting camera.");
                 }
             }
         }
@@ -129,16 +133,20 @@ public class OPController implements Initializable {
 
     @FXML
     void updateCam(ActionEvent event) {
-        MyCamera selectedCam = tableCams.getSelectionModel().getSelectedItem();
-        try {
-            if (selectedCam != null) {
-                myCameraService.updateCam(tfRef.getText(), tfName.getText(), selectedCam.getId());
-                showCameras();
-                clear();
+        if (validateTextFields()) {
+            MyCamera selectedCam = tableCams.getSelectionModel().getSelectedItem();
+            try {
+                if (selectedCam != null) {
+                    myCameraService.updateCam(tfRef.getText(), tfName.getText(), selectedCam.getId());
+                    showCameras();
+                    clear();
+                }
+            } catch (RuntimeException e) {
+                System.err.println(e.getMessage());
+                Alarm.showError("Error in updating camera.");
             }
-        } catch (RuntimeException e) {
-            System.err.println(e.getMessage());
         }
+
     }
 
 
@@ -147,7 +155,8 @@ public class OPController implements Initializable {
         try {
             App.switchToMainScreen();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println(e.getMessage());
+            Alarm.showError("Error in switching to Main Screen.");
         }
     }
 
@@ -155,7 +164,10 @@ public class OPController implements Initializable {
         tfRef.setText("");
         tfName.setText("");
         btnSave.setDisable(false);
+    }
 
+    private boolean validateTextFields() {
+        return !tfRef.getText().isBlank() && !tfName.getText().isBlank();
     }
 
 
