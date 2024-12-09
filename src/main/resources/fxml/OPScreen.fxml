@@ -25,19 +25,19 @@
          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ref" />
          <TextField fx:id="tfRef" prefHeight="25.0" prefWidth="304.0" />
          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
-         <TextField fx:id="tfName" />
+         <TextField fx:id="tfNameCam" />
       </children>
    </VBox>
    <ButtonBar layoutX="782.0" layoutY="513.0" prefHeight="40.0" prefWidth="257.0" AnchorPane.rightAnchor="20.0">
       <buttons>
-         <Button fx:id="btnDelete" minWidth="62.0" mnemonicParsing="false" onAction="#deleteCam" prefHeight="25.0" styleClass="form_container" text="Delete" />
-         <Button fx:id="clear" mnemonicParsing="false" onAction="#clearFields" prefHeight="25.0" prefWidth="178.0" text="Clear" />
+         <Button fx:id="btnDeleteCam" minWidth="62.0" mnemonicParsing="false" onAction="#deleteCam" prefHeight="25.0" styleClass="form_container" text="Delete" />
+         <Button fx:id="btnClearCam" mnemonicParsing="false" onAction="#clearFieldsCam" prefHeight="25.0" prefWidth="178.0" text="Clear" />
       </buttons>
    </ButtonBar>
    <ButtonBar layoutX="782.0" layoutY="473.0" prefHeight="40.0" prefWidth="257.0" AnchorPane.rightAnchor="21.0">
       <buttons>
-         <Button fx:id="btnSave" minWidth="62.0" mnemonicParsing="false" onAction="#createCam" prefHeight="25.0" styleClass="form_container" text="Save" />
-         <Button fx:id="btnUpdate" mnemonicParsing="false" onAction="#updateCam" prefHeight="25.0" prefWidth="178.0" text="Update" />
+         <Button fx:id="btnSaveCam" minWidth="62.0" mnemonicParsing="false" onAction="#createCam" prefHeight="25.0" styleClass="form_container" text="Save" />
+         <Button fx:id="btnUpdateCam" mnemonicParsing="false" onAction="#updateCam" prefHeight="25.0" prefWidth="178.0" text="Update" />
       </buttons>
    </ButtonBar>
 </AnchorPane>

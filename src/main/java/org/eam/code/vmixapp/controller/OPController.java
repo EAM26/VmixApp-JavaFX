@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Camera;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import org.eam.code.vmixapp.App;
 import org.eam.code.vmixapp.dao.MyCameraDAO;
 import org.eam.code.vmixapp.model.MyCamera;
@@ -40,16 +41,16 @@ public class OPController implements Initializable {
     private Button btnSwitch;
 
     @FXML
-    private Button btnDelete;
+    private Button btnDeleteCam;
 
     @FXML
-    private Button btnSave;
+    private Button btnSaveCam;
 
     @FXML
-    private Button btnUpdate;
+    private Button btnUpdateCam;
 
     @FXML
-    private Button clear;
+    private Button btnClearCam;
 
     @FXML
     private TableColumn<Camera, String> colName;
@@ -64,7 +65,67 @@ public class OPController implements Initializable {
     private TextField tfRef;
 
     @FXML
-    private TextField tfName;
+    private TextField tfNameCam;
+
+    @FXML
+    private Button btnClearSceneFields;
+
+
+    @FXML
+    private Button btnDeleteScene;
+
+
+    @FXML
+    private Button btnSaveScene;
+
+
+    @FXML
+    private Button btnUpdateScene;
+
+
+    @FXML
+    private TableView<?> tableScenes;
+
+    @FXML
+    private TextField tfDescription;
+
+
+
+    @FXML
+    private TextField tfNameScene;
+
+    @FXML
+    private TextField tfNumScene;
+
+
+
+
+
+    @FXML
+    void clearFieldsSence(ActionEvent event) {
+
+    }
+
+
+
+
+    @FXML
+    void deleteScene(ActionEvent event) {
+
+    }
+
+
+    @FXML
+    void saveScene(ActionEvent event) {
+
+    }
+
+
+
+    @FXML
+    void updateScene(ActionEvent event) {
+
+    }
 
     private void showCameras() {
         ObservableList<MyCamera> myCameraList = myCameraService.getCameras();
@@ -82,19 +143,19 @@ public class OPController implements Initializable {
         lbSequence.setText("SEQUENCE: " + SelectedSequence.getSelectedSequence().getName());
     }
 
+
     @FXML
-    void getSelectedData() {
+    void getSelectedData(MouseEvent event) {
         MyCamera selectedCamera = tableCams.getSelectionModel().getSelectedItem();
         if (selectedCamera != null) {
             tfRef.setText(String.valueOf(selectedCamera.getRef()));
-            tfName.setText(selectedCamera.getName());
-            btnSave.setDisable(true);
+            tfNameCam.setText(selectedCamera.getName());
+            btnSaveCam.setDisable(true);
         }
-
     }
 
     @FXML
-    void clearFields(ActionEvent event) {
+    void clearFieldsCam(ActionEvent event) {
         clear();
     }
 
@@ -102,7 +163,7 @@ public class OPController implements Initializable {
     void createCam(ActionEvent event) {
         if (validateTextFields()) {
             try {
-                myCameraService.createCam(tfRef.getText(), tfName.getText(), SelectedSequence.getSelectedSequence());
+                myCameraService.createCam(tfRef.getText(), tfNameCam.getText(), SelectedSequence.getSelectedSequence());
                 showCameras();
                 clear();
             } catch (RuntimeException e) {
@@ -137,7 +198,7 @@ public class OPController implements Initializable {
             MyCamera selectedCam = tableCams.getSelectionModel().getSelectedItem();
             try {
                 if (selectedCam != null) {
-                    myCameraService.updateCam(tfRef.getText(), tfName.getText(), selectedCam.getId());
+                    myCameraService.updateCam(tfRef.getText(), tfNameCam.getText(), selectedCam.getId());
                     showCameras();
                     clear();
                 }
@@ -162,13 +223,11 @@ public class OPController implements Initializable {
 
     private void clear() {
         tfRef.setText("");
-        tfName.setText("");
-        btnSave.setDisable(false);
+        tfNameCam.setText("");
+        btnSaveCam.setDisable(false);
     }
 
     private boolean validateTextFields() {
-        return !tfRef.getText().isBlank() && !tfName.getText().isBlank();
+        return !tfRef.getText().isBlank() && !tfNameCam.getText().isBlank();
     }
-
-
 }
