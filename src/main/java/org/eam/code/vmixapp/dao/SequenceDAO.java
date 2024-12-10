@@ -22,11 +22,11 @@ public class SequenceDAO {
     public List<Sequence> getSequences() {
         List<Sequence> sequences = new ArrayList<>();
 
-        String insert = "select * from sequences";
+        String selectMessage = "select * from sequences";
 
         con = DBConnection.getCon();
         try {
-            pstmt = con.prepareStatement(insert);
+            pstmt = con.prepareStatement(selectMessage);
             resultSet = pstmt.executeQuery();
 
             while (resultSet.next()) {
@@ -41,6 +41,30 @@ public class SequenceDAO {
             throw new RuntimeException(e);
         }
         return sequences;
+    }
+
+    public Sequence getSequenceById(int id) {
+        String getMessage = "Select * from sequences where id=?";
+        con = DBConnection.getCon();
+
+        try {
+            pstmt = con.prepareStatement(getMessage);
+            pstmt.setInt(1, id);
+            resultSet = pstmt.executeQuery();
+            if(resultSet.next()) {
+                Sequence sequence = new Sequence();
+                sequence.setId(id);
+                sequence.setName(resultSet.getString("Name"));
+                sequence.setDescription(resultSet.getString("Description"));
+                return sequence;
+            } else {
+//                todo: create own not found exception
+                throw new RuntimeException();
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void createSequence(String name, String description) {

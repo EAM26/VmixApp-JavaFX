@@ -41,6 +41,13 @@ VALUES (1, 'Cam1-1', 4),
        (2, 'Cam1-1', 4),
        (2, 'Cam3-1', 1);
 
+INSERT INTO scenes(Number, Name, Description, SeqId, CamId)
+VALUES (1, 'Scene 1', 'Descr. 1', 1, 1),
+       (2, 'Scene 2', 'Descr. 2', 1, 2),
+       (3, 'Scene 3', 'Descr. 3', 1, 1),
+       (1, 'Scene 1', 'Descr. 1', 2, 1),
+       (1, 'Scene 1', 'Descr. 1', 3, 1);
+
 
 
 

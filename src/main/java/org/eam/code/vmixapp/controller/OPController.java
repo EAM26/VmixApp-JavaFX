@@ -12,7 +12,9 @@ import javafx.scene.input.MouseEvent;
 import org.eam.code.vmixapp.App;
 import org.eam.code.vmixapp.dao.MyCameraDAO;
 import org.eam.code.vmixapp.model.MyCamera;
+import org.eam.code.vmixapp.model.Scene;
 import org.eam.code.vmixapp.service.MyCameraService;
+import org.eam.code.vmixapp.service.SceneService;
 import org.eam.code.vmixapp.util.Alarm;
 import org.eam.code.vmixapp.util.SelectedSequence;
 
@@ -23,15 +25,18 @@ import java.util.ResourceBundle;
 
 public class OPController implements Initializable {
     private final MyCameraService myCameraService;
+    private final SceneService sceneService;
 
     public OPController() {
-        this.myCameraService = new MyCameraService(new MyCameraDAO());
+        this.myCameraService = new MyCameraService();
+        this.sceneService = new SceneService();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setLabel();
         showCameras();
+        showTestScenes();
     }
 
     @FXML
@@ -53,7 +58,7 @@ public class OPController implements Initializable {
     private Button btnClearCam;
 
     @FXML
-    private TableColumn<Camera, String> colName;
+    private TableColumn<Camera, String> colNameCam;
 
     @FXML
     private TableColumn<Camera, Integer> colRef;
@@ -62,33 +67,38 @@ public class OPController implements Initializable {
     private TableView<MyCamera> tableCams;
 
     @FXML
+    private TableView<Scene> tableScenes;
+
+    @FXML
     private TextField tfRef;
 
     @FXML
     private TextField tfNameCam;
 
     @FXML
-    private Button btnClearSceneFields;
+    private TableColumn<Scene, String> colDescrSene;
 
+    @FXML
+    private TableColumn<Scene, String> colNameScene;
+
+    @FXML
+    private TableColumn<Scene, Integer> colNumScene;
+
+    @FXML
+    private Button btnClearSceneFields;
 
     @FXML
     private Button btnDeleteScene;
 
-
     @FXML
     private Button btnSaveScene;
-
 
     @FXML
     private Button btnUpdateScene;
 
 
     @FXML
-    private TableView<?> tableScenes;
-
-    @FXML
     private TextField tfDescription;
-
 
 
     @FXML
@@ -98,26 +108,17 @@ public class OPController implements Initializable {
     private TextField tfNumScene;
 
 
-
-
-
     @FXML
-    void clearFieldsSence(ActionEvent event) {
-
+    void clearFieldsScene(ActionEvent event) {
     }
-
-
-
 
     @FXML
     void deleteScene(ActionEvent event) {
 
     }
 
-
     @FXML
     void saveScene(ActionEvent event) {
-
     }
 
 
@@ -133,8 +134,22 @@ public class OPController implements Initializable {
         try {
             tableCams.setItems(myCameraList);
             colRef.setCellValueFactory(new PropertyValueFactory<>("Ref"));
-            colName.setCellValueFactory(new PropertyValueFactory<>("Name"));
+            colNameCam.setCellValueFactory(new PropertyValueFactory<>("Name"));
         } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void showTestScenes() {
+        ObservableList<Scene> sceneList = sceneService.getScenes();
+//        FXCollections.sort(sceneList, Comparator.comparing(MyCamera::getRef));
+        try {
+            tableScenes.setItems(sceneList);
+            colNumScene.setCellValueFactory(new PropertyValueFactory<>("Number"));
+            colNameScene.setCellValueFactory(new PropertyValueFactory<>("Name"));
+            colDescrSene.setCellValueFactory(new PropertyValueFactory<>("Description"));
+        } catch (Exception e) {
+            System.out.println("error in show test scenes");
             throw new RuntimeException(e);
         }
     }

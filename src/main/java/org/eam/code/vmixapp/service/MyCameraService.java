@@ -9,8 +9,8 @@ import org.eam.code.vmixapp.model.Sequence;
 public class MyCameraService {
     private final MyCameraDAO cameraDAO;
 
-    public MyCameraService(MyCameraDAO cameraDAO) {
-        this.cameraDAO = cameraDAO;
+    public MyCameraService() {
+        this.cameraDAO = new MyCameraDAO();
     }
 
     public ObservableList<MyCamera> getCameras() {
@@ -27,5 +27,9 @@ public class MyCameraService {
 
     public void deleteCam(int id) {
         cameraDAO.deleteCam(id);
+    }
+
+    public MyCamera getCameraById(int id) {
+        return cameraDAO.getCameraById(id);
     }
 }

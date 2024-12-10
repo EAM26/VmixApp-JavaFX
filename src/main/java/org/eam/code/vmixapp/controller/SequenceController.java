@@ -8,28 +8,20 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import org.eam.code.vmixapp.App;
-import org.eam.code.vmixapp.DBConnection;
-import org.eam.code.vmixapp.dao.MyCameraDAO;
-import org.eam.code.vmixapp.dao.SequenceDAO;
 import org.eam.code.vmixapp.model.Sequence;
-import org.eam.code.vmixapp.service.MyCameraService;
 import org.eam.code.vmixapp.service.SequenceService;
 import org.eam.code.vmixapp.util.Alarm;
 import org.eam.code.vmixapp.util.SelectedSequence;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class SequenceController implements Initializable {
     private final SequenceService sequenceService;
 
     public SequenceController() {
-        this.sequenceService = new SequenceService(new SequenceDAO(), new MyCameraService(new MyCameraDAO()));
+        this.sequenceService = new SequenceService();
     }
 
     @FXML
