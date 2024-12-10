@@ -222,7 +222,7 @@ public class OPController implements Initializable {
                     clearCam();
                 } catch (RuntimeException e) {
                     System.err.println(e.getMessage());
-                    Alarm.showError("Error in deleting camera.");
+                    Alarm.showError("Error in deleting camera.\n" + e.getMessage());
                 }
             }
         }

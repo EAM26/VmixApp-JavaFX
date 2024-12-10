@@ -20,13 +20,8 @@ public class SequenceService {
         this.cameraDAO = new MyCameraDAO();
     }
 
-
     public ObservableList<Sequence> getSequences() {
         return FXCollections.observableArrayList(sequenceDAO.getSequences());
-    }
-
-    public Sequence getSequenceById(int id) {
-        return sequenceDAO.getSequenceById(id);
     }
 
     public void createSequence(String name, String description) {
@@ -39,7 +34,7 @@ public class SequenceService {
 
     public void deleteSequence(int id) {
         if (!cameraDAO.getCameras().isEmpty()) {
-            throw new RuntimeException("Sequence has camera(s).");
+            throw new IllegalStateException("Sequence has camera(s).");
         }
         sequenceDAO.deleteSequence(id);
     }
