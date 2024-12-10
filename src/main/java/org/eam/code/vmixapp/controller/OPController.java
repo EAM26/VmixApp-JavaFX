@@ -10,7 +10,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import org.eam.code.vmixapp.App;
-import org.eam.code.vmixapp.dao.MyCameraDAO;
 import org.eam.code.vmixapp.model.MyCamera;
 import org.eam.code.vmixapp.model.Scene;
 import org.eam.code.vmixapp.service.MyCameraService;
@@ -36,7 +35,7 @@ public class OPController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setLabel();
         showCameras();
-        showTestScenes();
+        showScenes();
     }
 
     @FXML
@@ -45,35 +44,12 @@ public class OPController implements Initializable {
     @FXML
     private Button btnSwitch;
 
-    @FXML
-    private Button btnDeleteCam;
+//    Scene elements
 
-    @FXML
-    private Button btnSaveCam;
-
-    @FXML
-    private Button btnUpdateCam;
-
-    @FXML
-    private Button btnClearCam;
-
-    @FXML
-    private TableColumn<Camera, String> colNameCam;
-
-    @FXML
-    private TableColumn<Camera, Integer> colRef;
-
-    @FXML
-    private TableView<MyCamera> tableCams;
 
     @FXML
     private TableView<Scene> tableScenes;
 
-    @FXML
-    private TextField tfRef;
-
-    @FXML
-    private TextField tfNameCam;
 
     @FXML
     private TableColumn<Scene, String> colDescrSene;
@@ -98,7 +74,7 @@ public class OPController implements Initializable {
 
 
     @FXML
-    private TextField tfDescription;
+    private TextField tfDescrScene;
 
 
     @FXML
@@ -110,10 +86,24 @@ public class OPController implements Initializable {
 
     @FXML
     void clearFieldsScene(ActionEvent event) {
+        clearScene();
     }
 
     @FXML
     void deleteScene(ActionEvent event) {
+        Scene selectedScene = tableScenes.getSelectionModel().getSelectedItem();
+        if(selectedScene != null) {
+            if(Alarm.showAskConfirmation(selectedScene.getNumber(), selectedScene.getName())) {
+                try {
+                    sceneService.deleteScene(selectedScene.getId());
+                    showScenes();
+                    clearScene();
+                } catch (NumberFormatException e) {
+                    System.err.println(e.getMessage());
+                    Alarm.showError("Error in deleting scene.");
+                }
+            }
+        }
 
     }
 
@@ -121,12 +111,64 @@ public class OPController implements Initializable {
     void saveScene(ActionEvent event) {
     }
 
-
-
     @FXML
     void updateScene(ActionEvent event) {
 
     }
+
+    @FXML
+    void getSelectedSceneData(MouseEvent event) {
+        Scene selectedScene = tableScenes.getSelectionModel().getSelectedItem();
+        if (selectedScene != null) {
+            tfNumScene.setText(String.valueOf(selectedScene.getNumber()));
+            tfNameScene.setText(selectedScene.getName());
+            tfDescrScene.setText(selectedScene.getDescription());
+            btnSaveCam.setDisable(true);
+        }
+    }
+
+    private void showScenes() {
+        ObservableList<Scene> sceneList = sceneService.getScenes();
+        FXCollections.sort(sceneList, Comparator.comparing(Scene::getNumber));
+        try {
+            tableScenes.setItems(sceneList);
+            colNumScene.setCellValueFactory(new PropertyValueFactory<>("Number"));
+            colNameScene.setCellValueFactory(new PropertyValueFactory<>("Name"));
+            colDescrSene.setCellValueFactory(new PropertyValueFactory<>("Description"));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            Alarm.showError("Error in showing scenes.");
+        }
+    }
+
+//    Cam elements
+
+    @FXML
+    private Button btnDeleteCam;
+
+    @FXML
+    private Button btnSaveCam;
+
+    @FXML
+    private Button btnUpdateCam;
+
+    @FXML
+    private Button btnClearCam;
+
+    @FXML
+    private TextField tfRef;
+
+    @FXML
+    private TextField tfNameCam;
+
+    @FXML
+    private TableColumn<Camera, String> colNameCam;
+
+    @FXML
+    private TableColumn<Camera, Integer> colRef;
+
+    @FXML
+    private TableView<MyCamera> tableCams;
 
     private void showCameras() {
         ObservableList<MyCamera> myCameraList = myCameraService.getCameras();
@@ -140,27 +182,8 @@ public class OPController implements Initializable {
         }
     }
 
-    private void showTestScenes() {
-        ObservableList<Scene> sceneList = sceneService.getScenes();
-//        FXCollections.sort(sceneList, Comparator.comparing(MyCamera::getRef));
-        try {
-            tableScenes.setItems(sceneList);
-            colNumScene.setCellValueFactory(new PropertyValueFactory<>("Number"));
-            colNameScene.setCellValueFactory(new PropertyValueFactory<>("Name"));
-            colDescrSene.setCellValueFactory(new PropertyValueFactory<>("Description"));
-        } catch (Exception e) {
-            System.out.println("error in show test scenes");
-            throw new RuntimeException(e);
-        }
-    }
-
-    void setLabel() {
-        lbSequence.setText("SEQUENCE: " + SelectedSequence.getSelectedSequence().getName());
-    }
-
-
     @FXML
-    void getSelectedData(MouseEvent event) {
+    void getSelectedCamData(MouseEvent event) {
         MyCamera selectedCamera = tableCams.getSelectionModel().getSelectedItem();
         if (selectedCamera != null) {
             tfRef.setText(String.valueOf(selectedCamera.getRef()));
@@ -171,16 +194,16 @@ public class OPController implements Initializable {
 
     @FXML
     void clearFieldsCam(ActionEvent event) {
-        clear();
+        clearCam();
     }
 
     @FXML
     void createCam(ActionEvent event) {
-        if (validateTextFields()) {
+        if (validateCamTextFields()) {
             try {
                 myCameraService.createCam(tfRef.getText(), tfNameCam.getText(), SelectedSequence.getSelectedSequence());
                 showCameras();
-                clear();
+                clearCam();
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 Alarm.showError("Error in creating new Camera.");
@@ -196,35 +219,32 @@ public class OPController implements Initializable {
                 try {
                     myCameraService.deleteCam(selectedCam.getId());
                     showCameras();
-                    clear();
+                    clearCam();
                 } catch (RuntimeException e) {
                     System.err.println(e.getMessage());
                     Alarm.showError("Error in deleting camera.");
                 }
             }
         }
-
     }
 
 
     @FXML
     void updateCam(ActionEvent event) {
-        if (validateTextFields()) {
+        if (validateCamTextFields()) {
             MyCamera selectedCam = tableCams.getSelectionModel().getSelectedItem();
             try {
                 if (selectedCam != null) {
                     myCameraService.updateCam(tfRef.getText(), tfNameCam.getText(), selectedCam.getId());
                     showCameras();
-                    clear();
+                    clearCam();
                 }
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 Alarm.showError("Error in updating camera.");
             }
         }
-
     }
-
 
     @FXML
     void switchToMain(ActionEvent event) {
@@ -236,13 +256,26 @@ public class OPController implements Initializable {
         }
     }
 
-    private void clear() {
+    private void clearCam() {
         tfRef.setText("");
         tfNameCam.setText("");
         btnSaveCam.setDisable(false);
     }
 
-    private boolean validateTextFields() {
+    private void clearScene() {
+        tfNumScene.setText("");
+        tfNameScene.setText("");
+        tfDescrScene.setText("");
+        btnSaveCam.setDisable(false);
+    }
+
+    private boolean validateCamTextFields() {
         return !tfRef.getText().isBlank() && !tfNameCam.getText().isBlank();
+    }
+
+
+
+    void setLabel() {
+        lbSequence.setText("SEQUENCE: " + SelectedSequence.getSelectedSequence().getName());
     }
 }

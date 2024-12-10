@@ -25,15 +25,15 @@ public class MyCameraDAO {
     public List<MyCamera> getCameras() {
         List<MyCamera> myCameraList = new ArrayList<>();
 
-        if(SelectedSequence.getSelectedSequence() != null) {
+        if (SelectedSequence.getSelectedSequence() != null) {
             String selectMessage = "SELECT * FROM cameras WHERE SeqId = ?";
-            Connection connection = DBConnection.getCon();
+            connection = DBConnection.getCon();
 
             try {
                 PreparedStatement pstmt = connection.prepareStatement(selectMessage);
                 pstmt.setInt(1, SelectedSequence.getSelectedSequence().getId());
                 ResultSet resultSet = pstmt.executeQuery();
-                while (resultSet.next()){
+                while (resultSet.next()) {
                     MyCamera myCamera = new MyCamera();
                     myCamera.setId(resultSet.getInt("Id"));
                     myCamera.setName(resultSet.getString("Name"));
@@ -81,7 +81,7 @@ public class MyCameraDAO {
         }
     }
 
-    public void deleteCam(int id){
+    public void deleteCam(int id) {
         String deleteMessage = "delete from cameras where id = ?";
         connection = DBConnection.getCon();
         try {
@@ -97,12 +97,12 @@ public class MyCameraDAO {
         String getMessage = "Select * from cameras where id = ?";
         connection = DBConnection.getCon();
 
-        try{
+        try {
             pstmt = connection.prepareStatement(getMessage);
             pstmt.setInt(1, id);
             resultSet = pstmt.executeQuery();
 
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 MyCamera camera = new MyCamera();
                 camera.setId(resultSet.getInt("Id"));
                 camera.setRef(resultSet.getString("Ref"));

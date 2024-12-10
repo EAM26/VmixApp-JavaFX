@@ -15,4 +15,8 @@ public class SceneService {
     public ObservableList<Scene> getScenes() {
         return FXCollections.observableArrayList(sceneDao.getScenes());
     }
+
+    public void deleteScene(int id) {
+        sceneDao.deleteScene(id);
+    }
 }
