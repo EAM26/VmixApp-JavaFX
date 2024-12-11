@@ -1,5 +1,7 @@
 package org.eam.code.vmixapp.controller;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -44,21 +46,23 @@ public class OPController implements Initializable {
     @FXML
     private Button btnSwitch;
 
-//    Scene elements
 
+//    Scene elements
 
     @FXML
     private TableView<Scene> tableScenes;
 
-
     @FXML
-    private TableColumn<Scene, String> colDescrSene;
+    private TableColumn<Scene, Integer> colNumScene;
 
     @FXML
     private TableColumn<Scene, String> colNameScene;
 
     @FXML
-    private TableColumn<Scene, Integer> colNumScene;
+    private TableColumn<Scene, String> colDescrSene;
+
+    @FXML
+    private TableColumn<Scene, String> colCamRef;
 
     @FXML
     private Button btnClearSceneFields;
@@ -72,17 +76,16 @@ public class OPController implements Initializable {
     @FXML
     private Button btnUpdateScene;
 
-
-    @FXML
-    private TextField tfDescrScene;
-
-
-    @FXML
-    private TextField tfNameScene;
-
     @FXML
     private TextField tfNumScene;
 
+    @FXML
+    private TextField tfNameScene;
+    @FXML
+    private TextField tfDescrScene;
+
+    @FXML
+    private TextField tfCamRef;
 
     @FXML
     void clearFieldsScene(ActionEvent event) {
@@ -123,6 +126,7 @@ public class OPController implements Initializable {
             tfNumScene.setText(String.valueOf(selectedScene.getNumber()));
             tfNameScene.setText(selectedScene.getName());
             tfDescrScene.setText(selectedScene.getDescription());
+            tfCamRef.setText(selectedScene.getCamera().getRef());
             btnSaveCam.setDisable(true);
         }
     }
@@ -135,6 +139,10 @@ public class OPController implements Initializable {
             colNumScene.setCellValueFactory(new PropertyValueFactory<>("Number"));
             colNameScene.setCellValueFactory(new PropertyValueFactory<>("Name"));
             colDescrSene.setCellValueFactory(new PropertyValueFactory<>("Description"));
+            colCamRef.setCellValueFactory(cellData -> {
+                MyCamera camera = cellData.getValue().getCamera();
+                return new SimpleStringProperty(camera != null? camera.getRef(): "");
+            });
         } catch (Exception e) {
             System.out.println(e.getMessage());
             Alarm.showError("Error in showing scenes.");
