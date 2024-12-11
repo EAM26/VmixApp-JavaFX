@@ -1,43 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="566.0" prefWidth="1071.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.eam.code.vmixapp.controller.OPController">
-    <Label layoutX="483.0" layoutY="51.0" text="OPScreen" />
-    <Button fx:id="btnSwitch" layoutX="989.0" layoutY="26.0" mnemonicParsing="false" onAction="#switchToMain" text="BACK" />
-    <TableView fx:id="tableCams" layoutX="808.0" layoutY="68.0" onMouseClicked="#getSelectedData" prefHeight="296.0" prefWidth="241.0" AnchorPane.rightAnchor="20.666666666666742">
+    <Label layoutX="490.0" layoutY="21.0" text="OPScreen" />
+    <Button fx:id="btnSwitch" layoutX="1003.0" layoutY="26.0" mnemonicParsing="false" onAction="#switchToMain" text="BACK" AnchorPane.rightAnchor="20.0" />
+    <TableView fx:id="tableCams" layoutX="808.0" layoutY="68.0" onMouseClicked="#getSelectedCamData" prefHeight="389.0" prefWidth="208.0" AnchorPane.rightAnchor="20.0">
       <columns>
           <TableColumn fx:id="colRef" prefWidth="75.0" text="Ref" />
-          <TableColumn fx:id="colName" prefWidth="197.0" text="Name" />
+          <TableColumn fx:id="colNameCam" prefWidth="197.0" text="Name" />
       </columns>
     </TableView>
-   <Label fx:id="lbSequence" layoutX="495.0" layoutY="107.0" text="Label" />
-   <VBox layoutX="808.0" layoutY="376.0" prefHeight="97.0" prefWidth="241.0" AnchorPane.rightAnchor="20.666666666666742">
-      <children>
-         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ref" />
-         <TextField fx:id="tfRef" prefHeight="25.0" prefWidth="304.0" />
-         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
-         <TextField fx:id="tfName" />
-      </children>
-   </VBox>
-   <ButtonBar layoutX="782.0" layoutY="513.0" prefHeight="40.0" prefWidth="257.0" AnchorPane.rightAnchor="20.0">
-      <buttons>
-         <Button fx:id="btnDelete" minWidth="62.0" mnemonicParsing="false" onAction="#deleteCam" prefHeight="25.0" styleClass="form_container" text="Delete" />
-         <Button fx:id="clear" mnemonicParsing="false" onAction="#clearFields" prefHeight="25.0" prefWidth="178.0" text="Clear" />
-      </buttons>
-   </ButtonBar>
-   <ButtonBar layoutX="782.0" layoutY="473.0" prefHeight="40.0" prefWidth="257.0" AnchorPane.rightAnchor="21.0">
-      <buttons>
-         <Button fx:id="btnSave" minWidth="62.0" mnemonicParsing="false" onAction="#createCam" prefHeight="25.0" styleClass="form_container" text="Save" />
-         <Button fx:id="btnUpdate" mnemonicParsing="false" onAction="#updateCam" prefHeight="25.0" prefWidth="178.0" text="Update" />
-      </buttons>
-   </ButtonBar>
+   <Label fx:id="lbSequence" layoutX="578.0" layoutY="20.0" text="Label" />
+   <TableView fx:id="tableScenes" layoutX="39.0" layoutY="68.0" onMouseClicked="#getSelectedSceneData" prefHeight="389.0" prefWidth="776.0" AnchorPane.leftAnchor="20.0">
+      <columns>
+         <TableColumn fx:id="colNumScene" prefWidth="57.0" text="Number" />
+         <TableColumn fx:id="colNameScene" prefWidth="270.0" text="Name" />
+         <TableColumn fx:id="colDescrSene" prefWidth="344.0" text="Descrption" />
+         <TableColumn fx:id="colCamRef" prefWidth="104.0" text="CamRef" />
+      </columns>
+   </TableView>
+   <Text layoutX="39.0" layoutY="476.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number" />
+   <TextField fx:id="tfNumScene" layoutX="39.0" layoutY="483.0" prefHeight="25.0" prefWidth="61.0" />
+   <Text layoutX="120.0" layoutY="476.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
+   <TextField fx:id="tfNameScene" layoutX="120.0" layoutY="483.0" prefHeight="25.0" prefWidth="179.0" />
+   <Text layoutX="318.0" layoutY="475.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" />
+   <TextField fx:id="tfDescrScene" layoutX="318.0" layoutY="483.0" prefHeight="25.0" prefWidth="265.0" />
+   <Label fx:id="lbSequence1" layoutX="673.0" layoutY="30.0" prefHeight="17.0" prefWidth="107.0" text="Label" />
+   <Button fx:id="btnSaveScene" layoutX="35.0" layoutY="520.0" mnemonicParsing="false" onAction="#saveScene" prefHeight="25.0" prefWidth="130.0" text="Save" />
+   <Button fx:id="btnDeleteScene" layoutX="348.0" layoutY="521.0" mnemonicParsing="false" onAction="#deleteScene" prefHeight="25.0" prefWidth="130.0" text="Delete" />
+   <Button fx:id="btnClearSceneFields" layoutX="497.0" layoutY="520.0" mnemonicParsing="false" onAction="#clearFieldsScene" prefHeight="25.0" prefWidth="130.0" text="Clear" />
+   <Button fx:id="btnUpdateScene" layoutX="198.0" layoutY="520.0" mnemonicParsing="false" onAction="#updateScene" prefHeight="25.0" prefWidth="130.0" text="Update" />
+   <TextField fx:id="tfRef" layoutX="842.0" layoutY="483.0" prefHeight="25.0" prefWidth="44.0" />
+   <Text layoutX="841.0" layoutY="476.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ref" wrappingWidth="28.0" />
+   <TextField fx:id="tfNameCam" layoutX="906.0" layoutY="483.0" />
+   <Text layoutX="906.0" layoutY="476.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
+   <Button fx:id="btnSaveCam" layoutX="786.0" layoutY="520.0" minWidth="62.0" mnemonicParsing="false" onAction="#createCam" prefHeight="25.0" styleClass="form_container" text="Save" />
+   <Button fx:id="btnUpdateCam" layoutX="855.0" layoutY="520.0" mnemonicParsing="false" onAction="#updateCam" prefHeight="25.0" prefWidth="62.0" text="Update" />
+   <Button fx:id="btnDeleteCam" layoutX="929.0" layoutY="520.0" minWidth="51.0" mnemonicParsing="false" onAction="#deleteCam" prefHeight="25.0" prefWidth="51.0" styleClass="form_container" text="Delete" />
+   <Button fx:id="btnClearCam" layoutX="989.0" layoutY="520.0" mnemonicParsing="false" onAction="#clearFieldsCam" prefHeight="25.0" prefWidth="60.0" text="Clear" />
+   <TextField fx:id="tfCamRef" layoutX="606.0" layoutY="483.0" prefHeight="25.0" prefWidth="83.0" />
+   <Text layoutX="606.0" layoutY="473.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CamRef" />
 </AnchorPane>

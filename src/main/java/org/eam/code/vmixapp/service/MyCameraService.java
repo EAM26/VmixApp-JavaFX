@@ -3,18 +3,27 @@ package org.eam.code.vmixapp.service;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.eam.code.vmixapp.dao.MyCameraDAO;
+import org.eam.code.vmixapp.dao.SceneDao;
 import org.eam.code.vmixapp.model.MyCamera;
 import org.eam.code.vmixapp.model.Sequence;
+import org.eam.code.vmixapp.util.SelectedSequence;
+import org.eam.code.vmixapp.util.Validation;
 
 public class MyCameraService {
     private final MyCameraDAO cameraDAO;
+    private final SceneDao sceneDao;
 
-    public MyCameraService(MyCameraDAO cameraDAO) {
-        this.cameraDAO = cameraDAO;
+    public MyCameraService() {
+        this.cameraDAO = new MyCameraDAO();
+        this.sceneDao = new SceneDao();
     }
 
-    public ObservableList<MyCamera> getCameras() {
-        return FXCollections.observableArrayList(cameraDAO.getCameras());
+    public ObservableList<MyCamera> getCamerasBySeqId() {
+        if (SelectedSequence.getSelectedSequence() != null) {
+            int seqId = SelectedSequence.getSelectedSequence().getId();
+            return FXCollections.observableArrayList(cameraDAO.getCamerasBySeqId(seqId));
+        }
+        return FXCollections.observableArrayList();
     }
 
     public void createCam(String ref, String name, Sequence sequence) {
@@ -26,6 +35,9 @@ public class MyCameraService {
     }
 
     public void deleteCam(int id) {
+        if (Validation.existsInTable("scenes", "CamId", id)) {
+            throw new IllegalStateException("Scene present.");
+        }
         cameraDAO.deleteCam(id);
     }
 }

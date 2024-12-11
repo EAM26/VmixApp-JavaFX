@@ -18,6 +18,8 @@ public class DBInitializer {
                     "Description Text)");
             stmt.executeUpdate("CREATE TABLE IF NOT EXISTS cameras (Id INTEGER PRIMARY KEY, Ref TEXT,  " +
                     "Name Text, SeqId INTEGER, FOREIGN KEY(SeqId) REFERENCES sequences(Id))");
+            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS scenes (Id INTEGER PRIMARY KEY, Number INTEGER,  " +
+                    "Name Text, Description Text, SeqId INTEGER, CamId INTEGER, FOREIGN KEY(SeqId) REFERENCES sequences(Id), FOREIGN KEY(CamId) REFERENCES cameras(Id))");
         } catch (
                 SQLException e) {
             throw new RuntimeException(e);

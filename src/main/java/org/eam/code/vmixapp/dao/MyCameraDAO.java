@@ -13,34 +13,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyCameraDAO {
+    private final SequenceDAO sequenceDAO;
     Connection connection = null;
     PreparedStatement pstmt = null;
     ResultSet resultSet = null;
 
-    public List<MyCamera> getCameras() {
+    public MyCameraDAO() {
+        this.sequenceDAO = new SequenceDAO();
+    }
+
+    public List<MyCamera> getCamerasBySeqId(int seqId) {
         List<MyCamera> myCameraList = new ArrayList<>();
+        String selectMessage = "SELECT * FROM cameras WHERE SeqId = ?";
+        connection = DBConnection.getCon();
 
-        if(SelectedSequence.getSelectedSequence() != null) {
-            String selectMessage = "SELECT * FROM cameras WHERE SeqId = ?";
-            Connection connection = DBConnection.getCon();
-
-            try {;
-                PreparedStatement pstmt = connection.prepareStatement(selectMessage);
-                pstmt.setInt(1, SelectedSequence.getSelectedSequence().getId());
-                ResultSet resultSet = pstmt.executeQuery();
-                while (resultSet.next()){
-                    MyCamera myCamera = new MyCamera();
-                    myCamera.setId(resultSet.getInt("Id"));
-                    myCamera.setName(resultSet.getString("Name"));
-                    myCamera.setRef(resultSet.getString("Ref"));
-                    Sequence sequence = SelectedSequence.getSelectedSequence();
-                    myCamera.setSequence(sequence);
-                    myCameraList.add(myCamera);
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+        try {
+            pstmt = connection.prepareStatement(selectMessage);
+            pstmt.setInt(1, seqId);
+            ResultSet resultSet = pstmt.executeQuery();
+            while (resultSet.next()) {
+                MyCamera myCamera = new MyCamera();
+                myCamera.setId(resultSet.getInt("Id"));
+                myCamera.setName(resultSet.getString("Name"));
+                myCamera.setRef(resultSet.getString("Ref"));
+                Sequence sequence = SelectedSequence.getSelectedSequence();
+                myCamera.setSequence(sequence);
+                myCameraList.add(myCamera);
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+
         return myCameraList;
     }
 
@@ -76,7 +79,7 @@ public class MyCameraDAO {
         }
     }
 
-    public void deleteCam(int id){
+    public void deleteCam(int id) {
         String deleteMessage = "delete from cameras where id = ?";
         connection = DBConnection.getCon();
         try {
@@ -86,6 +89,31 @@ public class MyCameraDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    public MyCamera getCameraById(int id) {
+        String getMessage = "Select * from cameras where id = ?";
+        connection = DBConnection.getCon();
+
+        try {
+            pstmt = connection.prepareStatement(getMessage);
+            pstmt.setInt(1, id);
+            resultSet = pstmt.executeQuery();
+
+            if (resultSet.next()) {
+                MyCamera camera = new MyCamera();
+                camera.setId(resultSet.getInt("Id"));
+                camera.setRef(resultSet.getString("Ref"));
+                camera.setName(resultSet.getString("Name"));
+                int seqId = resultSet.getInt("SeqId");
+                camera.setSequence(sequenceDAO.getSequenceById(seqId));
+                return camera;
+            } else {
+//                todo create own exception
+                throw new RuntimeException();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
