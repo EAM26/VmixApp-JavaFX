@@ -1,7 +1,6 @@
 package org.eam.code.vmixapp.controller;
 
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -132,7 +131,7 @@ public class OPController implements Initializable {
     }
 
     private void showScenes() {
-        ObservableList<Scene> sceneList = sceneService.getScenes();
+        ObservableList<Scene> sceneList = sceneService.getScenesBySeqId();
         FXCollections.sort(sceneList, Comparator.comparing(Scene::getNumber));
         try {
             tableScenes.setItems(sceneList);
@@ -179,7 +178,7 @@ public class OPController implements Initializable {
     private TableView<MyCamera> tableCams;
 
     private void showCameras() {
-        ObservableList<MyCamera> myCameraList = myCameraService.getCameras();
+        ObservableList<MyCamera> myCameraList = myCameraService.getCamerasBySeqId();
         FXCollections.sort(myCameraList, Comparator.comparing(MyCamera::getRef));
         try {
             tableCams.setItems(myCameraList);
@@ -274,6 +273,7 @@ public class OPController implements Initializable {
         tfNumScene.setText("");
         tfNameScene.setText("");
         tfDescrScene.setText("");
+        tfCamRef.setText("");
         btnSaveCam.setDisable(false);
     }
 

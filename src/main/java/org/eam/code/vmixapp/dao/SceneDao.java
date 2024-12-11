@@ -24,14 +24,14 @@ public class SceneDao {
         this.cameraDAO = new MyCameraDAO();
     }
 
-    public List<Scene> getScenes() {
+    public List<Scene> getScenesBySeqId(int seqId) {
         List<Scene> sceneList = new ArrayList<>();
         String selectMessage = "select * from scenes where SeqId=?";
-
         con = DBConnection.getCon();
+
         try {
             pstmt = con.prepareStatement(selectMessage);
-            pstmt.setInt(1, SelectedSequence.getSelectedSequence().getId());
+            pstmt.setInt(1, seqId);
             resultSet = pstmt.executeQuery();
             while (resultSet.next()) {
                 Scene scene = new Scene();
@@ -48,7 +48,6 @@ public class SceneDao {
         }
         return sceneList;
     }
-
 
     public void deleteScene(int id) {
         String deleteMessage = "delete from scenes where Id=?";

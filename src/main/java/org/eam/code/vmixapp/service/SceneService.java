@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.eam.code.vmixapp.dao.SceneDao;
 import org.eam.code.vmixapp.model.Scene;
+import org.eam.code.vmixapp.util.SelectedSequence;
 
 public class SceneService {
     private final SceneDao sceneDao;
@@ -12,8 +13,12 @@ public class SceneService {
         this.sceneDao = new SceneDao();
     }
 
-    public ObservableList<Scene> getScenes() {
-        return FXCollections.observableArrayList(sceneDao.getScenes());
+    public ObservableList<Scene> getScenesBySeqId() {
+        if (SelectedSequence.getSelectedSequence() != null) {
+            int seqId = SelectedSequence.getSelectedSequence().getId();
+            return FXCollections.observableArrayList(sceneDao.getScenesBySeqId(seqId));
+        }
+        return FXCollections.observableArrayList();
     }
 
     public void deleteScene(int id) {

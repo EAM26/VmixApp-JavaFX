@@ -3,21 +3,22 @@ package org.eam.code.vmixapp.service;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.eam.code.vmixapp.dao.MyCameraDAO;
+import org.eam.code.vmixapp.dao.SceneDao;
 import org.eam.code.vmixapp.dao.SequenceDAO;
 import org.eam.code.vmixapp.model.Sequence;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.eam.code.vmixapp.util.Validation;
 
 public class SequenceService {
 
     private final SequenceDAO sequenceDAO;
     private final MyCameraDAO cameraDAO;
+    private final SceneDao sceneDao;
 
 
     public SequenceService() {
         this.sequenceDAO = new SequenceDAO();
         this.cameraDAO = new MyCameraDAO();
+        this.sceneDao = new SceneDao();
     }
 
     public ObservableList<Sequence> getSequences() {
@@ -33,8 +34,11 @@ public class SequenceService {
     }
 
     public void deleteSequence(int id) {
-        if (!cameraDAO.getCameras().isEmpty()) {
-            throw new IllegalStateException("Sequence has camera(s).");
+        if (Validation.existsInTable("scenes", "SeqId", id)) {
+            throw new IllegalStateException("Scene present.");
+        }
+        if (Validation.existsInTable("cameras", "SeqId", id)) {
+            throw new IllegalStateException("Camera present.");
         }
         sequenceDAO.deleteSequence(id);
     }

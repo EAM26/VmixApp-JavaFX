@@ -22,30 +22,28 @@ public class MyCameraDAO {
         this.sequenceDAO = new SequenceDAO();
     }
 
-    public List<MyCamera> getCameras() {
+    public List<MyCamera> getCamerasBySeqId(int seqId) {
         List<MyCamera> myCameraList = new ArrayList<>();
+        String selectMessage = "SELECT * FROM cameras WHERE SeqId = ?";
+        connection = DBConnection.getCon();
 
-        if (SelectedSequence.getSelectedSequence() != null) {
-            String selectMessage = "SELECT * FROM cameras WHERE SeqId = ?";
-            connection = DBConnection.getCon();
-
-            try {
-                PreparedStatement pstmt = connection.prepareStatement(selectMessage);
-                pstmt.setInt(1, SelectedSequence.getSelectedSequence().getId());
-                ResultSet resultSet = pstmt.executeQuery();
-                while (resultSet.next()) {
-                    MyCamera myCamera = new MyCamera();
-                    myCamera.setId(resultSet.getInt("Id"));
-                    myCamera.setName(resultSet.getString("Name"));
-                    myCamera.setRef(resultSet.getString("Ref"));
-                    Sequence sequence = SelectedSequence.getSelectedSequence();
-                    myCamera.setSequence(sequence);
-                    myCameraList.add(myCamera);
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+        try {
+            pstmt = connection.prepareStatement(selectMessage);
+            pstmt.setInt(1, seqId);
+            ResultSet resultSet = pstmt.executeQuery();
+            while (resultSet.next()) {
+                MyCamera myCamera = new MyCamera();
+                myCamera.setId(resultSet.getInt("Id"));
+                myCamera.setName(resultSet.getString("Name"));
+                myCamera.setRef(resultSet.getString("Ref"));
+                Sequence sequence = SelectedSequence.getSelectedSequence();
+                myCamera.setSequence(sequence);
+                myCameraList.add(myCamera);
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+
         return myCameraList;
     }
 
