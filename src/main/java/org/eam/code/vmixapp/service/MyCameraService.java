@@ -35,9 +35,16 @@ public class MyCameraService {
     }
 
     public void deleteCam(int id) {
+        if (!camHasScene(id)) {
+            cameraDAO.deleteCam(id);
+        }
+    }
+
+
+    private boolean camHasScene(int id) {
         if (Validation.existsInTable("scenes", "CamId", id)) {
             throw new IllegalStateException("Scene present.");
         }
-        cameraDAO.deleteCam(id);
+        return false;
     }
 }

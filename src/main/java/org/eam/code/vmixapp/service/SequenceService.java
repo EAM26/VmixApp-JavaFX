@@ -34,13 +34,24 @@ public class SequenceService {
     }
 
     public void deleteSequence(int id) {
+        if(!sequenceHasScene(id) && !sequenceHasCamera(id)) {
+            sequenceDAO.deleteSequence(id);
+        }
+    }
+
+    private boolean sequenceHasScene(int id) {
         if (Validation.existsInTable("scenes", "SeqId", id)) {
             throw new IllegalStateException("Scene present.");
         }
+        return false;
+    }
+
+    private boolean sequenceHasCamera(int id) {
         if (Validation.existsInTable("cameras", "SeqId", id)) {
             throw new IllegalStateException("Camera present.");
         }
-        sequenceDAO.deleteSequence(id);
+        return false;
     }
+
 
 }
