@@ -26,6 +26,10 @@ public class SceneService {
         sceneDao.deleteScene(id);
     }
 
+    public void createScene(String sceneNumber, String sceneName, String sceneDescription, String camRef) {
+
+    }
+
     private boolean sceneNumberExists(int sceneNum){
         return Validation.existsInTable("scenes", "Number", sceneNum);
 

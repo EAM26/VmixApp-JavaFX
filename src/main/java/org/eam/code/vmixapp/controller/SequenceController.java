@@ -93,6 +93,8 @@ public class SequenceController implements Initializable {
                 System.err.println(e.getMessage());
                 Alarm.showError("Error in creating new sequence.\n" + e.getMessage());
             }
+        } else {
+            Alarm.showError("Invalid input in fields.");
         }
     }
 

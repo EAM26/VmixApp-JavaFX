@@ -110,7 +110,10 @@ public class OPController implements Initializable {
     }
 
     @FXML
-    void saveScene(ActionEvent event) {
+    void createScene(ActionEvent event) {
+        if(validateSceneTextFields()) {
+            sceneService.createScene(tfNumScene.getText(), tfNameScene.getText(), tfDescrScene.getText(), tfCamRef.getText());
+        }
     }
 
     @FXML
@@ -147,6 +150,45 @@ public class OPController implements Initializable {
             Alarm.showError("Error in showing scenes.");
         }
     }
+
+//    private boolean validateSceneTextFields() {
+//        try {
+//            int number = Integer.parseInt(tfNumScene.getText());
+//            if(number > 0) {
+//                return !tfNumScene.getText().isBlank() && !tfNameScene.getText().isBlank() &&
+//                        !tfDescrScene.getText().isBlank() && !tfNameCam.getText().isBlank();
+//
+//            } else {
+//                Alarm.showError("Number must be higher than 0.");
+//            }
+//
+//        } catch (NumberFormatException e) {
+//            System.err.println(e.getMessage());
+//            Alarm.showError("Input in field number is not valid. ");
+//        }
+//        return false;
+//    }
+
+    private boolean validateSceneTextFields() {
+        if (tfNumScene.getText().isBlank() || tfNameScene.getText().isBlank() ||
+                tfDescrScene.getText().isBlank() || tfCamRef.getText().isBlank()) {
+            Alarm.showError("No empty fields allowed.");
+            return false;
+        }
+        try {
+            int number = Integer.parseInt(tfNumScene.getText());
+            if (number <= 0) {
+                Alarm.showError("Number must be higher than 0.");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            System.err.println(e.getMessage());
+            Alarm.showError("Invalid number input: " + tfNumScene.getText());
+            return false;
+        }
+        return true;
+    }
+
 
 //    Cam elements
 
@@ -215,6 +257,8 @@ public class OPController implements Initializable {
                 System.err.println(e.getMessage());
                 Alarm.showError("Error in creating new Camera.\n" + e.getMessage());
             }
+        } else {
+            Alarm.showError("Invalid input in fields.");
         }
     }
 
@@ -250,6 +294,8 @@ public class OPController implements Initializable {
                 System.err.println(e.getMessage());
                 Alarm.showError("Error in updating camera.\n" + e.getMessage());
             }
+        } else {
+            Alarm.showError("Invalid input in fields.");
         }
     }
 
