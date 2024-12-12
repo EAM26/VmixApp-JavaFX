@@ -113,7 +113,7 @@ public class OPController implements Initializable {
     void createScene(ActionEvent event) {
         if(validateSceneTextFields()) {
             try {
-                sceneService.createScene(tfNumScene.getText(), tfNameScene.getText(), tfDescrScene.getText(), tfCamRef.getText());
+                sceneService.createScene(tfNumScene.getText(), tfNameScene.getText(), tfDescrScene.getText(), tfCamRef.getText(), SelectedSequence.getSelectedSequence());
                 showScenes();
                 clearScene();
             } catch (RuntimeException e) {

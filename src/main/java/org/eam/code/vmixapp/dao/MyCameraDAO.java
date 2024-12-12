@@ -100,6 +100,30 @@ public class MyCameraDAO {
             pstmt.setInt(1, id);
             resultSet = pstmt.executeQuery();
 
+            return prepareCamera(resultSet);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public MyCamera getCameraByRef(String ref) {
+        String getMessage = "Select * from cameras where Ref = ? and SeqId=?";
+        connection = DBConnection.getCon();
+
+        try {
+            pstmt = connection.prepareStatement(getMessage);
+            pstmt.setString(1, ref);
+            pstmt.setInt(2, SelectedSequence.getSelectedSequence().getId());
+            resultSet = pstmt.executeQuery();
+
+            return prepareCamera(resultSet);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private MyCamera prepareCamera(ResultSet resultSet) {
+        try {
             if (resultSet.next()) {
                 MyCamera camera = new MyCamera();
                 camera.setId(resultSet.getInt("Id"));
@@ -109,8 +133,8 @@ public class MyCameraDAO {
                 camera.setSequence(sequenceDAO.getSequenceById(seqId));
                 return camera;
             } else {
-//                todo create own exception
-                throw new RuntimeException();
+    //                todo create own exception
+                throw new RuntimeException("No camera found.");
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

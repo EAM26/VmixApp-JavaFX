@@ -32,11 +32,13 @@
    <TextField fx:id="tfNameScene" layoutX="120.0" layoutY="483.0" prefHeight="25.0" prefWidth="179.0" />
    <Text layoutX="318.0" layoutY="475.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" />
    <TextField fx:id="tfDescrScene" layoutX="318.0" layoutY="483.0" prefHeight="25.0" prefWidth="265.0" />
+   <TextField fx:id="tfCamRef" layoutX="606.0" layoutY="483.0" prefHeight="25.0" prefWidth="83.0" />
+   <Text layoutX="606.0" layoutY="473.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CamRef" />
    <Label fx:id="lbSequence1" layoutX="673.0" layoutY="30.0" prefHeight="17.0" prefWidth="107.0" text="Label" />
    <Button fx:id="btnSaveScene" layoutX="35.0" layoutY="520.0" mnemonicParsing="false" onAction="#createScene" prefHeight="25.0" prefWidth="130.0" text="Save" />
+   <Button fx:id="btnUpdateScene" layoutX="198.0" layoutY="520.0" mnemonicParsing="false" onAction="#updateScene" prefHeight="25.0" prefWidth="130.0" text="Update" />
    <Button fx:id="btnDeleteScene" layoutX="348.0" layoutY="521.0" mnemonicParsing="false" onAction="#deleteScene" prefHeight="25.0" prefWidth="130.0" text="Delete" />
    <Button fx:id="btnClearSceneFields" layoutX="497.0" layoutY="520.0" mnemonicParsing="false" onAction="#clearFieldsScene" prefHeight="25.0" prefWidth="130.0" text="Clear" />
-   <Button fx:id="btnUpdateScene" layoutX="198.0" layoutY="520.0" mnemonicParsing="false" onAction="#updateScene" prefHeight="25.0" prefWidth="130.0" text="Update" />
    <TextField fx:id="tfRef" layoutX="842.0" layoutY="483.0" prefHeight="25.0" prefWidth="44.0" />
    <Text layoutX="841.0" layoutY="476.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ref" wrappingWidth="28.0" />
    <TextField fx:id="tfNameCam" layoutX="906.0" layoutY="483.0" />
@@ -45,6 +47,4 @@
    <Button fx:id="btnUpdateCam" layoutX="855.0" layoutY="520.0" mnemonicParsing="false" onAction="#updateCam" prefHeight="25.0" prefWidth="62.0" text="Update" />
    <Button fx:id="btnDeleteCam" layoutX="929.0" layoutY="520.0" minWidth="51.0" mnemonicParsing="false" onAction="#deleteCam" prefHeight="25.0" prefWidth="51.0" styleClass="form_container" text="Delete" />
    <Button fx:id="btnClearCam" layoutX="989.0" layoutY="520.0" mnemonicParsing="false" onAction="#clearFieldsCam" prefHeight="25.0" prefWidth="60.0" text="Clear" />
-   <TextField fx:id="tfCamRef" layoutX="606.0" layoutY="483.0" prefHeight="25.0" prefWidth="83.0" />
-   <Text layoutX="606.0" layoutY="473.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CamRef" />
 </AnchorPane>
