@@ -112,7 +112,13 @@ public class OPController implements Initializable {
     @FXML
     void createScene(ActionEvent event) {
         if(validateSceneTextFields()) {
-            sceneService.createScene(tfNumScene.getText(), tfNameScene.getText(), tfDescrScene.getText(), tfCamRef.getText());
+            try {
+                sceneService.createScene(tfNumScene.getText(), tfNameScene.getText(), tfDescrScene.getText(), tfCamRef.getText());
+                showScenes();
+                clearScene();
+            } catch (RuntimeException e) {
+                Alarm.showError("Error in creating scene. \n" + e.getMessage());
+            }
         }
     }
 
@@ -151,24 +157,6 @@ public class OPController implements Initializable {
         }
     }
 
-//    private boolean validateSceneTextFields() {
-//        try {
-//            int number = Integer.parseInt(tfNumScene.getText());
-//            if(number > 0) {
-//                return !tfNumScene.getText().isBlank() && !tfNameScene.getText().isBlank() &&
-//                        !tfDescrScene.getText().isBlank() && !tfNameCam.getText().isBlank();
-//
-//            } else {
-//                Alarm.showError("Number must be higher than 0.");
-//            }
-//
-//        } catch (NumberFormatException e) {
-//            System.err.println(e.getMessage());
-//            Alarm.showError("Input in field number is not valid. ");
-//        }
-//        return false;
-//    }
-
     private boolean validateSceneTextFields() {
         if (tfNumScene.getText().isBlank() || tfNameScene.getText().isBlank() ||
                 tfDescrScene.getText().isBlank() || tfCamRef.getText().isBlank()) {
@@ -176,7 +164,7 @@ public class OPController implements Initializable {
             return false;
         }
         try {
-            int number = Integer.parseInt(tfNumScene.getText());
+            int number = Integer.parseInt(tfNumScene.getText().trim());
             if (number <= 0) {
                 Alarm.showError("Number must be higher than 0.");
                 return false;

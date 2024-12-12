@@ -62,10 +62,10 @@ public class MyCameraService {
     }
 
     private boolean camNameExists(String camName) {
-        return Validation.existsInTable("cameras", "name", camName);
+        return Validation.existsInTable("cameras", "name", camName, "SeqId", SelectedSequence.getSelectedSequence().getId());
     }
 
-    private boolean camRefExists(String camRef) {
-        return Validation.existsInTable("cameras", "ref", camRef);
+    public boolean camRefExists(String camRef) {
+        return Validation.existsInTable("cameras", "ref", camRef, "SeqId", SelectedSequence.getSelectedSequence().getId());
     }
 }
