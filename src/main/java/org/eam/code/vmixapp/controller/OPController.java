@@ -208,12 +208,12 @@ public class OPController implements Initializable {
     void createCam(ActionEvent event) {
         if (validateCamTextFields()) {
             try {
-                myCameraService.createCam(tfRef.getText(), tfNameCam.getText(), SelectedSequence.getSelectedSequence());
+                myCameraService.createCam(tfRef.getText().trim(), tfNameCam.getText().trim(), SelectedSequence.getSelectedSequence());
                 showCameras();
                 clearCam();
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
-                Alarm.showError("Error in creating new Camera.");
+                Alarm.showError("Error in creating new Camera.\n" + e.getMessage());
             }
         }
     }
@@ -242,13 +242,13 @@ public class OPController implements Initializable {
             MyCamera selectedCam = tableCams.getSelectionModel().getSelectedItem();
             try {
                 if (selectedCam != null) {
-                    myCameraService.updateCam(tfRef.getText(), tfNameCam.getText(), selectedCam.getId());
+                    myCameraService.updateCam(tfRef.getText().trim(), tfNameCam.getText().trim(), selectedCam.getId());
                     showCameras();
                     clearCam();
                 }
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
-                Alarm.showError("Error in updating camera.");
+                Alarm.showError("Error in updating camera.\n" + e.getMessage());
             }
         }
     }

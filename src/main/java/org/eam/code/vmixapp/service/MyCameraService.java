@@ -27,11 +27,24 @@ public class MyCameraService {
     }
 
     public void createCam(String ref, String name, Sequence sequence) {
+        if (camRefExists(ref)) {
+            throw new IllegalArgumentException("Reference camera is not unique.");
+        }
+        if (camNameExists(name)) {
+            throw new IllegalArgumentException("Name camera is not unique.");
+        }
         cameraDAO.createCamera(ref, name, sequence);
     }
 
     public void updateCam(String ref, String name, int id) {
+        if (camRefExists(ref)) {
+            throw new IllegalArgumentException("Reference camera is not unique.");
+        }
+        if (camNameExists(name)) {
+            throw new IllegalArgumentException("Name camera is not unique.");
+        }
         cameraDAO.updateCam(ref, name, id);
+
     }
 
     public void deleteCam(int id) {
@@ -46,5 +59,13 @@ public class MyCameraService {
             throw new IllegalStateException("Scene present.");
         }
         return false;
+    }
+
+    private boolean camNameExists(String camName) {
+        return Validation.existsInTable("cameras", "name", camName);
+    }
+
+    private boolean camRefExists(String camRef) {
+        return Validation.existsInTable("cameras", "ref", camRef);
     }
 }

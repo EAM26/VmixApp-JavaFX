@@ -83,7 +83,7 @@ public class SequenceController implements Initializable {
     @FXML
     void createSequence(ActionEvent event) {
         if(validateTextFields()) {
-            String name = tfName.getText();
+            String name = tfName.getText().trim();
             String description = tfDescription.getText();
             try {
                 sequenceService.createSequence(name, description);
@@ -91,7 +91,7 @@ public class SequenceController implements Initializable {
                 clear();
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
-                Alarm.showError("Error in creating new sequence.");
+                Alarm.showError("Error in creating new sequence.\n" + e.getMessage());
             }
         }
     }
@@ -117,13 +117,13 @@ public class SequenceController implements Initializable {
     void updateSequence(ActionEvent event) {
         if(SelectedSequence.getSelectedSequence() != null && validateTextFields()) {
             try {
-                sequenceService.updateSequence(SelectedSequence.getSelectedSequence().getId(), tfName.getText(),
+                sequenceService.updateSequence(SelectedSequence.getSelectedSequence().getId(), tfName.getText().trim(),
                         tfDescription.getText());
                 showSequences();
                 clear();
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
-                Alarm.showError("Error in updating sequence.");
+                Alarm.showError("Error in updating sequence.\n" + e.getMessage());
             }
         }
     }

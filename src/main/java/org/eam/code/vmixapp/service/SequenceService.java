@@ -26,32 +26,43 @@ public class SequenceService {
     }
 
     public void createSequence(String name, String description) {
+        if(seqNameExists(name)) {
+            throw new IllegalArgumentException("Name for sequence not unique.");
+        }
         sequenceDAO.createSequence(name, description);
     }
 
     public void updateSequence(int id, String name, String description) {
+        if(seqNameExists(name)) {
+            throw new IllegalArgumentException("Name for sequence not unique.");
+        }
         sequenceDAO.updateSequence(id, name, description);
     }
 
     public void deleteSequence(int id) {
-        if(!sequenceHasScene(id) && !sequenceHasCamera(id)) {
-            sequenceDAO.deleteSequence(id);
+        if (sequenceHasScene(id)) {
+            throw new IllegalStateException("Scene present.");
         }
+        if(sequenceHasCamera(id)) {
+            throw new IllegalStateException("Camera present.");
+        }
+        sequenceDAO.deleteSequence(id);
     }
 
     private boolean sequenceHasScene(int id) {
-        if (Validation.existsInTable("scenes", "SeqId", id)) {
-            throw new IllegalStateException("Scene present.");
-        }
-        return false;
+        return Validation.existsInTable("scenes", "SeqId", id);
     }
 
     private boolean sequenceHasCamera(int id) {
-        if (Validation.existsInTable("cameras", "SeqId", id)) {
-            throw new IllegalStateException("Camera present.");
-        }
-        return false;
+        return Validation.existsInTable("cameras", "SeqId", id);
     }
+
+    private boolean seqNameExists(String seqName) {
+        return Validation.existsInTable("sequences", "Name", seqName);
+
+    }
+
+
 
 
 }
