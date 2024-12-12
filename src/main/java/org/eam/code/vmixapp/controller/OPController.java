@@ -110,7 +110,16 @@ public class OPController implements Initializable {
     }
 
     @FXML
-    void saveScene(ActionEvent event) {
+    void createScene(ActionEvent event) {
+        if(validateSceneTextFields()) {
+            try {
+                sceneService.createScene(tfNumScene.getText(), tfNameScene.getText(), tfDescrScene.getText(), tfCamRef.getText(), SelectedSequence.getSelectedSequence());
+                showScenes();
+                clearScene();
+            } catch (RuntimeException e) {
+                Alarm.showError("Error in creating scene. \n" + e.getMessage());
+            }
+        }
     }
 
     @FXML
@@ -147,6 +156,27 @@ public class OPController implements Initializable {
             Alarm.showError("Error in showing scenes.");
         }
     }
+
+    private boolean validateSceneTextFields() {
+        if (tfNumScene.getText().isBlank() || tfNameScene.getText().isBlank() ||
+                tfDescrScene.getText().isBlank() || tfCamRef.getText().isBlank()) {
+            Alarm.showError("No empty fields allowed.");
+            return false;
+        }
+        try {
+            int number = Integer.parseInt(tfNumScene.getText().trim());
+            if (number <= 0) {
+                Alarm.showError("Number must be higher than 0.");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            System.err.println(e.getMessage());
+            Alarm.showError("Invalid number input: " + tfNumScene.getText());
+            return false;
+        }
+        return true;
+    }
+
 
 //    Cam elements
 
@@ -208,13 +238,15 @@ public class OPController implements Initializable {
     void createCam(ActionEvent event) {
         if (validateCamTextFields()) {
             try {
-                myCameraService.createCam(tfRef.getText(), tfNameCam.getText(), SelectedSequence.getSelectedSequence());
+                myCameraService.createCam(tfRef.getText().trim(), tfNameCam.getText().trim(), SelectedSequence.getSelectedSequence());
                 showCameras();
                 clearCam();
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
-                Alarm.showError("Error in creating new Camera.");
+                Alarm.showError("Error in creating new Camera.\n" + e.getMessage());
             }
+        } else {
+            Alarm.showError("Invalid input in fields.");
         }
     }
 
@@ -242,14 +274,16 @@ public class OPController implements Initializable {
             MyCamera selectedCam = tableCams.getSelectionModel().getSelectedItem();
             try {
                 if (selectedCam != null) {
-                    myCameraService.updateCam(tfRef.getText(), tfNameCam.getText(), selectedCam.getId());
+                    myCameraService.updateCam(tfRef.getText().trim(), tfNameCam.getText().trim(), selectedCam);
                     showCameras();
                     clearCam();
                 }
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
-                Alarm.showError("Error in updating camera.");
+                Alarm.showError("Error in updating camera.\n" + e.getMessage());
             }
+        } else {
+            Alarm.showError("Invalid input in fields.");
         }
     }
 

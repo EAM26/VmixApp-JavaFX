@@ -27,17 +27,49 @@ public class MyCameraService {
     }
 
     public void createCam(String ref, String name, Sequence sequence) {
+        if (camRefExists(ref)) {
+            throw new IllegalArgumentException("Reference camera is not unique.");
+        }
+        if (camNameExists(name)) {
+            throw new IllegalArgumentException("Name camera is not unique.");
+        }
         cameraDAO.createCamera(ref, name, sequence);
     }
 
-    public void updateCam(String ref, String name, int id) {
-        cameraDAO.updateCam(ref, name, id);
+    public void updateCam(String ref, String name, MyCamera selectedCam) {
+        if(!ref.equals( selectedCam.getRef())) {
+            if (camRefExists(ref)) {
+                throw new IllegalArgumentException("Reference camera is not unique.");
+            }
+        }
+        if(!name.equals(selectedCam.getName())) {
+            if (camNameExists(name)) {
+                throw new IllegalArgumentException("Name camera is not unique.");
+            }
+        }
+        cameraDAO.updateCam(ref, name, selectedCam.getId());
+
     }
 
     public void deleteCam(int id) {
+        if (!camHasScene(id)) {
+            cameraDAO.deleteCam(id);
+        }
+    }
+
+
+    private boolean camHasScene(int id) {
         if (Validation.existsInTable("scenes", "CamId", id)) {
             throw new IllegalStateException("Scene present.");
         }
-        cameraDAO.deleteCam(id);
+        return false;
+    }
+
+    private boolean camNameExists(String camName) {
+        return Validation.existsInTable("cameras", "name", camName, "SeqId", SelectedSequence.getSelectedSequence().getId());
+    }
+
+    public boolean camRefExists(String camRef) {
+        return Validation.existsInTable("cameras", "ref", camRef, "SeqId", SelectedSequence.getSelectedSequence().getId());
     }
 }

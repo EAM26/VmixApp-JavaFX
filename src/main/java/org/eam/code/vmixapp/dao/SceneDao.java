@@ -1,7 +1,9 @@
 package org.eam.code.vmixapp.dao;
 
 import org.eam.code.vmixapp.DBConnection;
+import org.eam.code.vmixapp.model.MyCamera;
 import org.eam.code.vmixapp.model.Scene;
+import org.eam.code.vmixapp.model.Sequence;
 import org.eam.code.vmixapp.util.SelectedSequence;
 
 import java.sql.Connection;
@@ -47,6 +49,24 @@ public class SceneDao {
             throw new RuntimeException(e);
         }
         return sceneList;
+    }
+
+    public void createScene(int sceneNumber, String sceneName, String sceneDescription, MyCamera camera, Sequence sequence) {
+        String createMessage = "insert into scenes (Number, Name, Description, CamId, SeqId) values (?, ?, ?, ?, ?)";
+        con = DBConnection.getCon();
+
+        try {
+            pstmt = con.prepareStatement(createMessage);
+            pstmt.setInt(1, sceneNumber);
+            pstmt.setString(2, sceneName);
+            pstmt.setString(3, sceneDescription);
+            pstmt.setInt(4, camera.getId());
+            pstmt.setInt(5, sequence.getId());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public void deleteScene(int id) {
