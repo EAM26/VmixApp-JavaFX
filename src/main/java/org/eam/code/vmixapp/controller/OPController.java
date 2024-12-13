@@ -94,8 +94,8 @@ public class OPController implements Initializable {
     @FXML
     void deleteScene(ActionEvent event) {
         Scene selectedScene = tableScenes.getSelectionModel().getSelectedItem();
-        if(selectedScene != null) {
-            if(Alarm.showAskConfirmation(selectedScene.getNumber(), selectedScene.getName())) {
+        if (selectedScene != null) {
+            if (Alarm.showAskConfirmation(selectedScene.getNumber(), selectedScene.getName())) {
                 try {
 //                    sceneService.deleteScene(selectedScene.getId());
                     sceneService.deleteScene(selectedScene);
@@ -112,9 +112,9 @@ public class OPController implements Initializable {
 
     @FXML
     void createScene(ActionEvent event) {
-        if(validateSceneTextFields()) {
+        if (validateSceneTextFields()) {
             try {
-                sceneService.createScene(tfNumScene.getText(), tfNameScene.getText(), tfDescrScene.getText(), tfCamRef.getText(), SelectedSequence.getSelectedSequence());
+                sceneService.createScene(tfNumScene.getText().trim(), tfNameScene.getText().trim(), tfDescrScene.getText(), tfCamRef.getText().trim(), SelectedSequence.getSelectedSequence());
                 showScenes();
                 clearScene();
             } catch (RuntimeException e) {
@@ -125,7 +125,22 @@ public class OPController implements Initializable {
 
     @FXML
     void updateScene(ActionEvent event) {
-
+        if (validateSceneTextFields()) {
+            Scene selectedScene = tableScenes.getSelectionModel().getSelectedItem();
+            try {
+                if(selectedScene != null) {
+                    sceneService.updateScene(tfNumScene.getText().trim(), tfNameScene.getText().trim(),
+                            tfDescrScene.getText(), tfCamRef.getText().trim(), selectedScene);
+                    showScenes();
+                    clearScene();
+                }
+            } catch (RuntimeException e) {
+                System.err.println(e.getMessage());
+                Alarm.showError("Error in updating scene.\n" + e.getMessage());
+            }
+        } else {
+            Alarm.showError("Invalid input in fields.");
+        }
     }
 
     @FXML
@@ -136,7 +151,7 @@ public class OPController implements Initializable {
             tfNameScene.setText(selectedScene.getName());
             tfDescrScene.setText(selectedScene.getDescription());
             tfCamRef.setText(selectedScene.getCamera().getRef());
-            btnSaveCam.setDisable(true);
+            btnSaveScene.setDisable(true);
         }
     }
 
@@ -150,12 +165,21 @@ public class OPController implements Initializable {
             colDescrSene.setCellValueFactory(new PropertyValueFactory<>("Description"));
             colCamRef.setCellValueFactory(cellData -> {
                 MyCamera camera = cellData.getValue().getCamera();
-                return new SimpleStringProperty(camera != null? camera.getRef(): "");
+                return new SimpleStringProperty(camera != null ? camera.getRef() : "");
             });
         } catch (Exception e) {
             System.out.println(e.getMessage());
             Alarm.showError("Error in showing scenes.");
         }
+    }
+
+    private void clearScene() {
+        tfNumScene.setText("");
+        tfNameScene.setText("");
+        tfDescrScene.setText("");
+        tfCamRef.setText("");
+        btnSaveScene.setDisable(false);
+        System.out.println("clear scene running");
     }
 
     private boolean validateSceneTextFields() {
@@ -304,18 +328,10 @@ public class OPController implements Initializable {
         btnSaveCam.setDisable(false);
     }
 
-    private void clearScene() {
-        tfNumScene.setText("");
-        tfNameScene.setText("");
-        tfDescrScene.setText("");
-        tfCamRef.setText("");
-        btnSaveCam.setDisable(false);
-    }
 
     private boolean validateCamTextFields() {
         return !tfRef.getText().isBlank() && !tfNameCam.getText().isBlank();
     }
-
 
 
     void setLabel() {

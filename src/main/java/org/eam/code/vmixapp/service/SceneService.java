@@ -36,18 +36,38 @@ public class SceneService {
 
     public void createScene(String sceneNumberAsString, String sceneName, String sceneDescription, String camRef, Sequence sequence) {
         int sceneNumber = Integer.parseInt(sceneNumberAsString.trim());
-        if (!myCameraService.camRefExists(camRef)) {
-            throw new IllegalArgumentException(camRef + " doesnt exist as camera reference.");
-        }
+
         if (sceneNumberExists(sceneNumber)) {
             throw new IllegalArgumentException("Scene number: " + sceneNumber + " already exists.");
         }
         if (sceneNameExists(sceneName)) {
             throw new IllegalArgumentException("Scene name: "  + sceneName + " already exists.");
         }
+        if (!myCameraService.camRefExists(camRef)) {
+            throw new IllegalArgumentException(camRef + " doesnt exist as camera reference.");
+        }
         MyCamera camera = myCameraDAO.getCameraByRef(camRef);
         sceneDao.createScene(sceneNumber, sceneName, sceneDescription, camera , sequence);
+    }
 
+    public void updateScene(String sceneNumberAsString, String sceneName, String sceneDescription,
+                            String camRef, Scene selectedScene) {
+        int sceneNumber = Integer.parseInt(sceneNumberAsString.trim());
+        if (sceneNumber != selectedScene.getNumber()) {
+            if(sceneNumberExists(sceneNumber)) {
+                throw new IllegalArgumentException("Scene number is not unique.");
+            }
+        }
+        if(!sceneName.equals(selectedScene.getName())) {
+            if(sceneNameExists(sceneName)) {
+                throw new IllegalArgumentException("Scene name is not unique");
+            }
+        }
+        if (!myCameraService.camRefExists(camRef)) {
+            throw new IllegalArgumentException(camRef + " doesnt exist as camera reference.");
+        }
+        int camId = myCameraDAO.getCameraByRef(camRef).getId();
+        sceneDao.updateScene(sceneNumber, sceneName, sceneDescription, camId, selectedScene.getId());
     }
 
 
