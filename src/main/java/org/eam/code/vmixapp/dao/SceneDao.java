@@ -102,17 +102,26 @@ public class SceneDao {
     public void sceneNumDecrement(int sceneNumber) {
         String orderMessage = "SELECT * FROM scenes WHERE NUMBER > ? ORDER BY number";
         String decrementMessage = "UPDATE scenes SET number = number - 1 WHERE Number = ?";
-        con = DBConnection.getCon();
+        scenesNumberAdjust(orderMessage, decrementMessage, sceneNumber);
+    }
 
+    public void sceneNumIncrement(int sceneNumber) {
+        String orderMessage = "SELECT * FROM scenes WHERE NUMBER > ? ORDER BY number DESC ";
+        String incrementMessage = "UPDATE scenes SET number = number + 1 WHERE Number = ?";
+        scenesNumberAdjust(orderMessage, incrementMessage, sceneNumber);
+    }
+
+    public void scenesNumberAdjust(String selectMessage, String updateMessage, int sceneNumber) {
+        con = DBConnection.getCon();
         try {
-            pstmt = con.prepareStatement(orderMessage);
+            pstmt = con.prepareStatement(selectMessage);
             pstmt.setInt(1, sceneNumber);
             resultSet = pstmt.executeQuery();
             pstmt = null;
 
             while(resultSet.next()) {
                 int numberOfNextScene = resultSet.getInt("Number");
-                pstmt = con.prepareStatement(decrementMessage);
+                pstmt = con.prepareStatement(updateMessage);
                 pstmt.setInt(1, numberOfNextScene);
                 pstmt.executeUpdate();
             }
