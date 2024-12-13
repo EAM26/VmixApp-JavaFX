@@ -101,7 +101,7 @@ public class SequenceController implements Initializable {
     @FXML
     void deleteSequence(ActionEvent event) {
         if(SelectedSequence.getSelectedSequence() != null) {
-            if(Alarm.showAskConfirmation(SelectedSequence.getSelectedSequence().getId(), SelectedSequence.getSelectedSequence().getName())) {
+            if(Alarm.confirmationDelete(SelectedSequence.getSelectedSequence().getId(), SelectedSequence.getSelectedSequence().getName())) {
                 try {
                     sequenceService.deleteSequence(SelectedSequence.getSelectedSequence().getId());
                     showSequences();

@@ -106,7 +106,7 @@ public class SceneDao {
     }
 
     public void sceneNumIncrement(int sceneNumber) {
-        String orderMessage = "SELECT * FROM scenes WHERE NUMBER > ? ORDER BY number DESC ";
+        String orderMessage = "SELECT * FROM scenes WHERE NUMBER >= ? ORDER BY number DESC ";
         String incrementMessage = "UPDATE scenes SET number = number + 1 WHERE Number = ?";
         scenesNumberAdjust(orderMessage, incrementMessage, sceneNumber);
     }

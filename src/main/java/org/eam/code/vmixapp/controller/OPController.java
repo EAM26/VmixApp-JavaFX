@@ -95,9 +95,8 @@ public class OPController implements Initializable {
     void deleteScene(ActionEvent event) {
         Scene selectedScene = tableScenes.getSelectionModel().getSelectedItem();
         if (selectedScene != null) {
-            if (Alarm.showAskConfirmation(selectedScene.getNumber(), selectedScene.getName())) {
+            if (Alarm.confirmationDelete(selectedScene.getNumber(), selectedScene.getName())) {
                 try {
-//                    sceneService.deleteScene(selectedScene.getId());
                     sceneService.deleteScene(selectedScene);
                     showScenes();
                     clearScene();
@@ -179,7 +178,6 @@ public class OPController implements Initializable {
         tfDescrScene.setText("");
         tfCamRef.setText("");
         btnSaveScene.setDisable(false);
-        System.out.println("clear scene running");
     }
 
     private boolean validateSceneTextFields() {
@@ -279,7 +277,7 @@ public class OPController implements Initializable {
     void deleteCam(ActionEvent event) {
         MyCamera selectedCam = tableCams.getSelectionModel().getSelectedItem();
         if (selectedCam != null) {
-            if (Alarm.showAskConfirmation(selectedCam.getRef(), selectedCam.getName())) {
+            if (Alarm.confirmationDelete(selectedCam.getRef(), selectedCam.getName())) {
                 try {
                     myCameraService.deleteCam(selectedCam.getId());
                     showCameras();
