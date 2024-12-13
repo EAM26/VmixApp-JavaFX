@@ -1,5 +1,6 @@
 package org.eam.code.vmixapp.dao;
 
+import javafx.scene.Camera;
 import org.eam.code.vmixapp.DBConnection;
 import org.eam.code.vmixapp.model.MyCamera;
 import org.eam.code.vmixapp.model.Scene;
@@ -11,6 +12,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class SceneDao {
@@ -66,7 +69,22 @@ public class SceneDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    public void updateScene(int sceneNumber, String sceneName, String sceneDescription, int camId, int sceneId) {
+        String updateMessage = "update scenes set Number=?, Name=?, Description=?, camId=? where id=?";
+        con = DBConnection.getCon();
+        try{
+            pstmt = con.prepareStatement(updateMessage);
+            pstmt.setInt(1, sceneNumber);
+            pstmt.setString(2, sceneName);
+            pstmt.setString(3, sceneDescription);
+            pstmt.setInt(4, camId);
+            pstmt.setInt(5, sceneId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void deleteScene(int id) {
@@ -76,6 +94,37 @@ public class SceneDao {
             pstmt = con.prepareStatement(deleteMessage);
             pstmt.setInt(1, id);
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void sceneNumDecrement(int sceneNumber) {
+        String orderMessage = "SELECT * FROM scenes WHERE NUMBER > ? ORDER BY number";
+        String decrementMessage = "UPDATE scenes SET number = number - 1 WHERE Number = ?";
+        scenesNumberAdjust(orderMessage, decrementMessage, sceneNumber);
+    }
+
+    public void sceneNumIncrement(int sceneNumber) {
+        String orderMessage = "SELECT * FROM scenes WHERE NUMBER >= ? ORDER BY number DESC ";
+        String incrementMessage = "UPDATE scenes SET number = number + 1 WHERE Number = ?";
+        scenesNumberAdjust(orderMessage, incrementMessage, sceneNumber);
+    }
+
+    public void scenesNumberAdjust(String selectMessage, String updateMessage, int sceneNumber) {
+        con = DBConnection.getCon();
+        try {
+            pstmt = con.prepareStatement(selectMessage);
+            pstmt.setInt(1, sceneNumber);
+            resultSet = pstmt.executeQuery();
+            pstmt = null;
+
+            while(resultSet.next()) {
+                int numberOfNextScene = resultSet.getInt("Number");
+                pstmt = con.prepareStatement(updateMessage);
+                pstmt.setInt(1, numberOfNextScene);
+                pstmt.executeUpdate();
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

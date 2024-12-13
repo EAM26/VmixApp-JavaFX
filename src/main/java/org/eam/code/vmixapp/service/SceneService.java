@@ -7,6 +7,7 @@ import org.eam.code.vmixapp.dao.SceneDao;
 import org.eam.code.vmixapp.model.MyCamera;
 import org.eam.code.vmixapp.model.Scene;
 import org.eam.code.vmixapp.model.Sequence;
+import org.eam.code.vmixapp.util.Alarm;
 import org.eam.code.vmixapp.util.SelectedSequence;
 import org.eam.code.vmixapp.util.Validation;
 
@@ -29,25 +30,56 @@ public class SceneService {
         return FXCollections.observableArrayList();
     }
 
-    public void deleteScene(int id) {
-        sceneDao.deleteScene(id);
+    public void deleteScene(Scene scene) {
+        sceneDao.deleteScene(scene.getId());
+        sceneDao.sceneNumDecrement(scene.getNumber());
     }
 
     public void createScene(String sceneNumberAsString, String sceneName, String sceneDescription, String camRef, Sequence sequence) {
-        int sceneNumber = Integer.parseInt(sceneNumberAsString.trim());
+        if (sceneNameExists(sceneName)) {
+            throw new IllegalArgumentException("Scene name: " + sceneName + " already exists.");
+        }
         if (!myCameraService.camRefExists(camRef)) {
             throw new IllegalArgumentException(camRef + " doesnt exist as camera reference.");
         }
+        int sceneNumber = Integer.parseInt(sceneNumberAsString.trim());
         if (sceneNumberExists(sceneNumber)) {
-            throw new IllegalArgumentException("Scene number: " + sceneNumber + " already exists.");
-        }
-        if (sceneNameExists(sceneName)) {
-            throw new IllegalArgumentException("Scene name: "  + sceneName + " already exists.");
+            if (Alarm.confirmationInsert(sceneNumber, sceneName)) {
+                sceneDao.sceneNumIncrement(sceneNumber);
+            } else {
+                return;
+            }
         }
         MyCamera camera = myCameraDAO.getCameraByRef(camRef);
-        sceneDao.createScene(sceneNumber, sceneName, sceneDescription, camera , sequence);
-
+        sceneDao.createScene(sceneNumber, sceneName, sceneDescription, camera, sequence);
     }
+
+    public void updateScene(String sceneNumberAsString, String sceneName, String sceneDescription,
+                            String camRef, Scene selectedScene) {
+
+        if (!sceneName.equals(selectedScene.getName())) {
+            if (sceneNameExists(sceneName)) {
+                throw new IllegalArgumentException("Scene name is not unique");
+            }
+        }
+        if (!myCameraService.camRefExists(camRef)) {
+            throw new IllegalArgumentException(camRef + " doesnt exist as camera reference.");
+        }
+        int camId = myCameraDAO.getCameraByRef(camRef).getId();
+
+        int sceneNumber = Integer.parseInt(sceneNumberAsString.trim());
+        if (sceneNumber != selectedScene.getNumber() && sceneNumberExists(sceneNumber)) {
+            if (Alarm.confirmationInsert(sceneNumber, sceneName)) {
+                sceneDao.sceneNumIncrement(sceneNumber);
+            } else {
+                return;
+            }
+
+        }
+        sceneDao.updateScene(sceneNumber, sceneName, sceneDescription, camId, selectedScene.getId());
+        sceneDao.sceneNumDecrement(selectedScene.getNumber());
+    }
+
 
     private boolean sceneNumberExists(int sceneNum) {
         return Validation.existsInTable("scenes", "Number", sceneNum, "SeqId", SelectedSequence.getSelectedSequence().getId());
