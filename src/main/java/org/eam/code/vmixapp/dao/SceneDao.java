@@ -11,6 +11,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class SceneDao {
@@ -76,6 +78,28 @@ public class SceneDao {
             pstmt = con.prepareStatement(deleteMessage);
             pstmt.setInt(1, id);
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void sceneNumDecrement(int sceneNumber) {
+        String orderMessage = "SELECT * FROM scenes WHERE NUMBER > ? ORDER BY number";
+        String decrementMessage = "UPDATE scenes SET number = number - 1 WHERE Number = ?";
+        con = DBConnection.getCon();
+
+        try {
+            pstmt = con.prepareStatement(orderMessage);
+            pstmt.setInt(1, sceneNumber);
+            resultSet = pstmt.executeQuery();
+            pstmt = null;
+
+            while(resultSet.next()) {
+                int numberOfNextScene = resultSet.getInt("Number");
+                pstmt = con.prepareStatement(decrementMessage);
+                pstmt.setInt(1, numberOfNextScene);
+                pstmt.executeUpdate();
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -97,7 +97,8 @@ public class OPController implements Initializable {
         if(selectedScene != null) {
             if(Alarm.showAskConfirmation(selectedScene.getNumber(), selectedScene.getName())) {
                 try {
-                    sceneService.deleteScene(selectedScene.getId());
+//                    sceneService.deleteScene(selectedScene.getId());
+                    sceneService.deleteScene(selectedScene);
                     showScenes();
                     clearScene();
                 } catch (NumberFormatException e) {

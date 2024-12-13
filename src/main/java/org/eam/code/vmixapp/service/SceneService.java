@@ -29,8 +29,9 @@ public class SceneService {
         return FXCollections.observableArrayList();
     }
 
-    public void deleteScene(int id) {
-        sceneDao.deleteScene(id);
+    public void deleteScene(Scene scene) {
+        sceneDao.deleteScene(scene.getId());
+        sceneDao.sceneNumDecrement(scene.getNumber());
     }
 
     public void createScene(String sceneNumberAsString, String sceneName, String sceneDescription, String camRef, Sequence sequence) {
@@ -48,6 +49,8 @@ public class SceneService {
         sceneDao.createScene(sceneNumber, sceneName, sceneDescription, camera , sequence);
 
     }
+
+
 
     private boolean sceneNumberExists(int sceneNum) {
         return Validation.existsInTable("scenes", "Number", sceneNum, "SeqId", SelectedSequence.getSelectedSequence().getId());
