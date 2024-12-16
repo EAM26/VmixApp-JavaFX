@@ -45,7 +45,28 @@ public class OPController implements Initializable {
     @FXML
     private Button btnSwitch;
 
+    //    Recorder elements
+    @FXML
+    private Button btnCue;
 
+    @FXML
+    private Button btnSetPreview;
+
+    @FXML
+    private TextField tfActual;
+
+    @FXML
+    private TextField tfPreview;
+
+    @FXML
+    void cueScene(ActionEvent event) {
+
+    }
+
+    @FXML
+    void setPreview(ActionEvent event) {
+
+    }
 //    Scene elements
 
     @FXML
@@ -127,7 +148,7 @@ public class OPController implements Initializable {
         if (validateSceneTextFields()) {
             Scene selectedScene = tableScenes.getSelectionModel().getSelectedItem();
             try {
-                if(selectedScene != null) {
+                if (selectedScene != null) {
                     sceneService.updateScene(tfNumScene.getText().trim(), tfNameScene.getText().trim(),
                             tfDescrScene.getText(), tfCamRef.getText().trim(), selectedScene);
                     showScenes();
