@@ -12,6 +12,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import org.eam.code.vmixapp.App;
 import org.eam.code.vmixapp.model.MyCamera;
+import org.eam.code.vmixapp.model.Recorder;
 import org.eam.code.vmixapp.model.Scene;
 import org.eam.code.vmixapp.service.MyCameraService;
 import org.eam.code.vmixapp.service.SceneService;
@@ -21,15 +22,20 @@ import org.eam.code.vmixapp.util.SelectedSequence;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 
 public class OPController implements Initializable {
     private final MyCameraService myCameraService;
     private final SceneService sceneService;
+    private final Recorder recorder;
+
+    public ObservableList<Scene> sceneList;
 
     public OPController() {
         this.myCameraService = new MyCameraService();
         this.sceneService = new SceneService();
+        this.recorder = new Recorder();
     }
 
     @Override
@@ -60,13 +66,56 @@ public class OPController implements Initializable {
 
     @FXML
     void cueScene(ActionEvent event) {
+        if (recorder.getPreview() != null) {
+            recorder.setActual(recorder.getPreview());
+            int indexPrev = sceneList.indexOf(recorder.getPreview());
+            if (indexPrev < sceneList.size() - 1) {
+                recorder.setPreview(sceneList.get(indexPrev + 1));
+            } else {
+                recorder.setPreview(null);
+            }
+        }
 
+        showRecorderFields();
     }
 
     @FXML
-    void setPreview(ActionEvent event) {
-
+    boolean setPreviewWithButton(ActionEvent event) {
+        System.out.println("set preview with button 1");
+        if (!validateSceneList()) {
+            System.out.println("No scenes present.");
+            return false;
+        }
+        if (getSelectedSceneData() == null) {
+            System.out.println("set preview with button  = null");
+            recorder.setPreview(sceneList.getFirst());
+        } else {
+            System.out.println("set preview with button is not null");
+            recorder.setPreview(getSelectedSceneData());
+        }
+        showRecorderFields();
+        tableScenes.getSelectionModel().clearSelection();
+        return true;
     }
+
+    private void showRecorderFields() {
+        if (recorder.getPreview() != null) {
+            tfPreview.setText("Scene " + recorder.getPreview().getNumber() + ". : " + recorder.getPreview().getName());
+        } else {
+            tfPreview.setText("");
+        }
+        if (recorder.getActual() != null) {
+            tfActual.setText("Scene " + recorder.getActual().getNumber() + ". : " + recorder.getActual().getName());
+        } else {
+            tfActual.setText("");
+        }
+    }
+
+
+    private boolean validateSceneList() {
+        return this.sceneList != null && !this.sceneList.isEmpty();
+    }
+
 //    Scene elements
 
     @FXML
@@ -164,7 +213,7 @@ public class OPController implements Initializable {
     }
 
     @FXML
-    void getSelectedSceneData(MouseEvent event) {
+    Scene getSelectedSceneData() {
         Scene selectedScene = tableScenes.getSelectionModel().getSelectedItem();
         if (selectedScene != null) {
             tfNumScene.setText(String.valueOf(selectedScene.getNumber()));
@@ -173,10 +222,11 @@ public class OPController implements Initializable {
             tfCamRef.setText(selectedScene.getCamera().getRef());
             btnSaveScene.setDisable(true);
         }
+        return selectedScene;
     }
 
     private void showScenes() {
-        ObservableList<Scene> sceneList = sceneService.getScenesBySeqId();
+        this.sceneList = sceneService.getScenesBySeqId();
         FXCollections.sort(sceneList, Comparator.comparing(Scene::getNumber));
         try {
             tableScenes.setItems(sceneList);
@@ -187,6 +237,7 @@ public class OPController implements Initializable {
                 MyCamera camera = cellData.getValue().getCamera();
                 return new SimpleStringProperty(camera != null ? camera.getRef() : "");
             });
+            tableScenes.getSelectionModel().clearSelection();
         } catch (Exception e) {
             System.out.println(e.getMessage());
             Alarm.showError("Error in showing scenes.");
@@ -199,6 +250,7 @@ public class OPController implements Initializable {
         tfDescrScene.setText("");
         tfCamRef.setText("");
         btnSaveScene.setDisable(false);
+        tableScenes.getSelectionModel().clearSelection();
     }
 
     private boolean validateSceneTextFields() {

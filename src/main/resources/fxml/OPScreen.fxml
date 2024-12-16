@@ -9,10 +9,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxWidth="-Infinity" prefHeight="736.0" prefWidth="1060.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.eam.code.vmixapp.controller.OPController">
+<AnchorPane maxWidth="-Infinity" prefHeight="736.0" prefWidth="1085.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.eam.code.vmixapp.controller.OPController">
     <Label layoutX="804.0" layoutY="30.0" text="OPScreen" />
-    <Button fx:id="btnSwitch" layoutX="1003.0" layoutY="26.0" mnemonicParsing="false" onAction="#switchToMain" text="BACK" />
-    <TableView fx:id="tableCams" layoutX="820.0" layoutY="209.0" onMouseClicked="#getSelectedCamData" prefHeight="400.0" prefWidth="189.0">
+    <Button fx:id="btnSwitch" layoutX="1023.0" layoutY="33.0" mnemonicParsing="false" onAction="#switchToMain" text="BACK" />
+    <TableView fx:id="tableCams" layoutX="820.0" layoutY="209.0" onMouseClicked="#getSelectedCamData" prefHeight="400.0" prefWidth="249.0">
       <columns>
           <TableColumn fx:id="colRef" minWidth="6.0" text="Ref" />
           <TableColumn fx:id="colNameCam" maxWidth="107.0" prefWidth="107.0" text="Name" />
@@ -36,11 +36,11 @@
    <TextField fx:id="tfCamRef" layoutX="592.0" layoutY="642.0" prefHeight="25.0" prefWidth="83.0" />
    <Text layoutX="592.0" layoutY="637.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CamRef" />
    <Label fx:id="lbSequence1" layoutX="801.0" layoutY="65.0" prefHeight="17.0" prefWidth="107.0" text="Label" />
-   <TextField fx:id="tfRef" layoutX="786.0" layoutY="642.0" prefHeight="25.0" prefWidth="44.0" />
-   <Text layoutX="786.0" layoutY="636.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ref" wrappingWidth="28.0" />
-   <TextField fx:id="tfNameCam" layoutX="854.0" layoutY="643.0" prefHeight="25.0" prefWidth="121.0" />
-   <Text layoutX="854.0" layoutY="636.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
-   <ButtonBar buttonMinWidth="10.0" layoutX="733.0" layoutY="676.0" prefHeight="40.0" prefWidth="305.0">
+   <TextField fx:id="tfRef" layoutX="820.0" layoutY="642.0" prefHeight="25.0" prefWidth="44.0" />
+   <Text layoutX="820.0" layoutY="636.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ref" wrappingWidth="31.693359375" />
+   <TextField fx:id="tfNameCam" layoutX="886.0" layoutY="642.0" prefHeight="25.0" prefWidth="121.0" />
+   <Text layoutX="886.0" layoutY="635.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
+   <ButtonBar buttonMinWidth="10.0" layoutX="800.0" layoutY="676.0" prefHeight="40.0" prefWidth="271.0">
       <buttons>
          <Button fx:id="btnSaveCam" mnemonicParsing="false" onAction="#createCam" styleClass="form_container" text="Save" />
          <Button fx:id="btnUpdateCam" mnemonicParsing="false" onAction="#updateCam" text="Update" />
@@ -52,14 +52,14 @@
       <buttons>
          <Button fx:id="btnSaveScene" mnemonicParsing="false" onAction="#createScene" text="Save" />
          <Button fx:id="btnDeleteScene" mnemonicParsing="false" onAction="#deleteScene" prefHeight="25.0" prefWidth="130.0" text="Delete" />
-         <Button fx:id="btnClearSceneFields" mnemonicParsing="false" onAction="#clearFieldsScene" prefHeight="25.0" prefWidth="130.0" text="Clear" />
          <Button fx:id="btnUpdateScene" mnemonicParsing="false" onAction="#updateScene" prefHeight="25.0" prefWidth="130.0" text="Update" />
+         <Button fx:id="btnClearSceneFields" mnemonicParsing="false" onAction="#clearFieldsScene" prefHeight="25.0" prefWidth="130.0" text="Clear" />
       </buttons>
    </ButtonBar>
    <TextField fx:id="tfPreview" layoutX="39.0" layoutY="65.0" prefHeight="35.0" prefWidth="350.0" />
    <TextField fx:id="tfActual" layoutX="417.0" layoutY="65.0" prefHeight="35.0" prefWidth="350.0" />
    <Button fx:id="btnCue" layoutX="324.0" layoutY="125.0" mnemonicParsing="false" onAction="#cueScene" prefHeight="25.0" prefWidth="161.0" text="CUE" />
-   <Button fx:id="btnSetPreview" layoutX="324.0" layoutY="173.0" mnemonicParsing="false" onAction="#setPreview" prefHeight="25.0" prefWidth="161.0" text="SET PREVIEW" />
+   <Button fx:id="btnSetPreview" layoutX="324.0" layoutY="173.0" mnemonicParsing="false" onAction="#setPreviewWithButton" prefHeight="25.0" prefWidth="161.0" text="SET PREVIEW" />
    <Text layoutX="39.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Preview" />
    <Text layoutX="419.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Actual" />
 </AnchorPane>
