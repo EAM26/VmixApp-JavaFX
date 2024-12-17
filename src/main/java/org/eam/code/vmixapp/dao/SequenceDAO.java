@@ -29,6 +29,8 @@ public class SequenceDAO {
                 sequence.setId(resultSet.getInt("Id"));
                 sequence.setName(resultSet.getString("Name"));
                 sequence.setDescription(resultSet.getString("Description"));
+                sequence.setIpAddress(resultSet.getString("IPAddress"));
+                sequence.setPort(resultSet.getString("Port"));
 
                 sequences.add(sequence);
             }
@@ -51,6 +53,8 @@ public class SequenceDAO {
                 sequence.setId(id);
                 sequence.setName(resultSet.getString("Name"));
                 sequence.setDescription(resultSet.getString("Description"));
+                sequence.setIpAddress(resultSet.getString("IPAddress"));
+                sequence.setPort(resultSet.getString("Port"));
                 return sequence;
             } else {
 //                todo: create own not found exception
@@ -62,14 +66,16 @@ public class SequenceDAO {
         }
     }
 
-    public void createSequence(String name, String description) {
-        String createMessage = "insert into sequences (Name, Description) values (?, ?)";
+    public void createSequence(String name, String description, String ipAddress, String port) {
+        String createMessage = "insert into sequences (Name, Description, IPAddress, Port) values (?, ?, ?, ?)";
         con = DBConnection.getCon();
 
         try {
             PreparedStatement pstmt = con.prepareStatement(createMessage);
             pstmt.setString(1, name);
             pstmt.setString(2, description);
+            pstmt.setString(3, ipAddress);
+            pstmt.setString(4, port);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

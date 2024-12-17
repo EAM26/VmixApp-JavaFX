@@ -52,10 +52,23 @@ public class SequenceController implements Initializable {
     private TableColumn<Sequence, String> colName;
 
     @FXML
+    private TableColumn<Sequence, String> colPort;
+
+    @FXML
+    private TableColumn<Sequence, String> colIPAddress;
+
+    @FXML
     private TextField tfDescription;
 
     @FXML
     private TextField tfName;
+
+    @FXML
+    private TextField tfIPAddress;
+
+
+    @FXML
+    private TextField tfPort;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -70,6 +83,8 @@ public class SequenceController implements Initializable {
         if (SelectedSequence.getSelectedSequence() != null) {
             tfName.setText(SelectedSequence.getSelectedSequence().getName());
             tfDescription.setText(SelectedSequence.getSelectedSequence().getDescription());
+            tfIPAddress.setText(SelectedSequence.getSelectedSequence().getIpAddress());
+            tfPort.setText(SelectedSequence.getSelectedSequence().getPort());
             btnSave.setDisable(true);
         }
     }
@@ -85,8 +100,10 @@ public class SequenceController implements Initializable {
         if(validateTextFields()) {
             String name = tfName.getText().trim();
             String description = tfDescription.getText();
+            String ipAddress = tfIPAddress.getText();
+            String port = tfPort.getId();
             try {
-                sequenceService.createSequence(name, description);
+                sequenceService.createSequence(name, description, ipAddress, port);
                 showSequences();
                 clear();
             } catch (RuntimeException e) {
@@ -137,6 +154,8 @@ public class SequenceController implements Initializable {
             colId.setCellValueFactory(new PropertyValueFactory<Sequence, Integer>("id"));
             colName.setCellValueFactory(new PropertyValueFactory<Sequence, String>("name"));
             colDescription.setCellValueFactory(new PropertyValueFactory<Sequence, String>("description"));
+            colIPAddress.setCellValueFactory(new PropertyValueFactory<Sequence, String>("ipAddress"));
+            colPort.setCellValueFactory(new PropertyValueFactory<Sequence, String>("port"));
         } catch (RuntimeException e) {
             Alarm.showError("An error occurred while loading sequences: " + e.getMessage());
         }

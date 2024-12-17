@@ -11,17 +11,23 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="610.0" prefWidth="1011.0" styleClass="form_container" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.eam.code.vmixapp.controller.SequenceController">
-    <VBox layoutX="61.0" layoutY="65.0" prefHeight="193.0" prefWidth="390.0" styleClass="form_container" stylesheets="@../css/styles.css">
+    <VBox layoutX="7.0" layoutY="110.0" prefHeight="349.0" prefWidth="410.0" styleClass="form_container" stylesheets="@../css/styles.css">
         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
         <TextField fx:id="tfName" />
         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description" />
         <TextField fx:id="tfDescription" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="IPAddress" />
+      <TextField fx:id="tfIPAddress" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Port" />
+      <TextField fx:id="tfPort" />
     </VBox>
     <TableView fx:id="tableSeq" layoutX="509.0" layoutY="110.0" onMouseClicked="#getSelectedData" prefHeight="318.0" prefWidth="489.0">
       <columns>
           <TableColumn fx:id="colId" prefWidth="75.0" text="ID" />
           <TableColumn fx:id="colName" prefWidth="146.0" text="Name" />
-          <TableColumn fx:id="colDescription" prefWidth="267.0" text="Description" />
+          <TableColumn fx:id="colDescription" prefWidth="118.6666259765625" text="Description" />
+         <TableColumn fx:id="colIPAddress" prefWidth="75.0" text="IP" />
+         <TableColumn fx:id="colPort" prefWidth="75.0" text="Port" />
       </columns>
     </TableView>
     <Label layoutX="397.0" layoutY="39.0" styleClass="title" text="SEQUENCE SCREEN" />
