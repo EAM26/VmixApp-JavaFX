@@ -25,11 +25,11 @@ public class SequenceService {
         return FXCollections.observableArrayList(sequenceDAO.getSequences());
     }
 
-    public void createSequence(String name, String description) {
+    public void createSequence(String name, String description, String ipAddress, String port) {
         if(seqNameExists(name)) {
             throw new IllegalArgumentException("Name for sequence not unique.");
         }
-        sequenceDAO.createSequence(name, description);
+        sequenceDAO.createSequence(name, description, ipAddress, port);
     }
 
     public void updateSequence(int id, String name, String description) {
