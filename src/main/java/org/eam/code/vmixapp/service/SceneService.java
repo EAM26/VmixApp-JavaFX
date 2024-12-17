@@ -68,13 +68,16 @@ public class SceneService {
         int camId = myCameraDAO.getCameraByRef(camRef).getId();
 
         int sceneNumber = Integer.parseInt(sceneNumberAsString.trim());
-        if (sceneNumber != selectedScene.getNumber() && sceneNumberExists(sceneNumber)) {
+        if (sceneNumber == selectedScene.getNumber()) {
+            sceneDao.updateScene(sceneNumber, sceneName, sceneDescription, camId, selectedScene.getId());
+            return;
+        }
+        if(sceneNumberExists(sceneNumber)) {
             if (Alarm.confirmationInsert(sceneNumber, sceneName)) {
                 sceneDao.sceneNumIncrement(sceneNumber);
             } else {
                 return;
             }
-
         }
         sceneDao.updateScene(sceneNumber, sceneName, sceneDescription, camId, selectedScene.getId());
         sceneDao.sceneNumDecrement(selectedScene.getNumber());
