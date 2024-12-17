@@ -67,7 +67,7 @@ public class SequenceDAO {
     }
 
     public void createSequence(String name, String description, String ipAddress, String port) {
-        String createMessage = "insert into sequences (Name, Description, IPAdress, Port) values (?, ?, ?, ?)";
+        String createMessage = "insert into sequences (Name, Description, IPAddress, Port) values (?, ?, ?, ?)";
         con = DBConnection.getCon();
 
         try {
