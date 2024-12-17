@@ -11,11 +11,15 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="610.0" prefWidth="1011.0" styleClass="form_container" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.eam.code.vmixapp.controller.SequenceController">
-    <VBox layoutX="61.0" layoutY="65.0" prefHeight="193.0" prefWidth="390.0" styleClass="form_container" stylesheets="@../css/styles.css">
+    <VBox layoutX="61.0" layoutY="65.0" prefHeight="343.0" prefWidth="390.0" styleClass="form_container" stylesheets="@../css/styles.css">
         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
         <TextField fx:id="tfName" />
         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description" />
         <TextField fx:id="tfDescription" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="IPAdress" />
+      <TextField fx:id="tfIPAddress" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Port" />
+      <TextField fx:id="tfPort" />
     </VBox>
     <TableView fx:id="tableSeq" layoutX="509.0" layoutY="110.0" onMouseClicked="#getSelectedData" prefHeight="318.0" prefWidth="489.0">
       <columns>

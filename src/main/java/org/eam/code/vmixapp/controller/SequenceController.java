@@ -57,6 +57,13 @@ public class SequenceController implements Initializable {
     @FXML
     private TextField tfName;
 
+    @FXML
+    private TextField tfIPAddress;
+
+
+    @FXML
+    private TextField tfPort;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         clear();
