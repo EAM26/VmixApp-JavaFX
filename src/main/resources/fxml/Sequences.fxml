@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="610.0" prefWidth="1011.0" styleClass="form_container" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.eam.code.vmixapp.controller.SequenceController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="form_container" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.eam.code.vmixapp.controller.SequenceController">
     <VBox layoutX="7.0" layoutY="110.0" prefHeight="349.0" prefWidth="410.0" styleClass="form_container" stylesheets="@../css/styles.css">
         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
         <TextField fx:id="tfName" />
@@ -21,17 +21,17 @@
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Port" />
       <TextField fx:id="tfPort" />
     </VBox>
-    <TableView fx:id="tableSeq" layoutX="509.0" layoutY="110.0" onMouseClicked="#getSelectedData" prefHeight="318.0" prefWidth="489.0">
+    <TableView fx:id="tableSeq" layoutX="509.0" layoutY="110.0" onMouseClicked="#getSelectedData" prefHeight="429.0" prefWidth="687.0">
       <columns>
-          <TableColumn fx:id="colId" prefWidth="75.0" text="ID" />
-          <TableColumn fx:id="colName" prefWidth="146.0" text="Name" />
-          <TableColumn fx:id="colDescription" prefWidth="118.6666259765625" text="Description" />
-         <TableColumn fx:id="colIPAddress" prefWidth="75.0" text="IP" />
-         <TableColumn fx:id="colPort" prefWidth="75.0" text="Port" />
+          <TableColumn fx:id="colId" prefWidth="64.0" text="ID" />
+          <TableColumn fx:id="colName" prefWidth="157.0" text="Name" />
+          <TableColumn fx:id="colDescription" prefWidth="252.0" text="Description" />
+         <TableColumn fx:id="colIPAddress" minWidth="0.0" prefWidth="133.0" text="IP" />
+         <TableColumn fx:id="colPort" text="Port" />
       </columns>
     </TableView>
     <Label layoutX="397.0" layoutY="39.0" styleClass="title" text="SEQUENCE SCREEN" />
-    <ButtonBar buttonMinWidth="90.0" layoutX="293.0" layoutY="480.0" prefHeight="40.0" prefWidth="330.0" styleClass="form_container">
+    <ButtonBar buttonMinWidth="90.0" layoutX="301.0" layoutY="576.0" prefHeight="40.0" prefWidth="330.0" styleClass="form_container">
       <buttons>
           <Button fx:id="btnSave" mnemonicParsing="false" onAction="#createSequence" styleClass="form_container" text="Save" />
           <Button fx:id="btnUpdate" layoutX="302.0" layoutY="18.0" mnemonicParsing="false" onAction="#updateSequence" text="Update" />
@@ -39,5 +39,5 @@
           <Button fx:id="btnClear" layoutX="132.0" layoutY="18.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#clearField" prefWidth="100.0" text="Clear" />
       </buttons>
     </ButtonBar>
-   <Button fx:id="btnSwitch" layoutX="906.0" layoutY="44.0" mnemonicParsing="false" onAction="#switchToOP" text="Switch" />
+   <Button fx:id="btnSwitch" layoutX="1096.0" layoutY="40.0" mnemonicParsing="false" onAction="#switchToOP" text="Switch" />
 </AnchorPane>
