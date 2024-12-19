@@ -80,7 +80,8 @@ public class OPController implements Initializable {
                     recorder.setPreview(null);
                 }
             } catch (RuntimeException e) {
-                throw new RuntimeException(e);
+                System.err.println(e.getMessage());
+                Alarm.showError("Error in cutting to new scene.");
             }
         }
         showRecorderFields();
@@ -104,7 +105,7 @@ public class OPController implements Initializable {
             System.err.println(e.getMessage());
             Alarm.showError("Error in setting preview to VMix.");
         }
-        recorder.setPreview(sceneToSetPreview);
+
         showRecorderFields();
         tableScenes.getSelectionModel().clearSelection();
         return true;

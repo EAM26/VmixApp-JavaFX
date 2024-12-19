@@ -15,11 +15,12 @@ public class VMRequest {
     private final String ipAddress;
     private final String port;
 
-    private HttpClient httpClient;
+    private final HttpClient httpClient;
 
     public VMRequest() {
         this.ipAddress = SelectedSequence.getSelectedSequence().getIpAddress();
         this.port = SelectedSequence.getSelectedSequence().getPort();
+        this.httpClient = HttpClient.newHttpClient();
     }
 
     public String getIpAddress() {
@@ -48,8 +49,6 @@ public class VMRequest {
                     .uri(URI.create(url))
                     .build();
 
-            System.out.println("The url for the request is: " + url);
-
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if(response.statusCode() == 200) {
@@ -61,5 +60,7 @@ public class VMRequest {
             throw new RuntimeException(e);
         }
     }
+
+
 
 }
