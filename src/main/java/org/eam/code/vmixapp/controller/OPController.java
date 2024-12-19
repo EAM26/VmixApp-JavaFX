@@ -101,6 +101,7 @@ public class OPController implements Initializable {
         }
         try {
             request.setPreview(sceneToSetPreview);
+            recorder.setPreview(sceneToSetPreview);
         } catch (RuntimeException e) {
             System.err.println(e.getMessage());
             Alarm.showError("Error in setting preview to VMix.");
