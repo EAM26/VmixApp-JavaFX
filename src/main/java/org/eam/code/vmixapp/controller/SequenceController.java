@@ -165,6 +165,8 @@ public class SequenceController implements Initializable {
     private void clear() {
         tfName.setText("");
         tfDescription.setText("");
+        tfIPAddress.setText("");
+        tfPort.setText("");
         SelectedSequence.setSelectedSequence(null);
         btnSave.setDisable(false);
     }

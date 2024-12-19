@@ -6,7 +6,10 @@ import org.eam.code.vmixapp.dao.MyCameraDAO;
 import org.eam.code.vmixapp.dao.SceneDao;
 import org.eam.code.vmixapp.dao.SequenceDAO;
 import org.eam.code.vmixapp.model.Sequence;
+import org.eam.code.vmixapp.util.SelectedSequence;
 import org.eam.code.vmixapp.util.Validation;
+
+import java.nio.channels.SelectableChannel;
 
 public class SequenceService {
 
@@ -33,7 +36,7 @@ public class SequenceService {
     }
 
     public void updateSequence(int id, String name, String description) {
-        if(seqNameExists(name)) {
+        if(!name.equals(SelectedSequence.getSelectedSequence().getName()) && seqNameExists(name)) {
             throw new IllegalArgumentException("Name for sequence not unique.");
         }
         sequenceDAO.updateSequence(id, name, description);
