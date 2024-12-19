@@ -56,4 +56,16 @@ public class Scene {
     public void setCamera(MyCamera camera) {
         this.camera = camera;
     }
+
+    @Override
+    public String toString() {
+        return "Scene{" +
+                "id=" + id +
+                ", number=" + number +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", sequence=" + sequence +
+                ", camera=" + camera +
+                '}';
+    }
 }

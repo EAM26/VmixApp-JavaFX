@@ -19,7 +19,7 @@
    <TextField fx:id="tfPreview" layoutX="40.0" layoutY="106.0" prefHeight="35.0" prefWidth="400.0" />
    <Text layoutX="461.0" layoutY="92.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Actual" />
    <TextField fx:id="tfActual" layoutX="461.0" layoutY="106.0" prefHeight="35.0" prefWidth="400.0" />
-   <Button fx:id="btnCue" layoutX="247.0" layoutY="172.0" mnemonicParsing="false" onAction="#cueScene" prefHeight="25.0" prefWidth="287.0" text="CUT" />
+   <Button fx:id="btnCut" layoutX="247.0" layoutY="172.0" mnemonicParsing="false" onAction="#cutScene" prefHeight="25.0" prefWidth="287.0" text="CUT" />
    <Button fx:id="btnSetPreview" layoutX="39.0" layoutY="172.0" mnemonicParsing="false" onAction="#setPreviewWithButton" prefHeight="25.0" prefWidth="103.0" text="SET PREVIEW" />
    <TableView fx:id="tableScenes" layoutX="39.0" layoutY="209.0" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#getSelectedSceneData" prefHeight="400.0" prefWidth="822.0">
       <columns>
