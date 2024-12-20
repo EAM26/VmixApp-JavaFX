@@ -18,17 +18,18 @@ import org.eam.code.vmixapp.service.MyCameraService;
 import org.eam.code.vmixapp.service.SceneService;
 import org.eam.code.vmixapp.util.Alarm;
 import org.eam.code.vmixapp.util.SelectedSequence;
+import org.eam.code.vmixapp.util.VMRequest;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.ResourceBundle;
 
 public class OPController implements Initializable {
     private final MyCameraService myCameraService;
     private final SceneService sceneService;
     private final Recorder recorder;
+    private final VMRequest request;
 
     public ObservableList<Scene> sceneList;
 
@@ -36,6 +37,7 @@ public class OPController implements Initializable {
         this.myCameraService = new MyCameraService();
         this.sceneService = new SceneService();
         this.recorder = new Recorder();
+        this.request = new VMRequest();
     }
 
     @Override
@@ -53,7 +55,7 @@ public class OPController implements Initializable {
 
     //    Recorder elements
     @FXML
-    private Button btnCue;
+    private Button btnCut;
 
     @FXML
     private Button btnSetPreview;
@@ -65,34 +67,46 @@ public class OPController implements Initializable {
     private TextField tfPreview;
 
     @FXML
-    void cueScene(ActionEvent event) {
+    void cutScene(ActionEvent event) {
         if (recorder.getPreview() != null) {
-            recorder.setActual(recorder.getPreview());
             int indexPrev = sceneList.indexOf(recorder.getPreview());
-            if (indexPrev < sceneList.size() - 1) {
-                recorder.setPreview(sceneList.get(indexPrev + 1));
-            } else {
-                recorder.setPreview(null);
+            try {
+                request.cut();
+                recorder.setActual(recorder.getPreview());
+                if (indexPrev < sceneList.size() - 1) {
+                    request.setPreview(sceneList.get(indexPrev + 1));
+                    recorder.setPreview(sceneList.get(indexPrev + 1));
+                } else {
+                    recorder.setPreview(null);
+                }
+            } catch (RuntimeException e) {
+                System.err.println(e.getMessage());
+                Alarm.showError("Error in cutting to new scene.");
             }
         }
-
         showRecorderFields();
     }
 
     @FXML
     boolean setPreviewWithButton(ActionEvent event) {
-        System.out.println("set preview with button 1");
         if (!validateSceneList()) {
             System.out.println("No scenes present.");
             return false;
         }
+        Scene sceneToSetPreview;
         if (getSelectedSceneData() == null) {
-            System.out.println("set preview with button  = null");
-            recorder.setPreview(sceneList.getFirst());
+            sceneToSetPreview = sceneList.getFirst();
         } else {
-            System.out.println("set preview with button is not null");
-            recorder.setPreview(getSelectedSceneData());
+            sceneToSetPreview  = getSelectedSceneData();
         }
+        try {
+            request.setPreview(sceneToSetPreview);
+            recorder.setPreview(sceneToSetPreview);
+        } catch (RuntimeException e) {
+            System.err.println(e.getMessage());
+            Alarm.showError("Error in setting preview to VMix.");
+        }
+
         showRecorderFields();
         tableScenes.getSelectionModel().clearSelection();
         return true;
@@ -227,6 +241,9 @@ public class OPController implements Initializable {
 
     private void showScenes() {
         this.sceneList = sceneService.getScenesBySeqId();
+        for (Scene scene: sceneList) {
+            System.out.println(scene);
+        }
         FXCollections.sort(sceneList, Comparator.comparing(Scene::getNumber));
         try {
             tableScenes.setItems(sceneList);

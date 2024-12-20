@@ -4,6 +4,7 @@ module org.eam.code.vmixapp {
     requires java.sql;
     requires org.slf4j;
     requires org.xerial.sqlitejdbc;
+    requires java.net.http;
 
 
     opens org.eam.code.vmixapp to javafx.fxml;

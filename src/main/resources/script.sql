@@ -26,11 +26,11 @@
 
 
 INSERT INTO sequences (Name, Description, IPAddress, Port)
-VALUES ('Mozart piano', 'Utrecht', '123.456.789', '8080'),
-       ('Bach Viool', 'Amssterdam', '123.456.789', '8080'),
-       ('Wagner concert', 'Rotterdam', '123.456.789', '8080'),
-       ('Beethoven symfonie', 'Den Haag', '123.456.789', '8080'),
-       ('Vivaldi 4 jaargetijden ', 'Leiden', '123.456.789', '8080');
+VALUES ('Mozart piano', 'Utrecht', '192.168.0.1', '8080'),
+       ('Bach Viool', 'Amssterdam', '192.168.0.1', '8080'),
+       ('Wagner concert', 'Rotterdam', '192.168.0.1', '8080'),
+       ('Beethoven symfonie', 'Den Haag', '192.168.0.1', '8080'),
+       ('Vivaldi 4 jaargetijden ', 'Leiden', '192.168.0.1', '8080');
 
 INSERT INTO cameras(Ref, Name, SeqId)
 VALUES (1, 'Cam1', 1),
