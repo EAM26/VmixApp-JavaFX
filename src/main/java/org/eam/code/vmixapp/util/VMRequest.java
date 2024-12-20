@@ -34,11 +34,13 @@ public class VMRequest {
     public void setPreview(Scene scene) {
         String encodedName = URLEncoder.encode(scene.getName(), StandardCharsets.UTF_8);
         String url = "http://" + ipAddress + ":" + port + "/api/?Function=PreviewInput&Input=" + encodedName;
+//        String url = "https://jsonplaceholder.typicode.com/posts/1";
         sendRequest(url);
     }
 
     public void cut() {
         String url = "http://" + ipAddress + ":" + port + "/api/?Function=CutDirect";
+//        String url = "https://jsonplaceholder.typicode.com/posts/1";
         sendRequest(url);
     }
 
@@ -53,6 +55,8 @@ public class VMRequest {
 
             if(response.statusCode() == 200) {
                 System.out.println("Request successful.");
+                System.out.println("Headers: " + response.headers());
+                System.out.println("Body: " + response.body());
             } else {
                 System.out.println("Request failed with status: "+ response.statusCode());
             }

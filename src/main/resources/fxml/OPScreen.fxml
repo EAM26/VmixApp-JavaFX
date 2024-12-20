@@ -56,7 +56,7 @@
    <Text layoutX="982.0" layoutY="637.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ref" wrappingWidth="31.693359375" />
    <TextField fx:id="tfNameCam" layoutX="1090.0" layoutY="643.0" prefHeight="25.0" prefWidth="121.0" />
    <Text layoutX="1091.0" layoutY="635.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
-   <ButtonBar buttonMinWidth="10.0" layoutX="800.0" layoutY="676.0" prefHeight="40.0" prefWidth="271.0">
+   <ButtonBar buttonMinWidth="10.0" layoutX="963.0" layoutY="676.0" prefHeight="40.0" prefWidth="264.0">
       <buttons>
          <Button fx:id="btnSaveCam" mnemonicParsing="false" onAction="#createCam" styleClass="form_container" text="Save" />
          <Button fx:id="btnUpdateCam" mnemonicParsing="false" onAction="#updateCam" text="Update" />
