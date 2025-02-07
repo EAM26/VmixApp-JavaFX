@@ -67,3 +67,4 @@ generated/
 # Libraries or dependencies that should not be checked in
 lib/
 /vmdb.db
+/src/main/resources/META-INF/MANIFEST.MF
