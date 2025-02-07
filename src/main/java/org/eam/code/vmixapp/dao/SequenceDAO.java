@@ -82,15 +82,17 @@ public class SequenceDAO {
         }
     }
 
-    public void updateSequence(int id, String name, String description) {
-        String updateMessage = "update sequences set Name=?, Description=? where Id=?";
+    public void updateSequence(int id, String name, String description, String ipAddress, String port) {
+        String updateMessage = "update sequences set Name=?, Description=?, IPAddress=?, PORT=? where Id=?";
         con = DBConnection.getCon();
 
         try {
             PreparedStatement pstmt = con.prepareStatement(updateMessage);
             pstmt.setString(1, name);
             pstmt.setString(2, description);
-            pstmt.setInt(3, id);
+            pstmt.setString(3, ipAddress);
+            pstmt.setString(4, port);
+            pstmt.setInt(5, id);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

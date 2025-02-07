@@ -31,16 +31,27 @@ public class VMRequest {
         return port;
     }
 
-    public void setPreview(Scene scene) {
+    public void setPreviewOld(Scene scene) {
         String encodedName = URLEncoder.encode(scene.getName(), StandardCharsets.UTF_8);
         String url = "http://" + ipAddress + ":" + port + "/api/?Function=PreviewInput&Input=" + encodedName;
 //        String url = "https://jsonplaceholder.typicode.com/posts/1";
+        System.out.println("Preview url: " + url);
+        sendRequest(url);
+    } public void setPreview(Scene scene) {
+        String camName = scene.getCamera().getName();
+
+        String url = "http://" + ipAddress + ":" + port + "/api/?Function=PreviewInput&Input=" + camName;
+//        String url = "https://jsonplaceholder.typicode.com/posts/1";
+        System.out.println("Preview url: " + url);
         sendRequest(url);
     }
+
+
 
     public void cut() {
         String url = "http://" + ipAddress + ":" + port + "/api/?Function=CutDirect";
 //        String url = "https://jsonplaceholder.typicode.com/posts/1";
+        System.out.println("Actual url: " + url);
         sendRequest(url);
     }
 
