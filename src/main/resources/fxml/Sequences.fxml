@@ -39,5 +39,5 @@
           <Button fx:id="btnClear" layoutX="132.0" layoutY="18.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#clearField" prefWidth="100.0" text="Clear" />
       </buttons>
     </ButtonBar>
-   <Button fx:id="btnSwitch" layoutX="1096.0" layoutY="40.0" mnemonicParsing="false" onAction="#switchToOP" text="Switch" />
+   <Button fx:id="btnSwitch" layoutX="1096.0" layoutY="40.0" mnemonicParsing="false" onAction="#switchToOP" text="Next" />
 </AnchorPane>

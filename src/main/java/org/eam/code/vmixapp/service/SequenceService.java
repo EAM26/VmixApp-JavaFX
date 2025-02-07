@@ -35,11 +35,11 @@ public class SequenceService {
         sequenceDAO.createSequence(name, description, ipAddress, port);
     }
 
-    public void updateSequence(int id, String name, String description) {
+    public void updateSequence(int id, String name, String description, String ipAddress, String port ) {
         if(!name.equals(SelectedSequence.getSelectedSequence().getName()) && seqNameExists(name)) {
             throw new IllegalArgumentException("Name for sequence not unique.");
         }
-        sequenceDAO.updateSequence(id, name, description);
+        sequenceDAO.updateSequence(id, name, description, ipAddress, port);
     }
 
     public void deleteSequence(int id) {

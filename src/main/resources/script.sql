@@ -26,7 +26,7 @@
 
 
 INSERT INTO sequences (Name, Description, IPAddress, Port)
-VALUES ('Mozart piano', 'Utrecht', '192.168.0.1', '8080'),
+VALUES ('Mozart piano', 'Utrecht', '86.86.79.147', '8088'),
        ('Bach Viool', 'Amssterdam', '192.168.0.1', '8080'),
        ('Wagner concert', 'Rotterdam', '192.168.0.1', '8080'),
        ('Beethoven symfonie', 'Den Haag', '192.168.0.1', '8080'),
@@ -42,13 +42,13 @@ VALUES (1, 'Cam1', 1),
        (1, 'Cam1', 4);
 
 INSERT INTO scenes(Number, Name, Description, SeqId, CamId)
-VALUES (1, 'Scene 1', 'Descr. 1', 1, 1),
-       (2, 'Scene 2', 'Descr. 2', 1, 1),
-       (3, 'Scene 3', 'Descr. 3', 1, 2),
-       (1, 'Scene 1', 'Descr. 1', 2, 4),
-       (2, 'Scene 2', 'Descr. 2', 2, 5),
-       (1, 'Scene 1', 'Descr. 1', 3, 6),
-       (1, 'Scene 1', 'Descr. 1', 4, 7);
+VALUES (1, 'Opening', 'Descr. 1', 1, 1),
+       (2, 'Dirigent ', 'Descr. 2', 1, 1),
+       (3, 'Eindshot', 'Descr. 3', 1, 2),
+       (1, 'Zaal', 'Descr. 1', 2, 4),
+       (2, 'Viool 2', 'Descr. 2', 2, 5),
+       (1, 'Zaal', 'Descr. 1', 3, 6),
+       (1, 'Opening', 'Descr. 1', 4, 7);
 
 
 

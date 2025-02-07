@@ -101,7 +101,7 @@ public class SequenceController implements Initializable {
             String name = tfName.getText().trim();
             String description = tfDescription.getText();
             String ipAddress = tfIPAddress.getText();
-            String port = tfPort.getId();
+            String port = tfPort.getText();
             try {
                 sequenceService.createSequence(name, description, ipAddress, port);
                 showSequences();
@@ -137,7 +137,7 @@ public class SequenceController implements Initializable {
         if(SelectedSequence.getSelectedSequence() != null && validateTextFields()) {
             try {
                 sequenceService.updateSequence(SelectedSequence.getSelectedSequence().getId(), tfName.getText().trim(),
-                        tfDescription.getText());
+                        tfDescription.getText(), tfIPAddress.getText(), tfPort.getText());
                 showSequences();
                 clear();
             } catch (RuntimeException e) {
