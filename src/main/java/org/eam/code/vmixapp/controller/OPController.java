@@ -88,9 +88,14 @@ public class OPController implements Initializable {
     }
 
     @FXML
+    void clearPreviewWithButton(ActionEvent event) {
+        recorder.setPreview(null);
+        showRecorderFields();
+    }
+
+    @FXML
     boolean setPreviewWithButton(ActionEvent event) {
         if (!validateSceneList()) {
-            System.out.println("No scenes present.");
             return false;
         }
         Scene sceneToSetPreview;
@@ -244,9 +249,6 @@ public class OPController implements Initializable {
 
     private void showScenes() {
         this.sceneList = sceneService.getScenesBySeqId();
-        for (Scene scene: sceneList) {
-            System.out.println(scene);
-        }
         FXCollections.sort(sceneList, Comparator.comparing(Scene::getNumber));
         try {
             tableScenes.setItems(sceneList);
