@@ -148,6 +148,9 @@ public class OPController implements Initializable {
     private TableColumn<Scene, String> colCamRef;
 
     @FXML
+    private TableColumn<Scene, String> colCamName;
+
+    @FXML
     private Button btnClearSceneFields;
 
     @FXML
@@ -253,6 +256,10 @@ public class OPController implements Initializable {
             colCamRef.setCellValueFactory(cellData -> {
                 MyCamera camera = cellData.getValue().getCamera();
                 return new SimpleStringProperty(camera != null ? camera.getRef() : "");
+            });
+            colCamName.setCellValueFactory(cellData -> {
+                MyCamera camera = cellData.getValue().getCamera();
+                return new SimpleStringProperty(camera != null ? camera.getName() : "");
             });
             tableScenes.getSelectionModel().clearSelection();
         } catch (Exception e) {
