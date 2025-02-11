@@ -88,9 +88,14 @@ public class OPController implements Initializable {
     }
 
     @FXML
+    void clearPreviewWithButton(ActionEvent event) {
+        recorder.setPreview(null);
+        showRecorderFields();
+    }
+
+    @FXML
     boolean setPreviewWithButton(ActionEvent event) {
         if (!validateSceneList()) {
-            System.out.println("No scenes present.");
             return false;
         }
         Scene sceneToSetPreview;
@@ -146,6 +151,9 @@ public class OPController implements Initializable {
 
     @FXML
     private TableColumn<Scene, String> colCamRef;
+
+    @FXML
+    private TableColumn<Scene, String> colCamName;
 
     @FXML
     private Button btnClearSceneFields;
@@ -241,9 +249,6 @@ public class OPController implements Initializable {
 
     private void showScenes() {
         this.sceneList = sceneService.getScenesBySeqId();
-        for (Scene scene: sceneList) {
-            System.out.println(scene);
-        }
         FXCollections.sort(sceneList, Comparator.comparing(Scene::getNumber));
         try {
             tableScenes.setItems(sceneList);
@@ -253,6 +258,10 @@ public class OPController implements Initializable {
             colCamRef.setCellValueFactory(cellData -> {
                 MyCamera camera = cellData.getValue().getCamera();
                 return new SimpleStringProperty(camera != null ? camera.getRef() : "");
+            });
+            colCamName.setCellValueFactory(cellData -> {
+                MyCamera camera = cellData.getValue().getCamera();
+                return new SimpleStringProperty(camera != null ? camera.getName() : "");
             });
             tableScenes.getSelectionModel().clearSelection();
         } catch (Exception e) {
@@ -389,6 +398,7 @@ public class OPController implements Initializable {
                 if (selectedCam != null) {
                     myCameraService.updateCam(tfRef.getText().trim(), tfNameCam.getText().trim(), selectedCam);
                     showCameras();
+                    showScenes();
                     clearCam();
                 }
             } catch (RuntimeException e) {
