@@ -70,6 +70,14 @@ public class OPController implements Initializable {
     void cutScene(ActionEvent event) {
         if (recorder.getPreview() != null) {
             int indexPrev = sceneList.indexOf(recorder.getPreview());
+            System.out.println("the id of the old preview is: " + recorder.getPreview().getId());
+            if (indexPrev == -1) {
+                for(Scene scene: sceneList) {
+                    if(scene.getId() == recorder.getPreview().getId()) {
+                        indexPrev = sceneList.indexOf(scene);
+                    }
+                }
+            }
             try {
                 request.cut();
                 recorder.setActual(recorder.getPreview());
