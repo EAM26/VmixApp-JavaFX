@@ -23,6 +23,8 @@ import org.eam.code.vmixapp.util.VMRequest;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class OPController implements Initializable {
@@ -70,6 +72,14 @@ public class OPController implements Initializable {
     void cutScene(ActionEvent event) {
         if (recorder.getPreview() != null) {
             int indexPrev = sceneList.indexOf(recorder.getPreview());
+            if (indexPrev == -1) {
+//                Find the old preview scene in the recreated sceneList.
+                for (Scene scene : sceneList) {
+                    if (scene.getId() == recorder.getPreview().getId()) {
+                        indexPrev = sceneList.indexOf(scene);
+                    }
+                }
+            }
             try {
                 request.cut();
                 recorder.setActual(recorder.getPreview());
@@ -102,7 +112,7 @@ public class OPController implements Initializable {
         if (getSelectedSceneData() == null) {
             sceneToSetPreview = sceneList.getFirst();
         } else {
-            sceneToSetPreview  = getSelectedSceneData();
+            sceneToSetPreview = getSelectedSceneData();
         }
         try {
             request.setPreview(sceneToSetPreview);
@@ -117,17 +127,28 @@ public class OPController implements Initializable {
         return true;
     }
 
+
     private void showRecorderFields() {
+        Map<Scene, String> sceneColorMap = new HashMap<>();
         if (recorder.getPreview() != null) {
             tfPreview.setText("Scene " + recorder.getPreview().getNumber() + ". : " + recorder.getPreview().getName());
+            sceneColorMap.put(recorder.getPreview(), "orange");
         } else {
             tfPreview.setText("");
         }
         if (recorder.getActual() != null) {
             tfActual.setText("Scene " + recorder.getActual().getNumber() + ". : " + recorder.getActual().getName());
+            sceneColorMap.put(recorder.getActual(), "green");
+
+            int actualSceneIndex = sceneList.indexOf(recorder.getActual());
+            if (actualSceneIndex != -1) {
+                tableScenes.scrollTo(actualSceneIndex);
+                tableScenes.getSelectionModel().select(actualSceneIndex);
+            }
         } else {
             tfActual.setText("");
         }
+        updateRowColor(sceneColorMap);
     }
 
 
@@ -187,16 +208,24 @@ public class OPController implements Initializable {
     void deleteScene(ActionEvent event) {
         Scene selectedScene = tableScenes.getSelectionModel().getSelectedItem();
         if (selectedScene != null) {
-            if (Alarm.confirmationDelete(selectedScene.getNumber(), selectedScene.getName())) {
-                try {
-                    sceneService.deleteScene(selectedScene);
-                    showScenes();
-                    clearScene();
-                } catch (NumberFormatException e) {
-                    System.err.println(e.getMessage());
-                    Alarm.showError("Error in deleting scene.");
+            if (recorder.getPreview() != null && selectedScene == recorder.getPreview()) {
+                Alarm.showError("Can't delete scene that is in Preview.");
+            } else if (recorder.getActual() != null && selectedScene == recorder.getActual()) {
+                Alarm.showError("Can't delete scene that is in Actual.");
+            } else {
+                if (Alarm.confirmationDelete(selectedScene.getNumber(), selectedScene.getName())) {
+                    try {
+                        sceneService.deleteScene(selectedScene);
+                        showScenes();
+                        clearScene();
+                    } catch (NumberFormatException e) {
+                        System.err.println(e.getMessage());
+                        Alarm.showError("Error in deleting scene.");
+                    }
                 }
             }
+
+
         }
 
     }
@@ -263,11 +292,31 @@ public class OPController implements Initializable {
                 MyCamera camera = cellData.getValue().getCamera();
                 return new SimpleStringProperty(camera != null ? camera.getName() : "");
             });
+
             tableScenes.getSelectionModel().clearSelection();
         } catch (Exception e) {
             System.out.println(e.getMessage());
             Alarm.showError("Error in showing scenes.");
         }
+    }
+
+    private void updateRowColor(Map<Scene, String> sceneColorMap) {
+        tableScenes.setRowFactory(tv -> new TableRow<Scene>() {
+            @Override
+            protected void updateItem(Scene item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setStyle("");
+                } else {
+                    String color = sceneColorMap.get(item);
+                    if (color != null) {
+                        setStyle("-fx-background-color:" + color + ";");
+                    } else {
+                        setStyle("");
+                    }
+                }
+            }
+        });
     }
 
     private void clearScene() {
