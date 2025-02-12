@@ -352,6 +352,9 @@ public class OPController implements Initializable {
 //    Cam elements
 
     @FXML
+    private Button btnImportCams;
+
+    @FXML
     private Button btnDeleteCam;
 
     @FXML
@@ -388,6 +391,11 @@ public class OPController implements Initializable {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @FXML
+    void importCams() {
+        System.out.println("import cams running.");
     }
 
     @FXML
