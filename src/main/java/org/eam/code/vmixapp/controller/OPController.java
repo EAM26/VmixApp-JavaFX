@@ -139,6 +139,12 @@ public class OPController implements Initializable {
         if (recorder.getActual() != null) {
             tfActual.setText("Scene " + recorder.getActual().getNumber() + ". : " + recorder.getActual().getName());
             sceneColorMap.put(recorder.getActual(), "green");
+
+            int actualSceneIndex = sceneList.indexOf(recorder.getActual());
+            if (actualSceneIndex != -1) {
+                tableScenes.scrollTo(actualSceneIndex);
+                tableScenes.getSelectionModel().select(actualSceneIndex);
+            }
         } else {
             tfActual.setText("");
         }
