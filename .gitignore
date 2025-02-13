@@ -68,3 +68,4 @@ generated/
 lib/
 /vmdb.db
 /src/main/resources/META-INF/MANIFEST.MF
+/src/main/resources/fxml/OPScreenWithCamRef.fxml

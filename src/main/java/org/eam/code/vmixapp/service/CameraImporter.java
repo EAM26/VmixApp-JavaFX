@@ -69,10 +69,10 @@ public class CameraImporter {
     }
 
     private void camListCreator(List<String> camList) {
-        int ref = 100;
-        for (String camName: camList) {
-            myCameraService.createCam(String.valueOf(ref++), camName, SelectedSequence.getSelectedSequence());
-        }
+//        int ref = 100;
+//        for (String camName: camList) {
+//            myCameraService.createCam(String.valueOf(ref++), camName, SelectedSequence.getSelectedSequence());
+//        }
     }
 
 

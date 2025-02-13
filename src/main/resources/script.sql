@@ -32,14 +32,14 @@ VALUES ('Mozart piano', 'Utrecht', '86.86.79.147', '8088'),
        ('Beethoven symfonie', 'Den Haag', '192.168.0.1', '8080'),
        ('Vivaldi 4 jaargetijden ', 'Leiden', '192.168.0.1', '8080');
 
-INSERT INTO cameras(Ref, Name, SeqId)
-VALUES (1, 'Cam1', 1),
-       (2, 'Cam2', 1),
-       (3, 'Cam3', 1),
-       (1, 'Cam1', 2),
-       (2, 'Cam2', 2),
-       (1, 'Cam3', 3),
-       (1, 'Cam1', 4);
+INSERT INTO cameras(Name, SeqId)
+VALUES ('Cam1', 1),
+       ('Cam2', 1),
+       ('Cam3', 1),
+       ('Cam1', 2),
+       ('Cam2', 2),
+       ('Cam3', 3),
+       ('Cam1', 4);
 
 INSERT INTO scenes(Number, Name, Description, SeqId, CamId)
 VALUES
