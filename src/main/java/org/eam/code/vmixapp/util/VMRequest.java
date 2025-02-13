@@ -36,7 +36,7 @@ public class VMRequest {
 
         String url = "http://" + ipAddress + ":" + port + "/api/?Function=PreviewInput&Input=" + camName;
 //        String url = "https://jsonplaceholder.typicode.com/posts/1";
-        System.out.println("Preview url: " + url);
+        System.out.println("Preview url: " + url + "  camname is: " + camName);
 //        sendRequest(url);
     }
 

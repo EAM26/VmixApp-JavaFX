@@ -23,10 +23,7 @@ import org.eam.code.vmixapp.util.VMRequest;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class OPController implements Initializable {
     String xmlResponse = "<vmix><version>28.0.0.36</version><edition>4K</edition><preset>C:\\Users\\synco\\AppData\\Roaming\\last.vmix</preset><inputs>"
@@ -164,6 +161,20 @@ public class OPController implements Initializable {
         updateRowColor(sceneColorMap);
     }
 
+    private void resetRecorderFields() {
+        if(sceneList == null) {
+            return;
+        }
+        for (Scene scene : sceneList) {
+            if (recorder.getPreview() != null && scene.getId() == recorder.getPreview().getId()) {
+                recorder.setPreview(scene);
+            }
+            if (recorder.getActual() != null && scene.getId() == recorder.getActual().getId()) {
+                recorder.setActual(scene);
+            }
+        }
+        showRecorderFields();
+    }
 
     private boolean validateSceneList() {
         return this.sceneList != null && !this.sceneList.isEmpty();
@@ -213,8 +224,11 @@ public class OPController implements Initializable {
 //    @FXML
 //    private TextField tfCamRef;
 
+//    @FXML
+//    private TextField tfCamName;
+
     @FXML
-    private TextField tfCamName;
+    private ChoiceBox<String> cbCamName;
 
     @FXML
     void clearFieldsScene(ActionEvent event) {
@@ -252,7 +266,7 @@ public class OPController implements Initializable {
         if (validateSceneTextFields()) {
             try {
 //                sceneService.createScene(tfNumScene.getText().trim(), tfNameScene.getText().trim(), tfDescrScene.getText(), tfCamRef.getText().trim(), SelectedSequence.getSelectedSequence());
-                sceneService.createScene(tfNumScene.getText().trim(), tfNameScene.getText().trim(), tfDescrScene.getText(), tfCamName.getText().trim(), SelectedSequence.getSelectedSequence());
+                sceneService.createScene(tfNumScene.getText().trim(), tfNameScene.getText().trim(), tfDescrScene.getText(), cbCamName.getValue(), SelectedSequence.getSelectedSequence());
                 showScenes();
                 clearScene();
             } catch (RuntimeException e) {
@@ -269,7 +283,7 @@ public class OPController implements Initializable {
                 if (selectedScene != null) {
                     sceneService.updateScene(tfNumScene.getText().trim(), tfNameScene.getText().trim(),
 //                            tfDescrScene.getText(), tfCamRef.getText().trim(), selectedScene);
-                            tfDescrScene.getText(), tfCamName.getText().trim(), selectedScene);
+                            tfDescrScene.getText(), cbCamName.getValue(), selectedScene);
                     showScenes();
                     clearScene();
                 }
@@ -290,15 +304,18 @@ public class OPController implements Initializable {
             tfNameScene.setText(selectedScene.getName());
             tfDescrScene.setText(selectedScene.getDescription());
 //            tfCamRef.setText(selectedScene.getCamera().getRef());
-            tfCamName.setText(selectedScene.getCamera().getName());
+            cbCamName.setValue(selectedScene.getCamera().getName());
             btnSaveScene.setDisable(true);
         }
         return selectedScene;
     }
 
     private void showScenes() {
+        clearScene();
         this.sceneList = sceneService.getScenesBySeqId();
         FXCollections.sort(sceneList, Comparator.comparing(Scene::getNumber));
+        resetRecorderFields();
+        populateCameraChoiceBox();
         try {
             tableScenes.setItems(sceneList);
             colNumScene.setCellValueFactory(new PropertyValueFactory<>("Number"));
@@ -319,6 +336,7 @@ public class OPController implements Initializable {
             System.out.println(e.getMessage());
             Alarm.showError("Error in showing scenes.");
         }
+
     }
 
     private void updateRowColor(Map<Scene, String> sceneColorMap) {
@@ -340,12 +358,26 @@ public class OPController implements Initializable {
         });
     }
 
+    private void populateCameraChoiceBox() {
+        List<String> cameraNames = new ArrayList<>();
+        for (MyCamera cameraName : myCameraService.getCamerasBySeqId()) {
+            cameraNames.add(cameraName.getName());
+        }
+        cbCamName.setItems(FXCollections.observableArrayList(cameraNames).sorted());
+        if (getSelectedSceneData() != null) {
+            cbCamName.setValue(getSelectedSceneData().getCamera().getName());
+        } else {
+            System.out.println("Scenedata is null.");
+        }
+    }
+
     private void clearScene() {
         tfNumScene.setText("");
         tfNameScene.setText("");
         tfDescrScene.setText("");
 //        tfCamRef.setText("");
-        tfCamName.setText("");
+//        tfCamName.setText("");
+        cbCamName.setValue("");
         btnSaveScene.setDisable(false);
         tableScenes.getSelectionModel().clearSelection();
     }
@@ -353,7 +385,8 @@ public class OPController implements Initializable {
     private boolean validateSceneTextFields() {
         if (tfNumScene.getText().isBlank() || tfNameScene.getText().isBlank() ||
 //                tfDescrScene.getText().isBlank() || tfCamRef.getText().isBlank()) {
-                tfDescrScene.getText().isBlank() || tfCamName.getText().isBlank()) {
+//                tfDescrScene.getText().isBlank() || tfCamName.getText().isBlank()) {
+                tfDescrScene.getText().isBlank() || cbCamName.getValue().isBlank()) {
             Alarm.showError("No empty fields allowed.");
             return false;
         }
@@ -415,6 +448,7 @@ public class OPController implements Initializable {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        showScenes();
     }
 
     @FXML
@@ -505,6 +539,7 @@ public class OPController implements Initializable {
             Alarm.showError("Error in switching to Main Screen.");
         }
     }
+
 
     private void clearCam() {
 //        tfRef.setText("");

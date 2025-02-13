@@ -40,9 +40,9 @@ public class SceneService {
         if (sceneNameExists(sceneName)) {
             throw new IllegalArgumentException("Scene name: " + sceneName + " already exists.");
         }
-//        if (!myCameraService.camRefExists(camRef)) {
-//            throw new IllegalArgumentException(camRef + " doesnt exist as camera reference.");
-//        }
+        if (!myCameraService.camNameExists(camName)) {
+            throw new IllegalArgumentException(camName + " doesnt exist as camera reference.");
+        }
         int sceneNumber = Integer.parseInt(sceneNumberAsString.trim());
         if (sceneNumberExists(sceneNumber)) {
             if (Alarm.confirmationInsert(sceneNumber, sceneName)) {
