@@ -35,7 +35,7 @@ public class MyCameraDAO {
                 MyCamera myCamera = new MyCamera();
                 myCamera.setId(resultSet.getInt("Id"));
                 myCamera.setName(resultSet.getString("Name"));
-                myCamera.setRef(resultSet.getString("Ref"));
+//                myCamera.setRef(resultSet.getString("Ref"));
                 Sequence sequence = SelectedSequence.getSelectedSequence();
                 myCamera.setSequence(sequence);
                 myCameraList.add(myCamera);
@@ -47,16 +47,18 @@ public class MyCameraDAO {
         return myCameraList;
     }
 
-    public void createCamera(String ref, String name, Sequence sequence) {
-        String insertMessage = "INSERT INTO cameras (Ref, Name, SeqId) values(?, ?, ?)";
+//    public void createCamera(String ref, String name, Sequence sequence) {
+    public void createCamera(String name, Sequence sequence) {
+//        String insertMessage = "INSERT INTO cameras (Ref, Name, SeqId) values(?, ?, ?)";
+        String insertMessage = "INSERT INTO cameras (Name, SeqId) values(?, ?)";
 
         connection = DBConnection.getCon();
 
         try {
             pstmt = connection.prepareStatement(insertMessage);
-            pstmt.setString(1, ref);
-            pstmt.setString(2, name);
-            pstmt.setInt(3, sequence.getId());
+//            pstmt.setString(1, ref);
+            pstmt.setString(1, name);
+            pstmt.setInt(2, sequence.getId());
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -64,15 +66,17 @@ public class MyCameraDAO {
         }
     }
 
-    public void updateCam(String ref, String name, int id) {
-        String updateMessage = "update cameras set Ref=?, Name=? where Id=?";
+//    public void updateCam(String ref, String name, int id) {
+    public void updateCam(String name, int id) {
+//        String updateMessage = "update cameras set Ref=?, Name=? where Id=?";
+        String updateMessage = "update cameras set Name=? where Id=?";
         connection = DBConnection.getCon();
 
         try {
             pstmt = connection.prepareStatement(updateMessage);
-            pstmt.setString(1, ref);
-            pstmt.setString(2, name);
-            pstmt.setInt(3, id);
+//            pstmt.setString(1, ref);
+            pstmt.setString(1, name);
+            pstmt.setInt(2, id);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -106,13 +110,29 @@ public class MyCameraDAO {
         }
     }
 
-    public MyCamera getCameraByRef(String ref) {
-        String getMessage = "Select * from cameras where Ref = ? and SeqId=?";
+//    public MyCamera getCameraByRef(String ref) {
+//        String getMessage = "Select * from cameras where Ref = ? and SeqId=?";
+//        connection = DBConnection.getCon();
+//
+//        try {
+//            pstmt = connection.prepareStatement(getMessage);
+//            pstmt.setString(1, ref);
+//            pstmt.setInt(2, SelectedSequence.getSelectedSequence().getId());
+//            resultSet = pstmt.executeQuery();
+//
+//            return prepareCamera(resultSet);
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+
+    public MyCamera getCameraByName(String camName) {
+        String getMessage = "Select * from cameras where Name = ? and SeqId=?";
         connection = DBConnection.getCon();
 
         try {
             pstmt = connection.prepareStatement(getMessage);
-            pstmt.setString(1, ref);
+            pstmt.setString(1, camName);
             pstmt.setInt(2, SelectedSequence.getSelectedSequence().getId());
             resultSet = pstmt.executeQuery();
 
@@ -127,7 +147,7 @@ public class MyCameraDAO {
             if (resultSet.next()) {
                 MyCamera camera = new MyCamera();
                 camera.setId(resultSet.getInt("Id"));
-                camera.setRef(resultSet.getString("Ref"));
+//                camera.setRef(resultSet.getString("Ref"));
                 camera.setName(resultSet.getString("Name"));
                 int seqId = resultSet.getInt("SeqId");
                 camera.setSequence(sequenceDAO.getSequenceById(seqId));

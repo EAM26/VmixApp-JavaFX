@@ -26,28 +26,32 @@ public class MyCameraService {
         return FXCollections.observableArrayList();
     }
 
-    public void createCam(String ref, String name, Sequence sequence) {
-        if (camRefExists(ref)) {
-            throw new IllegalArgumentException("Reference camera is not unique.");
-        }
+//    public void createCam(String ref, String name, Sequence sequence) {
+    public void createCam(String name, Sequence sequence) {
+//        if (camRefExists(ref)) {
+//            throw new IllegalArgumentException("Reference camera is not unique.");
+//        }
         if (camNameExists(name)) {
             throw new IllegalArgumentException("Name camera is not unique.");
         }
-        cameraDAO.createCamera(ref, name, sequence);
+//        cameraDAO.createCamera(ref, name, sequence);
+        cameraDAO.createCamera(name, sequence);
     }
 
-    public void updateCam(String ref, String name, MyCamera selectedCam) {
-        if (!ref.equals(selectedCam.getRef())) {
-            if (camRefExists(ref)) {
-                throw new IllegalArgumentException("Reference camera is not unique.");
-            }
-        }
+//    public void updateCam(String ref, String name, MyCamera selectedCam) {
+    public void updateCam(String name, MyCamera selectedCam) {
+//        if (!ref.equals(selectedCam.getRef())) {
+//            if (camRefExists(ref)) {
+//                throw new IllegalArgumentException("Reference camera is not unique.");
+//            }
+//        }
         if (!name.equals(selectedCam.getName())) {
             if (camNameExists(name)) {
                 throw new IllegalArgumentException("Name camera is not unique.");
             }
         }
-        cameraDAO.updateCam(ref, name, selectedCam.getId());
+//        cameraDAO.updateCam(ref, name, selectedCam.getId());
+        cameraDAO.updateCam(name, selectedCam.getId());
 
     }
 
@@ -65,7 +69,7 @@ public class MyCameraService {
         return false;
     }
 
-    private boolean camNameExists(String camName) {
+    public boolean camNameExists(String camName) {
         return Validation.existsInTable("cameras", "name", camName, "SeqId", SelectedSequence.getSelectedSequence().getId());
     }
 

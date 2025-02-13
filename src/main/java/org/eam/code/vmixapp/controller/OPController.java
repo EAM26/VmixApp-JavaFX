@@ -183,8 +183,9 @@ public class OPController implements Initializable {
     @FXML
     private TableColumn<Scene, String> colDescrSene;
 
-    @FXML
-    private TableColumn<Scene, String> colCamRef;
+//    @FXML
+//    private TableColumn<Scene, String> colCamRef;
+
 
     @FXML
     private TableColumn<Scene, String> colCamName;
@@ -209,8 +210,11 @@ public class OPController implements Initializable {
     @FXML
     private TextField tfDescrScene;
 
+//    @FXML
+//    private TextField tfCamRef;
+
     @FXML
-    private TextField tfCamRef;
+    private TextField tfCamName;
 
     @FXML
     void clearFieldsScene(ActionEvent event) {
@@ -247,7 +251,8 @@ public class OPController implements Initializable {
     void createScene(ActionEvent event) {
         if (validateSceneTextFields()) {
             try {
-                sceneService.createScene(tfNumScene.getText().trim(), tfNameScene.getText().trim(), tfDescrScene.getText(), tfCamRef.getText().trim(), SelectedSequence.getSelectedSequence());
+//                sceneService.createScene(tfNumScene.getText().trim(), tfNameScene.getText().trim(), tfDescrScene.getText(), tfCamRef.getText().trim(), SelectedSequence.getSelectedSequence());
+                sceneService.createScene(tfNumScene.getText().trim(), tfNameScene.getText().trim(), tfDescrScene.getText(), tfCamName.getText().trim(), SelectedSequence.getSelectedSequence());
                 showScenes();
                 clearScene();
             } catch (RuntimeException e) {
@@ -263,7 +268,8 @@ public class OPController implements Initializable {
             try {
                 if (selectedScene != null) {
                     sceneService.updateScene(tfNumScene.getText().trim(), tfNameScene.getText().trim(),
-                            tfDescrScene.getText(), tfCamRef.getText().trim(), selectedScene);
+//                            tfDescrScene.getText(), tfCamRef.getText().trim(), selectedScene);
+                            tfDescrScene.getText(), tfCamName.getText().trim(), selectedScene);
                     showScenes();
                     clearScene();
                 }
@@ -283,7 +289,8 @@ public class OPController implements Initializable {
             tfNumScene.setText(String.valueOf(selectedScene.getNumber()));
             tfNameScene.setText(selectedScene.getName());
             tfDescrScene.setText(selectedScene.getDescription());
-            tfCamRef.setText(selectedScene.getCamera().getRef());
+//            tfCamRef.setText(selectedScene.getCamera().getRef());
+            tfCamName.setText(selectedScene.getCamera().getName());
             btnSaveScene.setDisable(true);
         }
         return selectedScene;
@@ -297,10 +304,11 @@ public class OPController implements Initializable {
             colNumScene.setCellValueFactory(new PropertyValueFactory<>("Number"));
             colNameScene.setCellValueFactory(new PropertyValueFactory<>("Name"));
             colDescrSene.setCellValueFactory(new PropertyValueFactory<>("Description"));
-            colCamRef.setCellValueFactory(cellData -> {
-                MyCamera camera = cellData.getValue().getCamera();
-                return new SimpleStringProperty(camera != null ? camera.getRef() : "");
-            });
+//            colCamRef.setCellValueFactory(cellData -> {
+//                MyCamera camera = cellData.getValue().getCamera();
+//                return new SimpleStringProperty(camera != null ? camera.getRef() : "");
+//            });
+
             colCamName.setCellValueFactory(cellData -> {
                 MyCamera camera = cellData.getValue().getCamera();
                 return new SimpleStringProperty(camera != null ? camera.getName() : "");
@@ -336,14 +344,16 @@ public class OPController implements Initializable {
         tfNumScene.setText("");
         tfNameScene.setText("");
         tfDescrScene.setText("");
-        tfCamRef.setText("");
+//        tfCamRef.setText("");
+        tfCamName.setText("");
         btnSaveScene.setDisable(false);
         tableScenes.getSelectionModel().clearSelection();
     }
 
     private boolean validateSceneTextFields() {
         if (tfNumScene.getText().isBlank() || tfNameScene.getText().isBlank() ||
-                tfDescrScene.getText().isBlank() || tfCamRef.getText().isBlank()) {
+//                tfDescrScene.getText().isBlank() || tfCamRef.getText().isBlank()) {
+                tfDescrScene.getText().isBlank() || tfCamName.getText().isBlank()) {
             Alarm.showError("No empty fields allowed.");
             return false;
         }
@@ -379,8 +389,8 @@ public class OPController implements Initializable {
     @FXML
     private Button btnClearCam;
 
-    @FXML
-    private TextField tfRef;
+//    @FXML
+//    private TextField tfRef;
 
     @FXML
     private TextField tfNameCam;
@@ -396,10 +406,11 @@ public class OPController implements Initializable {
 
     private void showCameras() {
         ObservableList<MyCamera> myCameraList = myCameraService.getCamerasBySeqId();
-        FXCollections.sort(myCameraList, Comparator.comparing(MyCamera::getRef));
+//        FXCollections.sort(myCameraList, Comparator.comparing(MyCamera::getRef));
+        FXCollections.sort(myCameraList, Comparator.comparing(MyCamera::getName));
         try {
             tableCams.setItems(myCameraList);
-            colRef.setCellValueFactory(new PropertyValueFactory<>("Ref"));
+//            colRef.setCellValueFactory(new PropertyValueFactory<>("Ref"));
             colNameCam.setCellValueFactory(new PropertyValueFactory<>("Name"));
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -417,7 +428,7 @@ public class OPController implements Initializable {
     void getSelectedCamData(MouseEvent event) {
         MyCamera selectedCamera = tableCams.getSelectionModel().getSelectedItem();
         if (selectedCamera != null) {
-            tfRef.setText(String.valueOf(selectedCamera.getRef()));
+//            tfRef.setText(String.valueOf(selectedCamera.getRef()));
             tfNameCam.setText(selectedCamera.getName());
             btnSaveCam.setDisable(true);
         }
@@ -432,7 +443,8 @@ public class OPController implements Initializable {
     void createCam(ActionEvent event) {
         if (validateCamTextFields()) {
             try {
-                myCameraService.createCam(tfRef.getText().trim(), tfNameCam.getText().trim(), SelectedSequence.getSelectedSequence());
+//                myCameraService.createCam(tfRef.getText().trim(), tfNameCam.getText().trim(), SelectedSequence.getSelectedSequence());
+                myCameraService.createCam(tfNameCam.getText().trim(), SelectedSequence.getSelectedSequence());
                 showCameras();
                 clearCam();
             } catch (RuntimeException e) {
@@ -448,7 +460,8 @@ public class OPController implements Initializable {
     void deleteCam(ActionEvent event) {
         MyCamera selectedCam = tableCams.getSelectionModel().getSelectedItem();
         if (selectedCam != null) {
-            if (Alarm.confirmationDelete(selectedCam.getRef(), selectedCam.getName())) {
+//            if (Alarm.confirmationDelete(selectedCam.getRef(), selectedCam.getName())) {
+            if (Alarm.confirmationDelete(selectedCam.getName())) {
                 try {
                     myCameraService.deleteCam(selectedCam.getId());
                     showCameras();
@@ -468,7 +481,8 @@ public class OPController implements Initializable {
             MyCamera selectedCam = tableCams.getSelectionModel().getSelectedItem();
             try {
                 if (selectedCam != null) {
-                    myCameraService.updateCam(tfRef.getText().trim(), tfNameCam.getText().trim(), selectedCam);
+//                    myCameraService.updateCam(tfRef.getText().trim(), tfNameCam.getText().trim(), selectedCam);
+                    myCameraService.updateCam(tfNameCam.getText().trim(), selectedCam);
                     showCameras();
                     showScenes();
                     clearCam();
@@ -493,14 +507,15 @@ public class OPController implements Initializable {
     }
 
     private void clearCam() {
-        tfRef.setText("");
+//        tfRef.setText("");
         tfNameCam.setText("");
         btnSaveCam.setDisable(false);
     }
 
 
     private boolean validateCamTextFields() {
-        return !tfRef.getText().isBlank() && !tfNameCam.getText().isBlank();
+//        return !tfRef.getText().isBlank() && !tfNameCam.getText().isBlank();
+        return !tfNameCam.getText().isBlank();
     }
 
 
