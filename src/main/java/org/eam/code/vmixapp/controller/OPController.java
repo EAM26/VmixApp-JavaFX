@@ -14,6 +14,7 @@ import org.eam.code.vmixapp.App;
 import org.eam.code.vmixapp.model.MyCamera;
 import org.eam.code.vmixapp.model.Recorder;
 import org.eam.code.vmixapp.model.Scene;
+import org.eam.code.vmixapp.service.CameraImporter;
 import org.eam.code.vmixapp.service.MyCameraService;
 import org.eam.code.vmixapp.service.SceneService;
 import org.eam.code.vmixapp.util.Alarm;
@@ -28,18 +29,30 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 public class OPController implements Initializable {
+    String xmlResponse = "<vmix><version>28.0.0.36</version><edition>4K</edition><preset>C:\\Users\\synco\\AppData\\Roaming\\last.vmix</preset><inputs>"
+            + "<input key=\"4d64cadf-aa54-461b-8e78-97ea41108da2\" number=\"1\" type=\"Capture\" title=\"C1\" shortTitle=\"C1\" state=\"Running\" position=\"0\" duration=\"0\" loop=\"False\">C1</input>"
+            + "<input key=\"652898f9-a524-40ba-a21f-c0b28d512a0c\" number=\"2\" type=\"Colour\" title=\"C2\" shortTitle=\"C2\" state=\"Paused\" position=\"0\" duration=\"0\" loop=\"False\">C2</input>"
+            + "<input key=\"bbc3da0b-09ee-4ed7-90b4-97ba106f872a\" number=\"3\" type=\"Virtual\" title=\"PTZ - C1-TOTAAL\" shortTitle=\"C1-TOTAAL\" state=\"Paused\" position=\"0\" duration=\"0\" loop=\"False\">PTZ - C1-TOTAAL</input>"
+            + "<input key=\"db907683-92f5-4a59-854f-aa48c529e6c3\" number=\"4\" type=\"Virtual\" title=\"PTZ - C1-HOUT\" shortTitle=\"C1-HOUT\" state=\"Paused\" position=\"0\" duration=\"0\" loop=\"False\">PTZ - C1-HOUT</input>"
+            + "<input key=\"680decec-39e0-47e4-8c73-9049ae549d01\" number=\"5\" type=\"Image\" title=\"cam10-Piano-Superclose.jpg\" shortTitle=\"cam10-Piano-Superclose.jpg\" state=\"Paused\" position=\"0\" duration=\"0\" loop=\"False\">cam10-Piano-Superclose.jpg</input>"
+            + "</inputs></vmix>";
+
     private final MyCameraService myCameraService;
     private final SceneService sceneService;
     private final Recorder recorder;
     private final VMRequest request;
+    private final CameraImporter cameraImporter;
+
 
     public ObservableList<Scene> sceneList;
 
     public OPController() {
+        this.cameraImporter = new CameraImporter();
         this.myCameraService = new MyCameraService();
         this.sceneService = new SceneService();
         this.recorder = new Recorder();
         this.request = new VMRequest();
+
     }
 
     @Override
@@ -395,7 +408,9 @@ public class OPController implements Initializable {
 
     @FXML
     void importCams() {
-        System.out.println("import cams running.");
+//        CameraImporter cameraImporter = new CameraImporter();
+        cameraImporter.importCameras();
+        showCameras();
     }
 
     @FXML
