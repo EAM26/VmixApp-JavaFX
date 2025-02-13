@@ -366,9 +366,7 @@ public class OPController implements Initializable {
         cbCamName.setItems(FXCollections.observableArrayList(cameraNames).sorted());
         if (getSelectedSceneData() != null) {
             cbCamName.setValue(getSelectedSceneData().getCamera().getName());
-        } else {
-            System.out.println("Scenedata is null.");
-        }
+        } 
     }
 
     private void clearScene() {
@@ -453,8 +451,10 @@ public class OPController implements Initializable {
 
     @FXML
     void importCams() {
-//        CameraImporter cameraImporter = new CameraImporter();
-        cameraImporter.importCameras();
+        List<String> cameraNamesFromImport = cameraImporter.importCameras();
+        if(cameraNamesFromImport != null) {
+            myCameraService.createCamerasFromList(cameraNamesFromImport, SelectedSequence.getSelectedSequence());
+        }
         showCameras();
     }
 

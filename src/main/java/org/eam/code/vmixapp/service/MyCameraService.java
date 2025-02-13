@@ -9,6 +9,9 @@ import org.eam.code.vmixapp.model.Sequence;
 import org.eam.code.vmixapp.util.SelectedSequence;
 import org.eam.code.vmixapp.util.Validation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MyCameraService {
     private final MyCameraDAO cameraDAO;
     private final SceneDao sceneDao;
@@ -36,6 +39,13 @@ public class MyCameraService {
         }
 //        cameraDAO.createCamera(ref, name, sequence);
         cameraDAO.createCamera(name, sequence);
+    }
+
+    public void createCamerasFromList(List<String> importedCams, Sequence sequence) {
+        importedCams.removeAll(getNamesPresentCameras());
+        for(String camName: importedCams) {
+            createCam(camName, sequence);
+        }
     }
 
 //    public void updateCam(String ref, String name, MyCamera selectedCam) {
@@ -75,5 +85,13 @@ public class MyCameraService {
 
     public boolean camRefExists(String camRef) {
         return Validation.existsInTable("cameras", "ref", camRef, "SeqId", SelectedSequence.getSelectedSequence().getId());
+    }
+
+    private List<String> getNamesPresentCameras() {
+        List<String> presentCamNames = new ArrayList<>();
+        for(MyCamera camera: getCamerasBySeqId()) {
+            presentCamNames.add(camera.getName());
+        }
+        return presentCamNames;
     }
 }
