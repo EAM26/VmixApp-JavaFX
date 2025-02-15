@@ -73,6 +73,9 @@ public class OPController implements Initializable {
     private Button btnSetPreview;
 
     @FXML
+    private Button btnClearPreview;
+
+    @FXML
     private TextField tfActual;
 
     @FXML
@@ -409,6 +412,9 @@ public class OPController implements Initializable {
     private Button btnImportCams;
 
     @FXML
+    private Button btnDeleteAllCams;
+
+    @FXML
     private Button btnDeleteCam;
 
     @FXML
@@ -452,9 +458,12 @@ public class OPController implements Initializable {
     @FXML
     void importCams() {
         List<String> cameraNamesFromImport = cameraImporter.importCameras();
-        if(cameraNamesFromImport != null) {
-            myCameraService.createCamerasFromList(cameraNamesFromImport, SelectedSequence.getSelectedSequence());
-        }
+        System.out.println(cameraNamesFromImport);
+    }
+
+    @FXML
+    void deleteAllCams() {
+        myCameraService.deleteAllCams();
         showCameras();
     }
 

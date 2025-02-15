@@ -71,6 +71,21 @@ public class MyCameraService {
         }
     }
 
+    public void deleteAllCams() {
+        int seqId = SelectedSequence.getSelectedSequence().getId();
+        List<MyCamera> allCameras = cameraDAO.getCamerasBySeqId(seqId);
+        for(MyCamera camera: allCameras) {
+            try {
+            deleteCam(camera.getId());
+            } catch (RuntimeException e) {
+                System.err.println(camera.getName() + " has scene attached.");
+
+            }
+
+        }
+
+    }
+
 
     private boolean camHasScene(int id) {
         if (Validation.existsInTable("scenes", "CamId", id)) {

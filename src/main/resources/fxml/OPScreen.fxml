@@ -64,6 +64,7 @@
             </ButtonBar>
          <Button fx:id="btnClearPreview" layoutX="171.0" layoutY="160.0" mnemonicParsing="false" onAction="#clearPreviewWithButton" prefHeight="25.0" prefWidth="103.0" text="CLEAR PREVIEW" />
          <Button fx:id="btnImportCams" layoutX="985.0" layoutY="160.0" mnemonicParsing="false" onAction="#importCams" text="import cams" />
+         <Button fx:id="btnDeleteAllCams" layoutX="1129.0" layoutY="160.0" mnemonicParsing="false" onAction="#deleteAllCams" text="delete cams" />
         </AnchorPane>
     </content>
 </ScrollPane>
