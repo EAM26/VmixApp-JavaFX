@@ -10,7 +10,9 @@ import org.eam.code.vmixapp.util.SelectedSequence;
 import org.eam.code.vmixapp.util.Validation;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MyCameraService {
     private final MyCameraDAO cameraDAO;
@@ -35,16 +37,18 @@ public class MyCameraService {
 //            throw new IllegalArgumentException("Reference camera is not unique.");
 //        }
         if (camNameExists(name)) {
-            throw new IllegalArgumentException("Name camera is not unique.");
+            throw new IllegalArgumentException("Name camera is not unique: " + name);
         }
 //        cameraDAO.createCamera(ref, name, sequence);
         cameraDAO.createCamera(name, sequence);
     }
 
-    public void createCamerasFromList(List<String> importedCams, Sequence sequence) {
+    public void createCamerasFromList(List<String> importedCams) {
+        Sequence selectedSequence = SelectedSequence.getSelectedSequence();
         importedCams.removeAll(getNamesPresentCameras());
-        for(String camName: importedCams) {
-            createCam(camName, sequence);
+        Set<String> uniqueImportedCams = new HashSet<>(importedCams);
+        for(String camName: uniqueImportedCams) {
+            createCam(camName, selectedSequence);
         }
     }
 

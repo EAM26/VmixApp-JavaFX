@@ -49,8 +49,16 @@ public class VMRequest {
 //        sendRequest(url);
     }
 
+    public String getCamsFromVmix() {
+        String url = "http://" + ipAddress + ":" + "10000" + "/api/";
+//        String url = "https://jsonplaceholder.typicode.com/posts/1";
+        System.out.println("Actual url: " + url);
+//        sendRequest(url);
+        return sendRequest(url);
+    }
 
-    public void sendRequest(String url) {
+
+    public String sendRequest(String url) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
@@ -61,9 +69,11 @@ public class VMRequest {
             if(response.statusCode() == 200) {
                 System.out.println("Request successful.");
                 System.out.println("Headers: " + response.headers());
-                System.out.println("Body: " + response.body());
+//                System.out.println("Body: " + response.body());
+                return response.body();
             } else {
                 System.out.println("Request failed with status: "+ response.statusCode());
+                return "";
             }
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);

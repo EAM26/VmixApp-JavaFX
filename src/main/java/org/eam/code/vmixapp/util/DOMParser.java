@@ -34,7 +34,7 @@ public class DOMParser {
                     String shortTitle = element.getAttribute("shortTitle");
 //                    String title = element.getAttribute("title");
                     cameraNames.add(shortTitle);
-//                    System.out.println("ShortTitle: " + shortTitle + ", Title: " + title);
+                    System.out.println("ShortTitle: " + shortTitle);
                 }
             }
         } catch (Exception e) {

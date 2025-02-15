@@ -459,6 +459,8 @@ public class OPController implements Initializable {
     void importCams() {
         List<String> cameraNamesFromImport = cameraImporter.importCameras();
         System.out.println(cameraNamesFromImport);
+        myCameraService.createCamerasFromList(cameraNamesFromImport);
+        showCameras();
     }
 
     @FXML
