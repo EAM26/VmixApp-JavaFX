@@ -9,6 +9,11 @@ import org.eam.code.vmixapp.model.Sequence;
 import org.eam.code.vmixapp.util.SelectedSequence;
 import org.eam.code.vmixapp.util.Validation;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 public class MyCameraService {
     private final MyCameraDAO cameraDAO;
     private final SceneDao sceneDao;
@@ -32,10 +37,19 @@ public class MyCameraService {
 //            throw new IllegalArgumentException("Reference camera is not unique.");
 //        }
         if (camNameExists(name)) {
-            throw new IllegalArgumentException("Name camera is not unique.");
+            throw new IllegalArgumentException("Name camera is not unique: " + name);
         }
 //        cameraDAO.createCamera(ref, name, sequence);
         cameraDAO.createCamera(name, sequence);
+    }
+
+    public void createCamerasFromList(List<String> importedCams) {
+        Sequence selectedSequence = SelectedSequence.getSelectedSequence();
+        importedCams.removeAll(getNamesPresentCameras());
+        Set<String> uniqueImportedCams = new HashSet<>(importedCams);
+        for(String camName: uniqueImportedCams) {
+            createCam(camName, selectedSequence);
+        }
     }
 
 //    public void updateCam(String ref, String name, MyCamera selectedCam) {
@@ -61,6 +75,21 @@ public class MyCameraService {
         }
     }
 
+    public void deleteAllCams() {
+        int seqId = SelectedSequence.getSelectedSequence().getId();
+        List<MyCamera> allCameras = cameraDAO.getCamerasBySeqId(seqId);
+        for(MyCamera camera: allCameras) {
+            try {
+            deleteCam(camera.getId());
+            } catch (RuntimeException e) {
+                System.err.println(camera.getName() + " has scene attached.");
+
+            }
+
+        }
+
+    }
+
 
     private boolean camHasScene(int id) {
         if (Validation.existsInTable("scenes", "CamId", id)) {
@@ -75,5 +104,13 @@ public class MyCameraService {
 
     public boolean camRefExists(String camRef) {
         return Validation.existsInTable("cameras", "ref", camRef, "SeqId", SelectedSequence.getSelectedSequence().getId());
+    }
+
+    private List<String> getNamesPresentCameras() {
+        List<String> presentCamNames = new ArrayList<>();
+        for(MyCamera camera: getCamerasBySeqId()) {
+            presentCamNames.add(camera.getName());
+        }
+        return presentCamNames;
     }
 }

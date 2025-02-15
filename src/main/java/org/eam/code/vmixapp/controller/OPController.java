@@ -73,6 +73,9 @@ public class OPController implements Initializable {
     private Button btnSetPreview;
 
     @FXML
+    private Button btnClearPreview;
+
+    @FXML
     private TextField tfActual;
 
     @FXML
@@ -366,9 +369,7 @@ public class OPController implements Initializable {
         cbCamName.setItems(FXCollections.observableArrayList(cameraNames).sorted());
         if (getSelectedSceneData() != null) {
             cbCamName.setValue(getSelectedSceneData().getCamera().getName());
-        } else {
-            System.out.println("Scenedata is null.");
-        }
+        } 
     }
 
     private void clearScene() {
@@ -409,6 +410,9 @@ public class OPController implements Initializable {
 
     @FXML
     private Button btnImportCams;
+
+    @FXML
+    private Button btnDeleteAllCams;
 
     @FXML
     private Button btnDeleteCam;
@@ -453,8 +457,15 @@ public class OPController implements Initializable {
 
     @FXML
     void importCams() {
-//        CameraImporter cameraImporter = new CameraImporter();
-        cameraImporter.importCameras();
+        List<String> cameraNamesFromImport = cameraImporter.importCameras();
+        System.out.println(cameraNamesFromImport);
+        myCameraService.createCamerasFromList(cameraNamesFromImport);
+        showCameras();
+    }
+
+    @FXML
+    void deleteAllCams() {
+        myCameraService.deleteAllCams();
         showCameras();
     }
 
