@@ -20,25 +20,21 @@ import org.eam.code.vmixapp.service.SceneService;
 import org.eam.code.vmixapp.util.Alarm;
 import org.eam.code.vmixapp.util.SelectedSequence;
 import org.eam.code.vmixapp.util.VMRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
 public class OPController implements Initializable {
-    String xmlResponse = "<vmix><version>28.0.0.36</version><edition>4K</edition><preset>C:\\Users\\synco\\AppData\\Roaming\\last.vmix</preset><inputs>"
-            + "<input key=\"4d64cadf-aa54-461b-8e78-97ea41108da2\" number=\"1\" type=\"Capture\" title=\"C1\" shortTitle=\"C1\" state=\"Running\" position=\"0\" duration=\"0\" loop=\"False\">C1</input>"
-            + "<input key=\"652898f9-a524-40ba-a21f-c0b28d512a0c\" number=\"2\" type=\"Colour\" title=\"C2\" shortTitle=\"C2\" state=\"Paused\" position=\"0\" duration=\"0\" loop=\"False\">C2</input>"
-            + "<input key=\"bbc3da0b-09ee-4ed7-90b4-97ba106f872a\" number=\"3\" type=\"Virtual\" title=\"PTZ - C1-TOTAAL\" shortTitle=\"C1-TOTAAL\" state=\"Paused\" position=\"0\" duration=\"0\" loop=\"False\">PTZ - C1-TOTAAL</input>"
-            + "<input key=\"db907683-92f5-4a59-854f-aa48c529e6c3\" number=\"4\" type=\"Virtual\" title=\"PTZ - C1-HOUT\" shortTitle=\"C1-HOUT\" state=\"Paused\" position=\"0\" duration=\"0\" loop=\"False\">PTZ - C1-HOUT</input>"
-            + "<input key=\"680decec-39e0-47e4-8c73-9049ae549d01\" number=\"5\" type=\"Image\" title=\"cam10-Piano-Superclose.jpg\" shortTitle=\"cam10-Piano-Superclose.jpg\" state=\"Paused\" position=\"0\" duration=\"0\" loop=\"False\">cam10-Piano-Superclose.jpg</input>"
-            + "</inputs></vmix>";
 
     private final MyCameraService myCameraService;
     private final SceneService sceneService;
     private final Recorder recorder;
     private final VMRequest request;
     private final CameraImporter cameraImporter;
+    private static final Logger logger = LoggerFactory.getLogger(OPController.class);
 
 
     public ObservableList<Scene> sceneList;
@@ -103,7 +99,7 @@ public class OPController implements Initializable {
                     recorder.setPreview(null);
                 }
             } catch (RuntimeException e) {
-                System.err.println(e.getMessage());
+                logger.error("Error caught in cutScene" + e.getMessage(), e);
                 Alarm.showError("Error in cutting to new scene.");
             }
         }
@@ -131,7 +127,7 @@ public class OPController implements Initializable {
             request.setPreview(sceneToSetPreview);
             recorder.setPreview(sceneToSetPreview);
         } catch (RuntimeException e) {
-            System.err.println(e.getMessage());
+            logger.error("Error caught in setPreviewWithButton" + e.getMessage(), e);
             Alarm.showError("Error in setting preview to VMix.");
         }
 
@@ -197,10 +193,6 @@ public class OPController implements Initializable {
     @FXML
     private TableColumn<Scene, String> colDescrSene;
 
-//    @FXML
-//    private TableColumn<Scene, String> colCamRef;
-
-
     @FXML
     private TableColumn<Scene, String> colCamName;
 
@@ -221,14 +213,9 @@ public class OPController implements Initializable {
 
     @FXML
     private TextField tfNameScene;
+
     @FXML
     private TextField tfDescrScene;
-
-//    @FXML
-//    private TextField tfCamRef;
-
-//    @FXML
-//    private TextField tfCamName;
 
     @FXML
     private ChoiceBox<String> cbCamName;
@@ -253,7 +240,7 @@ public class OPController implements Initializable {
                         showScenes();
                         clearScene();
                     } catch (NumberFormatException e) {
-                        System.err.println(e.getMessage());
+                        logger.error("Error caught in deleteScene: " + e.getMessage(), e);
                         Alarm.showError("Error in deleting scene.");
                     }
                 }
@@ -268,11 +255,11 @@ public class OPController implements Initializable {
     void createScene(ActionEvent event) {
         if (validateSceneTextFields()) {
             try {
-//                sceneService.createScene(tfNumScene.getText().trim(), tfNameScene.getText().trim(), tfDescrScene.getText(), tfCamRef.getText().trim(), SelectedSequence.getSelectedSequence());
                 sceneService.createScene(tfNumScene.getText().trim(), tfNameScene.getText().trim(), tfDescrScene.getText(), cbCamName.getValue(), SelectedSequence.getSelectedSequence());
                 showScenes();
                 clearScene();
             } catch (RuntimeException e) {
+                logger.error("Error caught in createScene: " + e.getMessage(), e);
                 Alarm.showError("Error in creating scene. \n" + e.getMessage());
             }
         }
@@ -285,13 +272,12 @@ public class OPController implements Initializable {
             try {
                 if (selectedScene != null) {
                     sceneService.updateScene(tfNumScene.getText().trim(), tfNameScene.getText().trim(),
-//                            tfDescrScene.getText(), tfCamRef.getText().trim(), selectedScene);
                             tfDescrScene.getText(), cbCamName.getValue(), selectedScene);
                     showScenes();
                     clearScene();
                 }
             } catch (RuntimeException e) {
-                System.err.println(e.getMessage());
+                logger.error("Error caught in updateScene: " + e.getMessage(), e);
                 Alarm.showError("Error in updating scene.\n" + e.getMessage());
             }
         } else {
@@ -306,7 +292,6 @@ public class OPController implements Initializable {
             tfNumScene.setText(String.valueOf(selectedScene.getNumber()));
             tfNameScene.setText(selectedScene.getName());
             tfDescrScene.setText(selectedScene.getDescription());
-//            tfCamRef.setText(selectedScene.getCamera().getRef());
             cbCamName.setValue(selectedScene.getCamera().getName());
             btnSaveScene.setDisable(true);
         }
@@ -324,11 +309,6 @@ public class OPController implements Initializable {
             colNumScene.setCellValueFactory(new PropertyValueFactory<>("Number"));
             colNameScene.setCellValueFactory(new PropertyValueFactory<>("Name"));
             colDescrSene.setCellValueFactory(new PropertyValueFactory<>("Description"));
-//            colCamRef.setCellValueFactory(cellData -> {
-//                MyCamera camera = cellData.getValue().getCamera();
-//                return new SimpleStringProperty(camera != null ? camera.getRef() : "");
-//            });
-
             colCamName.setCellValueFactory(cellData -> {
                 MyCamera camera = cellData.getValue().getCamera();
                 return new SimpleStringProperty(camera != null ? camera.getName() : "");
@@ -336,7 +316,7 @@ public class OPController implements Initializable {
 
             tableScenes.getSelectionModel().clearSelection();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.error("Error caught in showScenes: " + e.getMessage(), e);
             Alarm.showError("Error in showing scenes.");
         }
 
@@ -376,8 +356,6 @@ public class OPController implements Initializable {
         tfNumScene.setText("");
         tfNameScene.setText("");
         tfDescrScene.setText("");
-//        tfCamRef.setText("");
-//        tfCamName.setText("");
         cbCamName.setValue("");
         btnSaveScene.setDisable(false);
         tableScenes.getSelectionModel().clearSelection();
@@ -385,8 +363,6 @@ public class OPController implements Initializable {
 
     private boolean validateSceneTextFields() {
         if (tfNumScene.getText().isBlank() || tfNameScene.getText().isBlank() ||
-//                tfDescrScene.getText().isBlank() || tfCamRef.getText().isBlank()) {
-//                tfDescrScene.getText().isBlank() || tfCamName.getText().isBlank()) {
                 tfDescrScene.getText().isBlank() || cbCamName.getValue().isBlank()) {
             Alarm.showError("No empty fields allowed.");
             return false;
@@ -398,7 +374,7 @@ public class OPController implements Initializable {
                 return false;
             }
         } catch (NumberFormatException e) {
-            System.err.println(e.getMessage());
+            logger.error("Error caught in validateSceneTextFields: " + e.getMessage(), e);
             Alarm.showError("Invalid number input: " + tfNumScene.getText());
             return false;
         }
@@ -426,9 +402,6 @@ public class OPController implements Initializable {
     @FXML
     private Button btnClearCam;
 
-//    @FXML
-//    private TextField tfRef;
-
     @FXML
     private TextField tfNameCam;
 
@@ -443,23 +416,27 @@ public class OPController implements Initializable {
 
     private void showCameras() {
         ObservableList<MyCamera> myCameraList = myCameraService.getCamerasBySeqId();
-//        FXCollections.sort(myCameraList, Comparator.comparing(MyCamera::getRef));
         FXCollections.sort(myCameraList, Comparator.comparing(MyCamera::getName));
         try {
             tableCams.setItems(myCameraList);
-//            colRef.setCellValueFactory(new PropertyValueFactory<>("Ref"));
             colNameCam.setCellValueFactory(new PropertyValueFactory<>("Name"));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            logger.error("Error caught in showCameras: " + e.getMessage(), e);
+            Alarm.showError("Error in showing cameras.");
         }
         showScenes();
     }
 
     @FXML
     void importCams() {
-        List<String> cameraNamesFromImport = cameraImporter.importCameras();
-//        System.out.println(cameraNamesFromImport);
-        myCameraService.createCamerasFromList(cameraNamesFromImport);
+        try {
+            List<String> cameraNamesFromImport = cameraImporter.importCameras();
+            myCameraService.createCamerasFromList(cameraNamesFromImport);
+        } catch (RuntimeException e) {
+            logger.error("Error caught in importCams: " + e.getMessage(), e);
+            Alarm.showError("Error in importing cameras.");
+        }
+
         showCameras();
     }
 
@@ -473,7 +450,6 @@ public class OPController implements Initializable {
     void getSelectedCamData(MouseEvent event) {
         MyCamera selectedCamera = tableCams.getSelectionModel().getSelectedItem();
         if (selectedCamera != null) {
-//            tfRef.setText(String.valueOf(selectedCamera.getRef()));
             tfNameCam.setText(selectedCamera.getName());
             btnSaveCam.setDisable(true);
         }
@@ -488,12 +464,11 @@ public class OPController implements Initializable {
     void createCam(ActionEvent event) {
         if (validateCamTextFields()) {
             try {
-//                myCameraService.createCam(tfRef.getText().trim(), tfNameCam.getText().trim(), SelectedSequence.getSelectedSequence());
                 myCameraService.createCam(tfNameCam.getText().trim(), SelectedSequence.getSelectedSequence());
                 showCameras();
                 clearCam();
             } catch (RuntimeException e) {
-                System.err.println(e.getMessage());
+                logger.error("Error caught in createCam: " + e.getMessage(), e);
                 Alarm.showError("Error in creating new Camera.\n" + e.getMessage());
             }
         } else {
@@ -505,14 +480,13 @@ public class OPController implements Initializable {
     void deleteCam(ActionEvent event) {
         MyCamera selectedCam = tableCams.getSelectionModel().getSelectedItem();
         if (selectedCam != null) {
-//            if (Alarm.confirmationDelete(selectedCam.getRef(), selectedCam.getName())) {
             if (Alarm.confirmationDelete(selectedCam.getName())) {
                 try {
                     myCameraService.deleteCam(selectedCam.getId());
                     showCameras();
                     clearCam();
                 } catch (RuntimeException e) {
-                    System.err.println(e.getMessage());
+                    logger.error("Error caught in deleteCam: " + e.getMessage(), e);
                     Alarm.showError("Error in deleting camera.\n" + e.getMessage());
                 }
             }
@@ -526,14 +500,13 @@ public class OPController implements Initializable {
             MyCamera selectedCam = tableCams.getSelectionModel().getSelectedItem();
             try {
                 if (selectedCam != null) {
-//                    myCameraService.updateCam(tfRef.getText().trim(), tfNameCam.getText().trim(), selectedCam);
                     myCameraService.updateCam(tfNameCam.getText().trim(), selectedCam);
                     showCameras();
                     showScenes();
                     clearCam();
                 }
             } catch (RuntimeException e) {
-                System.err.println(e.getMessage());
+                logger.error("Error caught in updateCam: " + e.getMessage(), e);
                 Alarm.showError("Error in updating camera.\n" + e.getMessage());
             }
         } else {
@@ -546,21 +519,19 @@ public class OPController implements Initializable {
         try {
             App.switchToMainScreen();
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            logger.error("Error caught in switchToMain: " + e.getMessage(), e);
             Alarm.showError("Error in switching to Main Screen.");
         }
     }
 
 
     private void clearCam() {
-//        tfRef.setText("");
         tfNameCam.setText("");
         btnSaveCam.setDisable(false);
     }
 
 
     private boolean validateCamTextFields() {
-//        return !tfRef.getText().isBlank() && !tfNameCam.getText().isBlank();
         return !tfNameCam.getText().isBlank();
     }
 
