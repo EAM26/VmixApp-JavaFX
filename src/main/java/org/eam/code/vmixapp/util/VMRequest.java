@@ -1,18 +1,21 @@
 package org.eam.code.vmixapp.util;
 
 import org.eam.code.vmixapp.model.Scene;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 
 public class VMRequest {
 
     private final String ipAddress;
     private final String port;
-
+    private static final Logger logger = LoggerFactory.getLogger(VMRequest.class);
     private final HttpClient httpClient;
 
     public VMRequest() {
@@ -36,7 +39,6 @@ public class VMRequest {
 
         String url = "http://" + ipAddress + ":" + port + "/api/?Function=PreviewInput&Input=" + camName;
 //        String url = "https://jsonplaceholder.typicode.com/posts/1";
-//        System.out.println("Preview url: " + url + "  camname is: " + camName);
         sendRequest(url);
     }
 
@@ -45,14 +47,12 @@ public class VMRequest {
     public void cut() {
         String url = "http://" + ipAddress + ":" + port + "/api/?Function=CutDirect";
 //        String url = "https://jsonplaceholder.typicode.com/posts/1";
-//        System.out.println("Actual url: " + url);
         sendRequest(url);
     }
 
     public String getCamsFromVmix() {
         String url = "http://" + ipAddress + ":" + port + "/api/";
 //        String url = "https://jsonplaceholder.typicode.com/posts/1";
-//        System.out.println("Actual url: " + url);
         sendRequest(url);
         return sendRequest(url);
     }
@@ -62,12 +62,12 @@ public class VMRequest {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
+                    .timeout(Duration.ofSeconds(2))
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println("Requenst sended: " + url);
             if(response.statusCode() == 200) {
-//                System.out.println("Request successful.");
                 System.out.println("Headers: " + response.headers());
 //                System.out.println("Body: " + response.body());
                 return response.body();

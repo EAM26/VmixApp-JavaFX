@@ -57,7 +57,6 @@ public class SequenceDAO {
                 sequence.setPort(resultSet.getString("Port"));
                 return sequence;
             } else {
-//                todo: create own not found exception
                 throw new RuntimeException();
             }
 
