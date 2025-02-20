@@ -9,12 +9,12 @@
 <ScrollPane xmlns="http://javafx.com/javafx/23"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.eam.code.vmixapp.controller.SequenceController"
-            prefHeight="720.0" prefWidth="1280.0"
+            fitToHeight="true" fitToWidth="true"
             styleClass="form_container"
             stylesheets="@../css/styles.css"
             >
     <content>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="form_container" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" >
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" styleClass="form_container" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" >
     <VBox layoutX="7.0" layoutY="110.0" prefHeight="349.0" prefWidth="410.0" styleClass="form_container" stylesheets="@../css/styles.css">
         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
         <TextField fx:id="tfName" />
