@@ -454,6 +454,9 @@ public class OPController implements Initializable {
 
     @FXML
     void deleteAllCams() {
+        if(!Alarm.confirmationDelete("All non attached cameras.")) {
+            return;
+        }
         StringBuilder deleteResponse = myCameraService.deleteAllCams();
         if(!deleteResponse.isEmpty()) {
             Alarm.showError(deleteResponse.toString());

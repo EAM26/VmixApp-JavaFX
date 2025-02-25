@@ -76,7 +76,6 @@ public class MyCameraService {
             try {
             deleteCam(camera.getId());
             } catch (RuntimeException e) {
-                System.err.println(camera.getName() + " has scene attached.");
                 errorMessage.append(camera.getName()).append("has scene attached.\n");
             }
 
@@ -96,9 +95,6 @@ public class MyCameraService {
         return Validation.existsInTable("cameras", "name", camName, "SeqId", SelectedSequence.getSelectedSequence().getId());
     }
 
-    public boolean camRefExists(String camRef) {
-        return Validation.existsInTable("cameras", "ref", camRef, "SeqId", SelectedSequence.getSelectedSequence().getId());
-    }
 
     private List<String> getNamesPresentCameras() {
         List<String> presentCamNames = new ArrayList<>();

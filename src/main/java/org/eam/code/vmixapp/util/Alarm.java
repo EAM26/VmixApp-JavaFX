@@ -9,20 +9,21 @@ public class Alarm {
         return confirmationDelete(String.valueOf(id), name);
     }
 
-    public static boolean confirmationDelete(String ref, String name) {
+    public static boolean confirmationDelete(String strId, String name) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirm Deletion");
-        alert.setHeaderText("Are you sure you want to delete: " + ref + " - " + name);
+        alert.setHeaderText("Are you sure you want to delete: " + strId + " - " + name);
         alert.setContentText("This action cannot be undone.");
         return alert.showAndWait().filter(response -> response == ButtonType.OK).isPresent();
     }
 
     public static boolean confirmationDelete(String name) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirm Deletion");
-        alert.setHeaderText("Are you sure you want to delete: " +  name);
-        alert.setContentText("This action cannot be undone.");
-        return alert.showAndWait().filter(response -> response == ButtonType.OK).isPresent();
+        return confirmationDelete("", name);
+//        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+//        alert.setTitle("Confirm Deletion");
+//        alert.setHeaderText("Are you sure you want to delete: " +  name);
+//        alert.setContentText("This action cannot be undone.");
+//        return alert.showAndWait().filter(response -> response == ButtonType.OK).isPresent();
     }
 
     public static boolean confirmationInsert(int sceneNumber, String sceneName) {
