@@ -516,7 +516,7 @@ public class OPController implements Initializable {
             MyCamera selectedCam = tableCams.getSelectionModel().getSelectedItem();
             try {
                 if (selectedCam != null) {
-                    myCameraService.updateCam(tfNameCam.getText().trim(), selectedCam);
+                    myCameraService.updateCam(tfNameCam.getText().trim(), tfDescriptionCam.getText(), selectedCam);
                     showCameras();
                     showScenes();
                     clearCam();

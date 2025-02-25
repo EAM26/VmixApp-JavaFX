@@ -52,20 +52,13 @@ public class MyCameraService {
         }
     }
 
-//    public void updateCam(String ref, String name, MyCamera selectedCam) {
-    public void updateCam(String name, MyCamera selectedCam) {
-//        if (!ref.equals(selectedCam.getDescription())) {
-//            if (camRefExists(ref)) {
-//                throw new IllegalArgumentException("Reference camera is not unique.");
-//            }
-//        }
+    public void updateCam(String name, String description,  MyCamera selectedCam) {
         if (!name.equals(selectedCam.getName())) {
             if (camNameExists(name)) {
                 throw new IllegalArgumentException("Name camera is not unique.");
             }
         }
-//        cameraDAO.updateCam(ref, name, selectedCam.getId());
-        cameraDAO.updateCam(name, selectedCam.getId());
+        cameraDAO.updateCam(name, description, selectedCam.getId());
 
     }
 

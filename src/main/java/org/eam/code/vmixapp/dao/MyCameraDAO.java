@@ -66,17 +66,15 @@ public class MyCameraDAO {
         }
     }
 
-//    public void updateCam(String ref, String name, int id) {
-    public void updateCam(String name, int id) {
-//        String updateMessage = "update cameras set Ref=?, Name=? where Id=?";
-        String updateMessage = "update cameras set Name=? where Id=?";
+    public void updateCam(String name, String description, int id) {
+        String updateMessage = "update cameras set Name=?, Description = ? where Id=?";
         connection = DBConnection.getCon();
 
         try {
             pstmt = connection.prepareStatement(updateMessage);
-//            pstmt.setString(1, ref);
             pstmt.setString(1, name);
-            pstmt.setInt(2, id);
+            pstmt.setString(2, description);
+            pstmt.setInt(3, id);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
