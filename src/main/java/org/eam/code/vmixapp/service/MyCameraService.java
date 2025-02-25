@@ -32,7 +32,7 @@ public class MyCameraService {
     }
 
 //    public void createCam(String ref, String name, Sequence sequence) {
-    public void createCam(String name, Sequence sequence) {
+    public void createCam(String name, String description, Sequence sequence) {
 //        if (camRefExists(ref)) {
 //            throw new IllegalArgumentException("Reference camera is not unique.");
 //        }
@@ -40,7 +40,7 @@ public class MyCameraService {
             throw new IllegalArgumentException("Name camera is not unique: " + name);
         }
 //        cameraDAO.createCamera(ref, name, sequence);
-        cameraDAO.createCamera(name, sequence);
+        cameraDAO.createCamera(name, description, sequence);
     }
 
     public void createCamerasFromList(List<String> importedCams) {
@@ -48,24 +48,17 @@ public class MyCameraService {
         importedCams.removeAll(getNamesPresentCameras());
         Set<String> uniqueImportedCams = new HashSet<>(importedCams);
         for(String camName: uniqueImportedCams) {
-            createCam(camName, selectedSequence);
+            createCam(camName, "No Description", selectedSequence);
         }
     }
 
-//    public void updateCam(String ref, String name, MyCamera selectedCam) {
-    public void updateCam(String name, MyCamera selectedCam) {
-//        if (!ref.equals(selectedCam.getRef())) {
-//            if (camRefExists(ref)) {
-//                throw new IllegalArgumentException("Reference camera is not unique.");
-//            }
-//        }
+    public void updateCam(String name, String description,  MyCamera selectedCam) {
         if (!name.equals(selectedCam.getName())) {
             if (camNameExists(name)) {
                 throw new IllegalArgumentException("Name camera is not unique.");
             }
         }
-//        cameraDAO.updateCam(ref, name, selectedCam.getId());
-        cameraDAO.updateCam(name, selectedCam.getId());
+        cameraDAO.updateCam(name, description, selectedCam.getId());
 
     }
 
@@ -75,19 +68,19 @@ public class MyCameraService {
         }
     }
 
-    public void deleteAllCams() {
+    public StringBuilder deleteAllCams() {
+        StringBuilder errorMessage = new StringBuilder();
         int seqId = SelectedSequence.getSelectedSequence().getId();
         List<MyCamera> allCameras = cameraDAO.getCamerasBySeqId(seqId);
         for(MyCamera camera: allCameras) {
             try {
             deleteCam(camera.getId());
             } catch (RuntimeException e) {
-                System.err.println(camera.getName() + " has scene attached.");
-
+                errorMessage.append(camera.getName()).append("has scene attached.\n");
             }
 
         }
-
+        return errorMessage;
     }
 
 
@@ -102,9 +95,6 @@ public class MyCameraService {
         return Validation.existsInTable("cameras", "name", camName, "SeqId", SelectedSequence.getSelectedSequence().getId());
     }
 
-    public boolean camRefExists(String camRef) {
-        return Validation.existsInTable("cameras", "ref", camRef, "SeqId", SelectedSequence.getSelectedSequence().getId());
-    }
 
     private List<String> getNamesPresentCameras() {
         List<String> presentCamNames = new ArrayList<>();

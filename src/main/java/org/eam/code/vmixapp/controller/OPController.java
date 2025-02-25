@@ -197,6 +197,9 @@ public class OPController implements Initializable {
     private TableColumn<Scene, String> colCamName;
 
     @FXML
+    private TableColumn<Scene, String> colCamDescription;
+
+    @FXML
     private Button btnClearSceneFields;
 
     @FXML
@@ -313,6 +316,11 @@ public class OPController implements Initializable {
                 MyCamera camera = cellData.getValue().getCamera();
                 return new SimpleStringProperty(camera != null ? camera.getName() : "");
             });
+            colCamDescription.setCellValueFactory(cellData -> {
+                MyCamera camera = cellData.getValue().getCamera();
+                return new SimpleStringProperty(camera != null ? camera.getDescription() : "No value");
+            });
+
 
             tableScenes.getSelectionModel().clearSelection();
         } catch (Exception e) {
@@ -406,10 +414,13 @@ public class OPController implements Initializable {
     private TextField tfNameCam;
 
     @FXML
+    private TextField tfDescriptionCam;
+
+    @FXML
     private TableColumn<Camera, String> colNameCam;
 
     @FXML
-    private TableColumn<Camera, Integer> colRef;
+    private TableColumn<Camera, String> colDescriptionCam;
 
     @FXML
     private TableView<MyCamera> tableCams;
@@ -420,6 +431,7 @@ public class OPController implements Initializable {
         try {
             tableCams.setItems(myCameraList);
             colNameCam.setCellValueFactory(new PropertyValueFactory<>("Name"));
+            colDescriptionCam.setCellValueFactory(new PropertyValueFactory<>("Description"));
         } catch (Exception e) {
             logger.error("Error caught in showCameras: " + e.getMessage(), e);
             Alarm.showError("Error in showing cameras.");
@@ -442,7 +454,13 @@ public class OPController implements Initializable {
 
     @FXML
     void deleteAllCams() {
-        myCameraService.deleteAllCams();
+        if(!Alarm.confirmationDelete("All non attached cameras.")) {
+            return;
+        }
+        StringBuilder deleteResponse = myCameraService.deleteAllCams();
+        if(!deleteResponse.isEmpty()) {
+            Alarm.showError(deleteResponse.toString());
+        }
         showCameras();
     }
 
@@ -451,6 +469,7 @@ public class OPController implements Initializable {
         MyCamera selectedCamera = tableCams.getSelectionModel().getSelectedItem();
         if (selectedCamera != null) {
             tfNameCam.setText(selectedCamera.getName());
+            tfDescriptionCam.setText(selectedCamera.getDescription());
             btnSaveCam.setDisable(true);
         }
     }
@@ -464,7 +483,7 @@ public class OPController implements Initializable {
     void createCam(ActionEvent event) {
         if (validateCamTextFields()) {
             try {
-                myCameraService.createCam(tfNameCam.getText().trim(), SelectedSequence.getSelectedSequence());
+                myCameraService.createCam(tfNameCam.getText().trim(), tfDescriptionCam.getText(), SelectedSequence.getSelectedSequence());
                 showCameras();
                 clearCam();
             } catch (RuntimeException e) {
@@ -500,7 +519,7 @@ public class OPController implements Initializable {
             MyCamera selectedCam = tableCams.getSelectionModel().getSelectedItem();
             try {
                 if (selectedCam != null) {
-                    myCameraService.updateCam(tfNameCam.getText().trim(), selectedCam);
+                    myCameraService.updateCam(tfNameCam.getText().trim(), tfDescriptionCam.getText(), selectedCam);
                     showCameras();
                     showScenes();
                     clearCam();
@@ -527,12 +546,13 @@ public class OPController implements Initializable {
 
     private void clearCam() {
         tfNameCam.setText("");
+        tfDescriptionCam.setText("");
         btnSaveCam.setDisable(false);
     }
 
 
     private boolean validateCamTextFields() {
-        return !tfNameCam.getText().isBlank();
+        return (!tfNameCam.getText().isBlank() && !tfNameCam.getText().contains(" "));
     }
 
 

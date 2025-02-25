@@ -35,7 +35,7 @@ public class MyCameraDAO {
                 MyCamera myCamera = new MyCamera();
                 myCamera.setId(resultSet.getInt("Id"));
                 myCamera.setName(resultSet.getString("Name"));
-//                myCamera.setRef(resultSet.getString("Ref"));
+                myCamera.setDescription(resultSet.getString("Description"));
                 Sequence sequence = SelectedSequence.getSelectedSequence();
                 myCamera.setSequence(sequence);
                 myCameraList.add(myCamera);
@@ -48,17 +48,17 @@ public class MyCameraDAO {
     }
 
 //    public void createCamera(String ref, String name, Sequence sequence) {
-    public void createCamera(String name, Sequence sequence) {
+    public void createCamera(String name, String description, Sequence sequence) {
 //        String insertMessage = "INSERT INTO cameras (Ref, Name, SeqId) values(?, ?, ?)";
-        String insertMessage = "INSERT INTO cameras (Name, SeqId) values(?, ?)";
+        String insertMessage = "INSERT INTO cameras (Name, Description, SeqId) values(?, ?, ?)";
 
         connection = DBConnection.getCon();
 
         try {
             pstmt = connection.prepareStatement(insertMessage);
-//            pstmt.setString(1, ref);
             pstmt.setString(1, name);
-            pstmt.setInt(2, sequence.getId());
+            pstmt.setString(2, description);
+            pstmt.setInt(3, sequence.getId());
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -66,17 +66,15 @@ public class MyCameraDAO {
         }
     }
 
-//    public void updateCam(String ref, String name, int id) {
-    public void updateCam(String name, int id) {
-//        String updateMessage = "update cameras set Ref=?, Name=? where Id=?";
-        String updateMessage = "update cameras set Name=? where Id=?";
+    public void updateCam(String name, String description, int id) {
+        String updateMessage = "update cameras set Name=?, Description = ? where Id=?";
         connection = DBConnection.getCon();
 
         try {
             pstmt = connection.prepareStatement(updateMessage);
-//            pstmt.setString(1, ref);
             pstmt.setString(1, name);
-            pstmt.setInt(2, id);
+            pstmt.setString(2, description);
+            pstmt.setInt(3, id);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -147,13 +145,12 @@ public class MyCameraDAO {
             if (resultSet.next()) {
                 MyCamera camera = new MyCamera();
                 camera.setId(resultSet.getInt("Id"));
-//                camera.setRef(resultSet.getString("Ref"));
+                camera.setDescription(resultSet.getString("Description"));
                 camera.setName(resultSet.getString("Name"));
                 int seqId = resultSet.getInt("SeqId");
                 camera.setSequence(sequenceDAO.getSequenceById(seqId));
                 return camera;
             } else {
-    //                todo create own exception
                 throw new RuntimeException("No camera found.");
             }
         } catch (SQLException e) {
