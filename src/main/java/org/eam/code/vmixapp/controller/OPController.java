@@ -549,7 +549,7 @@ public class OPController implements Initializable {
 
 
     private boolean validateCamTextFields() {
-        return !tfNameCam.getText().isBlank();
+        return (!tfNameCam.getText().isBlank() && !tfNameCam.getText().contains(" "));
     }
 
 
