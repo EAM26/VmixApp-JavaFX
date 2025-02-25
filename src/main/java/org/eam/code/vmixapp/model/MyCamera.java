@@ -4,7 +4,7 @@ public class MyCamera {
 
     private int id;
     private String name;
-//    private String ref;
+    private String description;
     private Sequence sequence;
 
     public int getId() {
@@ -23,13 +23,13 @@ public class MyCamera {
         this.name = name;
     }
 
-//    public String getRef() {
-//        return ref;
-//    }
+    public String getDescription() {
+        return description;
+    }
 
-//    public void setRef(String ref) {
-//        this.ref = ref;
-//    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public Sequence getSequence() {
         return sequence;
