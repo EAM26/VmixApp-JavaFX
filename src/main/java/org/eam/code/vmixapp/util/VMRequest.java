@@ -38,7 +38,7 @@ public class VMRequest {
         String camName = scene.getCamera().getName();
 
         String url = "http://" + ipAddress + ":" + port + "/api/?Function=PreviewInput&Input=" + camName;
-//        String url = "https://jsonplaceholder.typicode.com/posts/1";
+//        System.out.println("Set preview with: " + url);
         sendRequest(url);
     }
 
@@ -46,7 +46,6 @@ public class VMRequest {
 
     public void cut() {
         String url = "http://" + ipAddress + ":" + port + "/api/?Function=CutDirect";
-//        String url = "https://jsonplaceholder.typicode.com/posts/1";
         sendRequest(url);
     }
 
