@@ -351,8 +351,8 @@ public class OPController implements Initializable {
 
     private void populateCameraChoiceBox() {
         List<String> cameraNames = new ArrayList<>();
-        for (MyCamera cameraName : myCameraService.getCamerasBySeqId()) {
-            cameraNames.add(cameraName.getName());
+        for (MyCamera camera : myCameraService.getCamerasBySeqId()) {
+            cameraNames.add(camera.getName() + " " + camera.getDescription());
         }
         cbCamName.setItems(FXCollections.observableArrayList(cameraNames).sorted());
         if (getSelectedSceneData() != null) {
