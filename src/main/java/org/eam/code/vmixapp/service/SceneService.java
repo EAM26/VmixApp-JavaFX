@@ -35,13 +35,14 @@ public class SceneService {
         sceneDao.sceneNumDecrement(scene.getNumber());
     }
 
-    //    public void createScene(String sceneNumberAsString, String sceneName, String sceneDescription, String camRef, Sequence sequence) {
     public void createScene(String sceneNumberAsString, String sceneName, String sceneDescription, String camName, Sequence sequence) {
+        System.out.println("Camname is: " + camName);
         if (sceneNameExists(sceneName)) {
             throw new IllegalArgumentException("Scene name: " + sceneName + " already exists.");
         }
+
         if (!myCameraService.camNameExists(camName)) {
-            throw new IllegalArgumentException(camName + " doesnt exist as camera reference.");
+            throw new IllegalArgumentException(camName + " doesn't exist as camera name.");
         }
         int sceneNumber = Integer.parseInt(sceneNumberAsString.trim());
         if (sceneNumberExists(sceneNumber)) {
@@ -51,13 +52,11 @@ public class SceneService {
                 return;
             }
         }
-//        MyCamera camera = myCameraDAO.getCameraByRef(camRef);
         MyCamera camera = myCameraDAO.getCameraByName(camName);
         sceneDao.createScene(sceneNumber, sceneName, sceneDescription, camera, sequence);
     }
 
-    //    public void updateScene(String sceneNumberAsString, String sceneName, String sceneDescription,
-//                            String camRef, Scene selectedScene) {
+
     public void updateScene(String sceneNumberAsString, String sceneName, String sceneDescription,
                             String camName, Scene selectedScene) {
         if (!sceneName.equals(selectedScene.getName())) {
@@ -65,13 +64,10 @@ public class SceneService {
                 throw new IllegalArgumentException("Scene name is not unique");
             }
         }
-//        if (!myCameraService.camRefExists(camRef)) {
-//            throw new IllegalArgumentException(camRef + " doesnt exist as camera reference.");
-//        }
         if (!myCameraService.camNameExists(camName)) {
-            throw new IllegalArgumentException(camName + " doesnt exist as camera name.");
+            throw new IllegalArgumentException(camName + " doesn't exist as camera name.");
         }
-//        int camId = myCameraDAO.getCameraByRef(camRef).getId();
+
         int camId = myCameraDAO.getCameraByName(camName).getId();
 
         int sceneNumber = Integer.parseInt(sceneNumberAsString.trim());
