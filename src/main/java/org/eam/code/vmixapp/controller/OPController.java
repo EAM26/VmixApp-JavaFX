@@ -258,7 +258,7 @@ public class OPController implements Initializable {
     void createScene(ActionEvent event) {
         if (validateSceneTextFields()) {
             try {
-                sceneService.createScene(tfNumScene.getText().trim(), tfNameScene.getText().trim(), tfDescrScene.getText(), cbCamName.getValue(), SelectedSequence.getSelectedSequence());
+                sceneService.createScene(tfNumScene.getText().trim(), tfNameScene.getText().trim(), tfDescrScene.getText(), getCamNameFromCB(cbCamName.getValue()), SelectedSequence.getSelectedSequence());
                 showScenes();
                 clearScene();
             } catch (RuntimeException e) {
@@ -275,7 +275,7 @@ public class OPController implements Initializable {
             try {
                 if (selectedScene != null) {
                     sceneService.updateScene(tfNumScene.getText().trim(), tfNameScene.getText().trim(),
-                            tfDescrScene.getText(), cbCamName.getValue(), selectedScene);
+                            tfDescrScene.getText(), getCamNameFromCB(cbCamName.getValue()), selectedScene);
                     showScenes();
                     clearScene();
                 }
@@ -286,6 +286,11 @@ public class OPController implements Initializable {
         } else {
             Alarm.showError("Invalid input in fields.");
         }
+    }
+
+    private String getCamNameFromCB(String nameAndDescr) {
+        int spaceIndex = nameAndDescr.indexOf(" ");
+        return spaceIndex != -1 ? nameAndDescr.substring(0, spaceIndex): nameAndDescr;
     }
 
     @FXML
@@ -352,6 +357,7 @@ public class OPController implements Initializable {
     private void populateCameraChoiceBox() {
         List<String> cameraNames = new ArrayList<>();
         for (MyCamera camera : myCameraService.getCamerasBySeqId()) {
+//            Leave space between name and description: getCamNameFromCB
             cameraNames.add(camera.getName() + " " + camera.getDescription());
         }
         cbCamName.setItems(FXCollections.observableArrayList(cameraNames).sorted());
@@ -359,6 +365,8 @@ public class OPController implements Initializable {
             cbCamName.setValue(getSelectedSceneData().getCamera().getName());
         } 
     }
+
+
 
     private void clearScene() {
         tfNumScene.setText("");
